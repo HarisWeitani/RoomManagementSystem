@@ -1,21 +1,19 @@
 package com.hw.rms.roommanagementsystem
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.Toast
-import androidx.annotation.IdRes
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.models.SlideModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var btn_book : Button
+    private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
+
+    lateinit var tv_running_text : TextView
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -28,19 +26,33 @@ class MainActivity : AppCompatActivity() {
         hideStatusBar()
         setContentView(R.layout.activity_main)
         initView()
+        initImageSlider()
+
 
     }
 
     fun initView(){
-        btn_book = findViewById(R.id.btn_book)
+
+        tv_running_text = findViewById(R.id.tv_running_text)
+        tv_running_text.isSelected = true
+        tv_running_text.text = SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT
 
         buttonListener()
     }
 
+    fun initImageSlider(){
+        val imageList = ArrayList<SlideModel>()
+// imageList.add(SlideModel("String Url" or R.drawable)
+// imageList.add(SlideModel("String Url" or R.drawable, "title") You can add title
+// imageList.add(SlideModel("String Url" or R.drawable, "title", true) Also you can add centerCrop scaleType for this image
+        imageList.add(SlideModel(R.drawable.fox, centerCrop = true))
+        imageList.add(SlideModel(R.drawable.elephant,centerCrop = true))
+        imageList.add(SlideModel(R.drawable.tiger, centerCrop = true))
+        val imageSlider = findViewById<ImageSlider>(R.id.image_slider)
+        imageSlider.setImageList(imageList)
+    }
+
     fun buttonListener() {
-        btn_book.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
+
     }
 }
