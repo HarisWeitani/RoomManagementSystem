@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@drawable/background_selector"
         tools:context=".MainActivity">
 
     <LinearLayout
@@ -35,6 +36,7 @@
         />
 
         <TextClock
+                android:id="@+id/tc_enter_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -73,6 +75,7 @@
             />
 
             <Button
+                    android:id="@+id/btn_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -85,9 +88,9 @@
                     android:text="Status"
                     android:textSize="20sp"
 
-                    app:strokeColor="@color/colorPrimaryDark"
+                    app:strokeColor="@color/white"
                     app:strokeWidth="5dp"
-                    android:backgroundTint="@color/transparent"
+                    android:background="@color/colorPrimaryDark"
             />
 
             <LinearLayout
@@ -136,12 +139,27 @@
                     app:period="5000"
                     app:delay="0"/>
 
-            <TextView
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="News Feed"
-            />
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal"
+            >
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:text="News Feed One"
+                />
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:text="News Feed Two"
+                />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -152,6 +170,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
     >
         <TextView
                 android:id="@+id/tv_running_text"
