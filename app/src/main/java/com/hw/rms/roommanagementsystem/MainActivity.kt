@@ -10,10 +10,14 @@ import android.widget.Button
 import android.widget.TextClock
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.DrawableImage
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RawVideo
+import com.asura.library.views.CustomViewPager
 import com.asura.library.views.PosterSlider
+import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
+import com.hw.rms.roommanagementsystem.Model.News
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +29,11 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var posterSlider: PosterSlider
     var posters : ArrayList<Poster> = arrayListOf()
+
+    lateinit var mViewPager: ViewPager
+    lateinit var newsPagerAdapter: NewsPagerAdapter
+
+    var newsList : MutableList<News> = mutableListOf()
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -38,8 +47,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_available)
         initView()
         initImageSlider()
+        initViewPager()
 
+    }
 
+    fun initViewPager(){
+        mViewPager = findViewById(R.id.view_pager_one)
+
+//        val news = News("News One","Content One")
+        newsList.add(News("News One","Content One"))
+        newsList.add(News("News Two","Content Two"))
+        newsList.add(News("News Three","Content Three"))
+
+        newsPagerAdapter = NewsPagerAdapter(newsList,this)
+
+        mViewPager.adapter = newsPagerAdapter
     }
 
     fun initView(){
@@ -71,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         posterSlider = findViewById(R.id.poster_slider)
         posters.add(DrawableImage(R.drawable.fox))
         posters.add(RawVideo(R.raw.seven_sec))
+
 
         posterSlider.setPosters(posters)
 
