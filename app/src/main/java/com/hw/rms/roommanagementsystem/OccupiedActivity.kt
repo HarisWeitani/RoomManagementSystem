@@ -1,25 +1,23 @@
 package com.hw.rms.roommanagementsystem
 
 import android.content.Intent
-import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.TextClock
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.DrawableImage
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RawVideo
-import com.asura.library.views.CustomViewPager
 import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
+import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Model.News
 
-class MainActivity : AppCompatActivity() {
+class OccupiedActivity : AppCompatActivity() {
 
     private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
 
@@ -33,18 +31,19 @@ class MainActivity : AppCompatActivity() {
     lateinit var mViewPager: ViewPager
     lateinit var newsPagerAdapter: NewsPagerAdapter
 
-    var newsList : MutableList<News> = mutableListOf()
+    var newsListLeft : MutableList<News> = mutableListOf()
+    var newsListRight : MutableList<News> = mutableListOf()
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideStatusBar()
-        setContentView(R.layout.activity_main_available)
+        setContentView(R.layout.activity_occupied)
         initView()
         initImageSlider()
         initViewPager()
@@ -52,14 +51,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initViewPager(){
+
         mViewPager = findViewById(R.id.view_pager_one)
 
-//        val news = News("News One","Content One")
-        newsList.add(News("News One","Content One"))
-        newsList.add(News("News Two","Content Two"))
-        newsList.add(News("News Three","Content Three"))
+        newsListLeft.add(News("News One","Content One"))
+        newsListRight.add(News("News Two","Content Two"))
+        newsListLeft.add(News("News Three","Content Three"))
+        newsListRight.add(News("News Four","Content Four"))
+        newsListLeft.add(News("News Five", "Content Five"))
+        newsListRight.add(News("",""))
 
-        newsPagerAdapter = NewsPagerAdapter(newsList,this)
+        newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
 
         mViewPager.adapter = newsPagerAdapter
     }
@@ -76,14 +78,13 @@ class MainActivity : AppCompatActivity() {
         //clock
         tv_enter_admin = findViewById(R.id.tv_enter_admin)
         tv_enter_admin.setOnLongClickListener {
-            val intent = Intent(this@MainActivity,AdminLoginActivity::class.java)
+            val intent = Intent(this@OccupiedActivity, AdminLoginActivity::class.java)
             startActivity(intent)
             true
         }
 
         //status
         btn_status = findViewById(R.id.btn_status)
-
 
         buttonListener()
     }

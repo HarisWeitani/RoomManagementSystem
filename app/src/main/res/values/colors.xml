@@ -6,5 +6,12 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+
     <color name="status_green">#16a443</color>
+    <color name="status_yellow">#fcbf06</color>
+    <color name="status_red">#fc061f</color>
+
+    <color name="setting_grey">#1a1a1a</color>
+
+
 </resources>

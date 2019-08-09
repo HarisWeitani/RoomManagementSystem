@@ -7,7 +7,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/black"
-        tools:context=".AvailableMainActivity">
+        tools:context=".OccupiedActivity">
+
+
 
     <LinearLayout
             android:id="@+id/layout_header"
@@ -18,10 +20,10 @@
             android:layout_margin="16dp"
     >
         <!--<ImageView-->
-                <!--android:layout_width="70dp"-->
-                <!--android:layout_height="70dp"-->
-                <!--android:layout_marginStart="30dp"-->
-                <!--android:background="@drawable/ic_launcher_background"-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_marginStart="30dp"-->
+        <!--android:background="@drawable/ic_launcher_background"-->
         <!--/>-->
 
         <TextView
@@ -58,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:background="@drawable/bg_available"
+            android:background="@drawable/bg_occupied"
             android:paddingTop="64dp"
     >
         <LinearLayout
@@ -82,23 +84,25 @@
             />
 
             <Button
-                    android:id="@+id/btn_status"
+                    android:id="@+id/btn_occupied"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
 
                     android:clickable="false"
 
                     android:padding="22dp"
                     android:paddingStart="90dp"
                     android:paddingEnd="90dp"
-                    android:text="Available"
+                    android:text="Occupied"
                     android:textAllCaps="false"
                     android:textSize="30sp"
 
-                    android:background="@color/status_green"
+                    android:background="@color/status_red"
                     android:fontFamily="@font/gotham_bold"
             />
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -110,46 +114,122 @@
                     android:fontFamily="@font/gotham_bold"
             />
 
-            <LinearLayout
+            <TextView
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+
+                    android:text="Meeting vendor Website and Digital Marketing by sandy ricardo"
+                    android:textSize="30sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/gotham_light"
+            />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
             >
-                <Button
-                        android:layout_width="wrap_content"
+                <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:padding="20dp"
-                        android:paddingStart="30dp"
-                        android:paddingEnd="30dp"
+                        android:orientation="horizontal"
+                >
+                    <Button
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="20dp"
+                            android:paddingStart="30dp"
+                            android:paddingEnd="30dp"
 
-                        android:text="Book Now"
-                        android:textAllCaps="false"
-                        android:textSize="30sp"
-                        android:fontFamily="@font/gotham_light"
-                        android:textColor="@color/white"
+                            android:text="Check In"
+                            android:textAllCaps="false"
+                            android:textSize="28sp"
+                            android:fontFamily="@font/gotham_light"
+                            android:textColor="@color/status_red"
 
-                        android:background="@drawable/transparent_bg_bordered"
-                />
+                            android:background="@drawable/transparent_bg_bordered_red"
+                    />
+                    <Button
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="20dp"
+                            android:paddingStart="30dp"
+                            android:paddingEnd="30dp"
 
-                <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:padding="20dp"
-                        android:paddingStart="30dp"
-                        android:paddingEnd="30dp"
+                            android:text="Extend"
+                            android:textAllCaps="false"
+                            android:textSize="28sp"
+                            android:fontFamily="@font/gotham_light"
+                            android:textColor="@color/status_red"
 
-                        android:text="Schedule"
-                        android:textAllCaps="false"
-                        android:textSize="30sp"
-                        android:fontFamily="@font/gotham_light"
-                        android:textColor="@color/white"
+                            android:background="@drawable/transparent_bg_bordered_red"
+                    />
 
-                        android:background="@drawable/transparent_bg_bordered"
-                />
+                    <Button
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="20dp"
+                            android:paddingStart="30dp"
+                            android:paddingEnd="30dp"
 
+                            android:text="Message"
+                            android:textAllCaps="false"
+                            android:textSize="28sp"
+                            android:fontFamily="@font/gotham_light"
+                            android:textColor="@color/status_red"
+
+                            android:background="@drawable/transparent_bg_bordered_red"
+                    />
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+
+                >
+
+                    <Button
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="20dp"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+
+                            android:text="Book Now"
+                            android:textAllCaps="false"
+                            android:textSize="28sp"
+                            android:fontFamily="@font/gotham_light"
+                            android:textColor="@color/white"
+
+                            android:background="@drawable/transparent_bg_bordered"
+                    />
+
+                    <Button
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="20dp"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+
+                            android:text="Schedule"
+                            android:textAllCaps="false"
+                            android:textSize="28sp"
+                            android:fontFamily="@font/gotham_light"
+                            android:textColor="@color/white"
+
+                            android:background="@drawable/transparent_bg_bordered"
+                    />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

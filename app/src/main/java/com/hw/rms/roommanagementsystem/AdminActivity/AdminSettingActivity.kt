@@ -1,4 +1,4 @@
-package com.hw.rms.roommanagementsystem
+package com.hw.rms.roommanagementsystem.AdminActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.*
-import kotlinx.android.synthetic.main.activity_admin_setting.*
+import com.hw.rms.roommanagementsystem.R
 
 class AdminSettingActivity : AppCompatActivity() {
 

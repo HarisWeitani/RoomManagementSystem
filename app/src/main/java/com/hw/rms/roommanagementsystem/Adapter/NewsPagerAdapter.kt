@@ -9,12 +9,16 @@ import androidx.viewpager.widget.PagerAdapter
 import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 
-class NewsPagerAdapter(internal var newsList: List<News>, internal var context: Context) : PagerAdapter() {
-    lateinit var tv_news_title: TextView
-    lateinit var tv_news_content: TextView
+class NewsPagerAdapter(internal var newsListLeft: List<News>, internal var newsListRight: List<News> , internal var context: Context) : PagerAdapter() {
+
+    lateinit var tv_news_title_left: TextView
+    lateinit var tv_news_title_right: TextView
+
+    lateinit var tv_news_content_left: TextView
+    lateinit var tv_news_content_right: TextView
 
     override fun getCount(): Int {
-        return newsList.size
+        return newsListLeft.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -29,11 +33,17 @@ class NewsPagerAdapter(internal var newsList: List<News>, internal var context: 
         val inflater = LayoutInflater.from(context)
         val itemView = inflater.inflate(R.layout.layout_news_pager, container, false)
 
-        tv_news_title = itemView.findViewById(R.id.tv_news_title)
-        tv_news_content = itemView.findViewById(R.id.tv_news_content)
+        tv_news_title_left = itemView.findViewById(R.id.tv_news_title_left)
+        tv_news_content_left = itemView.findViewById(R.id.tv_news_content_left)
 
-        tv_news_title.text = newsList[position].title
-        tv_news_content.text = newsList[position].content
+        tv_news_title_right = itemView.findViewById(R.id.tv_news_title_right)
+        tv_news_content_right = itemView.findViewById(R.id.tv_news_content_right)
+
+        tv_news_title_left.text = newsListLeft[position].title
+        tv_news_content_left.text = newsListLeft[position].content
+
+        tv_news_title_right.text = newsListRight[position].title
+        tv_news_content_right.text = newsListRight[position].content
 
         container.addView(itemView)
 

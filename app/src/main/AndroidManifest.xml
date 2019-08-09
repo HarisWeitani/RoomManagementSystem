@@ -9,28 +9,30 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity
-                android:name=".AdminSettingActivity"
-                android:screenOrientation="landscape"
-        >
+        <activity android:name=".OccupiedActivity">
         </activity>
         <activity
-                android:name=".AdminLoginActivity"
+                android:name=".AdminActivity.AdminSettingActivity"
+                android:screenOrientation="landscape">
+        </activity>
+        <activity
+                android:name=".AdminActivity.AdminLoginActivity"
                 android:screenOrientation="landscape">
         </activity>
         <activity
                 android:name=".RoomListActivity"
                 android:screenOrientation="landscape">
         </activity>
-
         <activity
-                android:name=".LoginActivity"
-                android:label="@string/title_activity_login"
-                android:screenOrientation="landscape"
-                android:theme="@style/NoActionBar">
+                android:name=".WaitingActivity"
+                android:screenOrientation="landscape">
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name=".AvailableMainActivity"
+                android:screenOrientation="landscape">
+        </activity>
+        <activity
+                android:name=".WaitingOccupiedActivity"
                 android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

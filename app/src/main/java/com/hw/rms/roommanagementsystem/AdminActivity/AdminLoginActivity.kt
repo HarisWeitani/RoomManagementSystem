@@ -1,17 +1,17 @@
-package com.hw.rms.roommanagementsystem
+package com.hw.rms.roommanagementsystem.AdminActivity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.hw.rms.roommanagementsystem.R
 
 class AdminLoginActivity : AppCompatActivity() {
 
@@ -38,7 +38,8 @@ class AdminLoginActivity : AppCompatActivity() {
         et_admin_pin.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     if(s.toString() == "1111")
-                        startActivity(Intent(this@AdminLoginActivity,AdminSettingActivity::class.java))
+                        startActivity(Intent(this@AdminLoginActivity,
+                            AdminSettingActivity::class.java))
                     else if ( s.toString().length == 4)
                         Toast.makeText(this@AdminLoginActivity,"THOU SHALL NOT PASS", Toast.LENGTH_SHORT).show()
                 }
