@@ -32,7 +32,7 @@ class AdminSettingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin_setting)
         sharePref = SharedPreference(this)
         initViews()
-
+        initButtonListener()
     }
 
     private fun initViews(){
@@ -41,12 +41,16 @@ class AdminSettingActivity : AppCompatActivity() {
         btn_save_and_exit = findViewById(R.id.btn_save_and_exit)
         btnBack = findViewById(R.id.btnBack)
 
+
+    }
+
+    private fun initButtonListener(){
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(this@AdminSettingActivity,"Selected : "+languages[position],Toast.LENGTH_SHORT).show()
+
             }
         }
 

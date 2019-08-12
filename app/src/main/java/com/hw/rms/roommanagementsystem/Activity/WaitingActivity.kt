@@ -1,6 +1,7 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.DrawableImage
 import com.asura.library.posters.Poster
 import com.asura.library.posters.RawVideo
+import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
@@ -48,15 +50,31 @@ class WaitingActivity : AppCompatActivity() {
         initView()
         initImageSlider()
         initViewPager()
+        initButtonListener()
 
     }
 
 
-    fun initViewPager(){
+    private fun initView(){
 
+        //running text below screen
+        tv_running_text = findViewById(R.id.tv_running_text)
+        tv_running_text.isSelected = true
+        //clock
+        tv_enter_admin = findViewById(R.id.tv_enter_admin)
+        //status
+        btn_status = findViewById(R.id.btn_status)
+        //poster
+        posterSlider = findViewById(R.id.poster_slider)
+        //news pager
         mViewPager = findViewById(R.id.view_pager_one)
 
-        newsListLeft.add(News("News One","Content One"))
+    }
+
+
+    private fun initViewPager(){
+
+        newsListLeft.add(News("News One","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat cursus ornare. Integer semper a est ac iaculis. Nunc orci odio, efficitur eget tortor eu, malesuada posuere nibh. Donec id orci quis risus consectetur blandit. Cras aliquet risus dui, quis finibus arcu tincidunt at. Duis ac commodo dolor, nec finibus est. Mauris ut elit ultricies, rutrum sem vel, tempus lorem. Quisque auctor, nulla sit amet tempor commodo, orci eros blandit felis, quis consectetur ante lorem at lorem. Mauris vitae leo dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla sed turpis lobortis, suscipit dui fermentum, fermentum tellus. Nullam sollicitudin augue felis. Donec tincidunt mauris massa, quis pellentesque elit imperdiet et. Morbi iaculis turpis arcu, at interdum ipsum maximus vel. Duis vitae purus semper, ultricies arcu at, faucibus est. Nulla aliquam, libero non posuere auctor, ipsum enim mollis dolor, ac cursus nibh odio sed ligula."))
         newsListRight.add(News("News Two","Content Two"))
         newsListLeft.add(News("News Three","Content Three"))
         newsListRight.add(News("News Four","Content Four"))
@@ -64,45 +82,32 @@ class WaitingActivity : AppCompatActivity() {
         newsListRight.add(News("",""))
 
         newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
-
         mViewPager.adapter = newsPagerAdapter
     }
 
-    fun initView(){
 
-        //running text below screen
-        tv_running_text = findViewById(R.id.tv_running_text)
-        tv_running_text.isSelected = true
-        tv_running_text.text = SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
-                SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
-                SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT
+    private fun initImageSlider(){
 
-        //clock
-        tv_enter_admin = findViewById(R.id.tv_enter_admin)
-        tv_enter_admin.setOnLongClickListener {
-            val intent = Intent(this@WaitingActivity, AdminLoginActivity::class.java)
-            startActivity(intent)
-            true
-        }
-
-        //status
-        btn_status = findViewById(R.id.btn_status)
-
-        buttonListener()
-    }
-
-    fun initImageSlider(){
-        //can be set by server
-        posterSlider = findViewById(R.id.poster_slider)
         posters.add(DrawableImage(R.drawable.fox))
         posters.add(RawVideo(R.raw.seven_sec))
-
+        posters.add(RemoteVideo(Uri.parse("https://www.youtube.com/watch?v=lTTajzrSkCw")))
 
         posterSlider.setPosters(posters)
 
     }
 
-    fun buttonListener() {
+    private fun initButtonListener() {
+        //sample only
+        tv_running_text.text = SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
+                SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
+                SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT
+
+        tv_enter_admin.setOnLongClickListener {
+            val intent = Intent(this@WaitingActivity,
+                AdminLoginActivity::class.java)
+            startActivity(intent)
+            true
+        }
 
     }
 }

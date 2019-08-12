@@ -30,32 +30,35 @@ class AdminLoginActivity : AppCompatActivity() {
         hideStatusBar()
         setContentView(R.layout.activity_admin_login)
         initView()
-
+        initButtonListener()
     }
 
     private fun initView(){
         //admin pin
         et_admin_pin = findViewById(R.id.et_admin_pin)
-        et_admin_pin.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    if(s.toString() == "1111") {
-                        startActivity(Intent(this@AdminLoginActivity, AdminSettingActivity::class.java))
-                    }
-                    else if ( s.toString().length == 4)
-                        Toast.makeText(this@AdminLoginActivity,"Wrong Code", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                }
-            }
-        )
-
         btnBack = findViewById(R.id.btnBack)
+
+
+    }
+    private fun initButtonListener(){
+        et_admin_pin.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString() == "1111") {
+                    startActivity(Intent(this@AdminLoginActivity, AdminSettingActivity::class.java))
+                }
+                else if ( s.toString().length == 4)
+                    Toast.makeText(this@AdminLoginActivity,"Wrong Code", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+
         btnBack.setOnClickListener {
             startActivity(Intent(this@AdminLoginActivity,RootActivity::class.java))
         }
