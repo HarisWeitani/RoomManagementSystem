@@ -1,7 +1,8 @@
-package com.hw.rms.roommanagementsystem
+package com.hw.rms.roommanagementsystem.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.hw.rms.roommanagementsystem.R
 
 class RoomListActivity : AppCompatActivity() {
 

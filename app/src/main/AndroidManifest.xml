@@ -9,8 +9,22 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".OccupiedActivity">
+        <!-- Root Activity for handling before entering activity when app first open-->
+        <activity
+                android:name=".RootActivity"
+                android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
+
+        <activity
+                android:name=".Activity.OccupiedActivity"
+                android:screenOrientation="landscape">
+        </activity>
+
         <activity
                 android:name=".AdminActivity.AdminSettingActivity"
                 android:screenOrientation="landscape">
@@ -20,25 +34,20 @@
                 android:screenOrientation="landscape">
         </activity>
         <activity
-                android:name=".RoomListActivity"
+                android:name=".Activity.RoomListActivity"
                 android:screenOrientation="landscape">
         </activity>
         <activity
-                android:name=".WaitingActivity"
+                android:name=".Activity.WaitingActivity"
                 android:screenOrientation="landscape">
         </activity>
         <activity
-                android:name=".AvailableMainActivity"
+                android:name=".Activity.AvailableMainActivity"
                 android:screenOrientation="landscape">
         </activity>
         <activity
-                android:name=".WaitingOccupiedActivity"
+                android:name=".Activity.WaitingOccupiedActivity"
                 android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

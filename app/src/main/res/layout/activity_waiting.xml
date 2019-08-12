@@ -6,8 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/black"
-        tools:context=".WaitingActivity">
+        android:background="@drawable/bg_waiting"
+        tools:context=".Activity.WaitingActivity">
 
 
     <LinearLayout
@@ -18,12 +18,12 @@
             android:orientation="horizontal"
             android:layout_margin="16dp"
     >
-        <!--<ImageView-->
-        <!--android:layout_width="70dp"-->
-        <!--android:layout_height="70dp"-->
-        <!--android:layout_marginStart="30dp"-->
-        <!--android:background="@drawable/ic_launcher_background"-->
-        <!--/>-->
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/ic_launcher_background"
+            />
 
         <TextView
                 android:layout_width="wrap_content"
@@ -59,8 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:background="@drawable/bg_waiting"
-            android:paddingTop="64dp"
+            android:paddingTop="32dp"
     >
         <LinearLayout
                 android:id="@+id/layout_content_left"
@@ -305,8 +304,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@color/black"
     >
         <TextView
                 android:id="@+id/tv_running_text"

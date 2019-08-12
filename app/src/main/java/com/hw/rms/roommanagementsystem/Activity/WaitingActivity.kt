@@ -1,13 +1,13 @@
-package com.hw.rms.roommanagementsystem
+package com.hw.rms.roommanagementsystem.Activity
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.DrawableImage
 import com.asura.library.posters.Poster
@@ -16,8 +16,9 @@ import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Model.News
+import com.hw.rms.roommanagementsystem.R
 
-class AvailableMainActivity : AppCompatActivity() {
+class WaitingActivity : AppCompatActivity() {
 
     private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
 
@@ -36,19 +37,20 @@ class AvailableMainActivity : AppCompatActivity() {
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideStatusBar()
-        setContentView(R.layout.activity_main_available)
+        setContentView(R.layout.activity_waiting)
         initView()
         initImageSlider()
         initViewPager()
 
     }
+
 
     fun initViewPager(){
 
@@ -78,8 +80,7 @@ class AvailableMainActivity : AppCompatActivity() {
         //clock
         tv_enter_admin = findViewById(R.id.tv_enter_admin)
         tv_enter_admin.setOnLongClickListener {
-            val intent = Intent(this@AvailableMainActivity,
-                AdminLoginActivity::class.java)
+            val intent = Intent(this@WaitingActivity, AdminLoginActivity::class.java)
             startActivity(intent)
             true
         }

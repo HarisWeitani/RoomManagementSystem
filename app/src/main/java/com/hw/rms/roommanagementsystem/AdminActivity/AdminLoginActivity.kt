@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.hw.rms.roommanagementsystem.R
+import com.hw.rms.roommanagementsystem.RootActivity
 
 class AdminLoginActivity : AppCompatActivity() {
 
@@ -32,16 +33,16 @@ class AdminLoginActivity : AppCompatActivity() {
 
     }
 
-    fun initView(){
+    private fun initView(){
         //admin pin
         et_admin_pin = findViewById(R.id.et_admin_pin)
         et_admin_pin.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    if(s.toString() == "1111")
-                        startActivity(Intent(this@AdminLoginActivity,
-                            AdminSettingActivity::class.java))
+                    if(s.toString() == "1111") {
+                        startActivity(Intent(this@AdminLoginActivity, AdminSettingActivity::class.java))
+                    }
                     else if ( s.toString().length == 4)
-                        Toast.makeText(this@AdminLoginActivity,"THOU SHALL NOT PASS", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AdminLoginActivity,"Wrong Code", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -56,7 +57,7 @@ class AdminLoginActivity : AppCompatActivity() {
 
         btnBack = findViewById(R.id.btnBack)
         btnBack.setOnClickListener {
-            super.onBackPressed()
+            startActivity(Intent(this@AdminLoginActivity,RootActivity::class.java))
         }
     }
 }

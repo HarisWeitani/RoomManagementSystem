@@ -6,69 +6,80 @@
         android:layout_height="match_parent"
         android:background="@color/transparent"
 >
-
-    <LinearLayout
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginEnd="16dp"
     >
-        <TextView
-                android:id="@+id/tv_news_title_left"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginEnd="16dp"
+        >
+            <TextView
+                    android:id="@+id/tv_news_title_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                android:text="News Title"
-                android:textAllCaps="false"
-                android:fontFamily="@font/gotham_bold"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-        />
-        <TextView
-                android:id="@+id/tv_news_content_left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                    android:text="News Title"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/gotham_bold"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+            />
+            <TextView
+                    android:id="@+id/tv_news_content_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
 
-                android:text="News Content asdkljamskldam asldkmaslkd asldkmaslkdas lalams alsdmaklsmd aslkamsdlkasd asldkmaksd "
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:fontFamily="@font/gotham_light"
-                android:textSize="20sp"
-        />
-    </LinearLayout>
+                    android:text="News Content asdkljamskldam asldkmaslkd asldkmaslkdas lalams alsdmaklsmd aslkamsdlkasd asldkmaksd "
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/gotham_light"
+                    android:textSize="20sp"
+            />
+        </LinearLayout>
+    </ScrollView>
 
-    <LinearLayout
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp"
     >
-        <TextView
-                android:id="@+id/tv_news_title_right"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+        >
+            <TextView
+                    android:id="@+id/tv_news_title_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                android:text="News Title"
-                android:textAllCaps="false"
-                android:fontFamily="@font/gotham_bold"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-        />
-        <TextView
-                android:id="@+id/tv_news_content_right"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                    android:text="News Title"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/gotham_bold"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+            />
+            <TextView
+                    android:id="@+id/tv_news_content_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
 
-                android:text="News Content asdkljamskldam asldkmaslkd asldkmaslkdas lalams alsdmaklsmd aslkamsdlkasd asldkmaksd "
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:fontFamily="@font/gotham_light"
-                android:textSize="20sp"
-        />
-    </LinearLayout>
+                    android:text="News Content asdkljamskldam asldkmaslkd asldkmaslkdas lalams alsdmaklsmd aslkamsdlkasd asldkmaksd "
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/gotham_light"
+                    android:textSize="20sp"
+            />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

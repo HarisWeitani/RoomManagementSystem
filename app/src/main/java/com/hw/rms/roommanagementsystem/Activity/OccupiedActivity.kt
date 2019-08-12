@@ -1,4 +1,4 @@
-package com.hw.rms.roommanagementsystem
+package com.hw.rms.roommanagementsystem.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +16,9 @@ import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Model.News
+import com.hw.rms.roommanagementsystem.R
 
-class WaitingOccupiedActivity : AppCompatActivity() {
+class OccupiedActivity : AppCompatActivity() {
 
     private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
 
@@ -43,13 +44,12 @@ class WaitingOccupiedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideStatusBar()
-        setContentView(R.layout.activity_waiting_occupied)
+        setContentView(R.layout.activity_occupied)
         initView()
         initImageSlider()
         initViewPager()
 
     }
-
 
     fun initViewPager(){
 
@@ -79,7 +79,7 @@ class WaitingOccupiedActivity : AppCompatActivity() {
         //clock
         tv_enter_admin = findViewById(R.id.tv_enter_admin)
         tv_enter_admin.setOnLongClickListener {
-            val intent = Intent(this@WaitingOccupiedActivity, AdminLoginActivity::class.java)
+            val intent = Intent(this@OccupiedActivity, AdminLoginActivity::class.java)
             startActivity(intent)
             true
         }

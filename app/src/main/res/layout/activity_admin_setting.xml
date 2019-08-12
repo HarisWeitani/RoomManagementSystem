@@ -65,6 +65,9 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_margin="64dp"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
     >
 
         <LinearLayout
@@ -117,6 +120,9 @@
                 android:layout_marginStart="32dp"
                 android:layout_weight="1"
                 android:background="@color/setting_grey"
+
+                android:focusable="true"
+                android:focusableInTouchMode="true"
         >
             <LinearLayout
                     android:layout_width="match_parent"
@@ -125,6 +131,9 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
                     android:orientation="vertical"
+
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
             >
                 <TextView
                         android:layout_width="match_parent"
@@ -247,6 +256,7 @@
                 />
 
                 <Button
+                        android:id="@+id/btn_save_and_exit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="70dp"
