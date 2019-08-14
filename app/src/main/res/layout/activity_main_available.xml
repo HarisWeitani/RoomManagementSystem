@@ -176,7 +176,6 @@
                     android:id="@+id/view_pager_iv_vv"
                     android:layout_width="500dp"
                     android:layout_height="300dp">
-
             </androidx.viewpager.widget.ViewPager>
 
             <LinearLayout

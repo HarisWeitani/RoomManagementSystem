@@ -124,6 +124,7 @@ class AvailableMainActivity : AppCompatActivity() {
 
     private fun imageVideoAutoScroll(){
         imageVideoList.add(ImageVideo("asdasd","asdasd","",""))
+        imageVideoList.add(ImageVideo("asdasd","asdasd","",""))
 
         val absPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).absolutePath)
         if( !absPath.exists() ){
@@ -135,7 +136,7 @@ class AvailableMainActivity : AppCompatActivity() {
         val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
         val fileName = "video.mp4"
 
-        imageVideoPagerAdapter = ImageVideoPagerAdapter(imageVideoList,"$dirPath/$fileName",this)
+        imageVideoPagerAdapter = ImageVideoPagerAdapter(imageVideoList,"$dirPath",this)
         vpImageVideo.adapter = imageVideoPagerAdapter
     }
 
@@ -144,9 +145,12 @@ class AvailableMainActivity : AppCompatActivity() {
         val path = "android.resource://" + packageName + "/" + R.raw.tiger
         val path2 = "android.resource://" + packageName + "/" + R.raw.tensecvideo
 
+        val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+        val fileName = "video.mp4"
+
         posters.add(DrawableImage(R.drawable.fox))
-        posters.add(RawVideo(R.raw.tensecvideo))
-        posters.add(RemoteVideo(Uri.parse(path2)))
+//        posters.add(RawVideo(R.raw.tensecvideo))
+        posters.add(RemoteVideo(Uri.parse("$dirPath/$fileName")))
         posters.add(RemoteImage(path))
 
         posterSlider.setPosters(posters)

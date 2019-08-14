@@ -28,15 +28,26 @@ import com.github.nkzawa.emitter.Emitter
 
 class RootActivity : AppCompatActivity() {
 
+    var firstInstall : Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
 
         val sharepref = SharedPreference(this)
-        val firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
+        firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
 
-//        postRequest(firstInstall)
+//        postRequest()
+        startActivity()
+    }
+    private fun startActivity(){
+        Handler().postDelayed({
+            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java))
+            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java))
+        },500)
+    }
 
+    private fun socketConnection(){
         val onNewMessage = Emitter.Listener { args ->
             runOnUiThread(Runnable {
                 val data = args[0] as JSONObject
@@ -57,16 +68,9 @@ class RootActivity : AppCompatActivity() {
         socket.on("new message", onNewMessage)
         socket.connect()
         socket.connected()
-
-    }
-    private fun startActivity( firstInstall: Boolean ){
-        Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java))
-            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java))
-        },500)
     }
 
-    private fun postRequest(firstInstall: Boolean){
+    private fun postRequest(){
         val queue = Volley.newRequestQueue(this)
         val url = "http://103.82.242.195/room_management_system/api/booking/get_config"
 
@@ -74,7 +78,7 @@ class RootActivity : AppCompatActivity() {
             Response.Listener {
                 var gson = Gson()
                 GlobalVal.configModel = gson.fromJson(it, Json4Kotlin_Base::class.java)
-                startActivity(firstInstall)
+                startActivity()
                 Log.d("VolleyRequest", it.toString())
             },
             Response.ErrorListener {

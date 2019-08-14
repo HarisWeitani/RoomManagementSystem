@@ -13,6 +13,10 @@ import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+
+
 
 class ImageVideoPagerAdapter(internal var imageVideoList: List<ImageVideo>, internal var filePath : String,internal var context: Context) : PagerAdapter() {
 
@@ -42,9 +46,33 @@ class ImageVideoPagerAdapter(internal var imageVideoList: List<ImageVideo>, inte
 //        if( !imageVideoList[position].imageTitle.equals(null) ){
 //            iv_image
 //        }
+//        if(position == 0) {
+//            vv_video.setVideoURI(Uri.parse("$filePath/video.mp4"))
+//            vv_video.start()
+//        }else{
+//            val imgFile = File("$filePath/image.png")
+//
+//            if (imgFile.exists()) {
+//
+//                val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+//
+//                iv_image.setImageBitmap(myBitmap)
+//
+//            }
+////            iv_image.setImageResource(R.drawable.elephant)
+//        }
 
-        vv_video.setVideoURI(Uri.parse(filePath))
-        vv_video.start()
+//        val imgFile = File("$filePath/pic.jpg")
+//
+//        iv_image.setImageURI(Uri.fromFile(imgFile.absoluteFile))
+//
+//        if (imgFile.exists()) {
+//
+//            iv_image.setImageBitmap(BitmapFactory.decodeFile(imgFile.absolutePath))
+//
+//        }
+
+        iv_image.setImageResource(R.drawable.elephant)
 
 //        iv_image.setImage = newsListLeft[position].title
 //        tv_news_content_left.text = newsListLeft[position].content
