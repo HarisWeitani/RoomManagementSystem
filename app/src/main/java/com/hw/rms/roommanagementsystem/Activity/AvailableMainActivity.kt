@@ -72,7 +72,6 @@ class AvailableMainActivity : AppCompatActivity() {
 
         var gson = Gson()
         var conv = gson.fromJson(jsonString,ImageVideo::class.java)
-        Log.i("ahsiap", " ${conv.imageUrl} | ${conv.imageTitle} | ${conv.videoUrl} | ${conv.videoTitle}")
 
     }
 
