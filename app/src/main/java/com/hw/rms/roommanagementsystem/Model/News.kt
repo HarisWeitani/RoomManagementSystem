@@ -1,12 +1,8 @@
 package com.hw.rms.roommanagementsystem.Model
 
-class News {
+class News(title: String, content: String) {
 
-    var title: String? = null
-    var content: String? = null
+    var title: String? = title
+    var content: String? = content
 
-    constructor(title: String, content: String) {
-        this.title = title
-        this.content = content
-    }
 }

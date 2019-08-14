@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.DrawableImage
 import com.asura.library.posters.Poster
-import com.asura.library.posters.RawVideo
 import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
@@ -65,7 +64,7 @@ class OccupiedActivity : AppCompatActivity() {
         //poster
         posterSlider = findViewById(R.id.poster_slider)
         //news pager
-        mViewPager = findViewById(R.id.view_pager_one)
+        mViewPager = findViewById(R.id.view_pager_news)
 
     }
 
@@ -87,7 +86,6 @@ class OccupiedActivity : AppCompatActivity() {
     private fun initImageSlider(){
 
         posters.add(DrawableImage(R.drawable.fox))
-        posters.add(RawVideo(R.raw.seven_sec))
         posters.add(RemoteVideo(Uri.parse("https://www.youtube.com/watch?v=lTTajzrSkCw")))
 
         posterSlider.setPosters(posters)

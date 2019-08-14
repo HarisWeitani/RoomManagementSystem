@@ -3,6 +3,8 @@ package com.hw.rms.roommanagementsystem.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -11,16 +13,17 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.asura.library.posters.DrawableImage
-import com.asura.library.posters.Poster
-import com.asura.library.posters.RawVideo
-import com.asura.library.posters.RemoteVideo
+import com.asura.library.posters.*
 import com.asura.library.views.PosterSlider
+import com.google.gson.Gson
+import com.hw.rms.roommanagementsystem.Adapter.ImageVideoPagerAdapter
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Helper.SharedPreference
+import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
+import java.io.File
 
 class AvailableMainActivity : AppCompatActivity() {
 
@@ -33,11 +36,19 @@ class AvailableMainActivity : AppCompatActivity() {
     lateinit var posterSlider: PosterSlider
     var posters : ArrayList<Poster> = arrayListOf()
 
-    lateinit var mViewPager: ViewPager
+    //news
+    lateinit var vpNews: ViewPager
     lateinit var newsPagerAdapter: NewsPagerAdapter
-
     var newsListLeft : MutableList<News> = mutableListOf()
     var newsListRight : MutableList<News> = mutableListOf()
+    var handlerNews : Handler? = null
+    var ctrNews : Int = 0
+
+    lateinit var vpImageVideo: ViewPager
+    lateinit var imageVideoPagerAdapter: ImageVideoPagerAdapter
+    var imageVideoList : MutableList<ImageVideo> = mutableListOf()
+
+
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -50,12 +61,18 @@ class AvailableMainActivity : AppCompatActivity() {
         hideStatusBar()
         setContentView(R.layout.activity_main_available)
         val sharedPref = SharedPreference(this)
-        Log.i("Ahsiap",sharedPref.getValueString("name"))
 
         initView()
-        initImageSlider()
+//        initImageSlider()
         initViewPager()
         initButtonListener()
+        imageVideoAutoScroll()
+
+        var jsonString = """{"imageTitle":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
+
+        var gson = Gson()
+        var conv = gson.fromJson(jsonString,ImageVideo::class.java)
+        Log.i("ahsiap", " ${conv.imageUrl} | ${conv.imageTitle} | ${conv.videoUrl} | ${conv.videoTitle}")
 
     }
 
@@ -69,12 +86,13 @@ class AvailableMainActivity : AppCompatActivity() {
         //status
         btn_status = findViewById(R.id.btn_status)
         //poster
-        posterSlider = findViewById(R.id.poster_slider)
+//        posterSlider = findViewById(R.id.poster_slider)
         //news pager
-        mViewPager = findViewById(R.id.view_pager_one)
+        vpNews = findViewById(R.id.view_pager_news)
+        //iv pager
+        vpImageVideo = findViewById(R.id.view_pager_iv_vv)
 
     }
-
 
     private fun initViewPager(){
 
@@ -86,15 +104,51 @@ class AvailableMainActivity : AppCompatActivity() {
         newsListRight.add(News("",""))
 
         newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
-        mViewPager.adapter = newsPagerAdapter
+        vpNews.adapter = newsPagerAdapter
+
     }
 
+    private fun newsAutoScroll(){
+        handlerNews = Handler()
+        handlerNews?.postDelayed({
+            if( ctrNews < 3 ){
+                vpNews.setCurrentItem(ctrNews,true)
+                Log.i("ahsiap", " $ctrNews | ${vpNews.currentItem} ")
+                ctrNews++
+                newsAutoScroll()
+            }else{
+                ctrNews = 0
+                newsAutoScroll()
+            }
+        }, 5000 )
+    }
+
+    private fun imageVideoAutoScroll(){
+        imageVideoList.add(ImageVideo("asdasd","asdasd","",""))
+
+        val absPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).absolutePath)
+        if( !absPath.exists() ){
+            Log.i("ahsiap", "aaaaa")
+        }else{
+            Log.i("ahsiap","ahsiap")
+        }
+
+        val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+        val fileName = "video.mp4"
+
+        imageVideoPagerAdapter = ImageVideoPagerAdapter(imageVideoList,"$dirPath/$fileName",this)
+        vpImageVideo.adapter = imageVideoPagerAdapter
+    }
 
     private fun initImageSlider(){
 
+        val path = "android.resource://" + packageName + "/" + R.raw.tiger
+        val path2 = "android.resource://" + packageName + "/" + R.raw.tensecvideo
+
         posters.add(DrawableImage(R.drawable.fox))
-        posters.add(RawVideo(R.raw.seven_sec))
-        posters.add(RemoteVideo(Uri.parse("https://www.youtube.com/watch?v=lTTajzrSkCw")))
+        posters.add(RawVideo(R.raw.tensecvideo))
+        posters.add(RemoteVideo(Uri.parse(path2)))
+        posters.add(RemoteImage(path))
 
         posterSlider.setPosters(posters)
 
