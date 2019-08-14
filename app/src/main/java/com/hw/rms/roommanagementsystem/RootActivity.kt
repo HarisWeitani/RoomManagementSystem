@@ -14,9 +14,16 @@ import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import android.R.attr.password
+import com.github.nkzawa.socketio.client.IO
+import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Model.DummyModel
 import com.hw.rms.roommanagementsystem.Model.Json4Kotlin_Base
+import org.json.JSONException
+import org.json.JSONObject
+import com.github.nkzawa.emitter.Emitter
+
+
 
 
 class RootActivity : AppCompatActivity() {
@@ -28,7 +35,28 @@ class RootActivity : AppCompatActivity() {
         val sharepref = SharedPreference(this)
         val firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
 
-        request(firstInstall)
+//        postRequest(firstInstall)
+
+        val onNewMessage = Emitter.Listener { args ->
+            runOnUiThread(Runnable {
+                val data = args[0] as JSONObject
+                val username: String
+                val message: String
+                try {
+                    username = data.getString("username")
+                    message = data.getString("message")
+                } catch (e: JSONException) {
+                    return@Runnable
+                }
+
+                Log.d("socket", "$username : $message")
+            })
+        }
+
+        var socket = IO.socket("http://192.168.1.10:3000")
+        socket.on("new message", onNewMessage)
+        socket.connect()
+        socket.connected()
 
     }
     private fun startActivity( firstInstall: Boolean ){
@@ -38,7 +66,7 @@ class RootActivity : AppCompatActivity() {
         },500)
     }
 
-    private fun request(firstInstall: Boolean){
+    private fun postRequest(firstInstall: Boolean){
         val queue = Volley.newRequestQueue(this)
         val url = "http://103.82.242.195/room_management_system/api/booking/get_config"
 
