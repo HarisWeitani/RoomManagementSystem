@@ -8,6 +8,8 @@ import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.downloader.Error
+import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
@@ -20,6 +22,13 @@ import com.github.nkzawa.emitter.Emitter
 import com.hw.rms.roommanagementsystem.Data.ConfigData
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.NetworkHelper
+import com.downloader.OnDownloadListener
+import com.downloader.Progress
+import com.downloader.OnProgressListener
+import com.downloader.OnPauseListener
+import com.downloader.OnStartOrResumeListener
+
+
 
 
 class RootActivity : AppCompatActivity() {
@@ -107,8 +116,25 @@ class RootActivity : AppCompatActivity() {
                 return params
             }
         }
-
         queue.add(postRequest)
+    }
+
+    private fun fileDownloader(url : String, dirPath : String, fileName : String){
+
+        PRDownloader.initialize(applicationContext)
+        PRDownloader.download(url, dirPath, fileName)
+            .build()
+            .setOnStartOrResumeListener { }
+            .setOnProgressListener { }
+            .start(object : OnDownloadListener {
+                override fun onError(error: Error?) {
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader on Error ${error?.responseCode} | ${error?.serverErrorMessage} ")
+                }
+
+                override fun onDownloadComplete() {
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader onDownloadComplete")
+                }
+            })
 
     }
 

@@ -43,7 +43,7 @@ class ImageVideoPagerAdapter(internal var imageVideoList: List<ImageVideo>, inte
         iv_image = itemView.findViewById(R.id.iv_image)
         vv_video = itemView.findViewById(R.id.vv_video)
 
-//        if( !imageVideoList[position].imageTitle.equals(null) ){
+//        if( !imageVideoList[position].imageName.equals(null) ){
 //            iv_image
 //        }
 //        if(position == 0) {

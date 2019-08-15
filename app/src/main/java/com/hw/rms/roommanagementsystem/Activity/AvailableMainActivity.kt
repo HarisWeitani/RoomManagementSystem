@@ -16,6 +16,7 @@ import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.*
 import com.asura.library.views.PosterSlider
 import com.google.gson.Gson
+import com.hw.rms.roommanagementsystem.Adapter.ImageVideoAdapter
 import com.hw.rms.roommanagementsystem.Adapter.ImageVideoPagerAdapter
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
@@ -46,9 +47,11 @@ class AvailableMainActivity : AppCompatActivity() {
 
     lateinit var vpImageVideo: ViewPager
     lateinit var imageVideoPagerAdapter: ImageVideoPagerAdapter
+
+    //image video slideshow
+    lateinit var ivAdapter : ImageVideoAdapter
+    lateinit var vPager : ViewPager
     var imageVideoList : MutableList<ImageVideo> = mutableListOf()
-
-
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -67,11 +70,23 @@ class AvailableMainActivity : AppCompatActivity() {
         initViewPager()
         initButtonListener()
         imageVideoAutoScroll()
+        initImageVideoPager()
 
-        var jsonString = """{"imageTitle":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
+        var jsonString = """{"imageName":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
 
         var gson = Gson()
         var conv = gson.fromJson(jsonString,ImageVideo::class.java)
+
+    }
+
+    private fun initImageVideoPager(){
+
+        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+        imageVideoList.add(ImageVideo("","","",""))
+
+        ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
+        vPager = findViewById(R.id.view_pager_iv_vv)
+        vPager.adapter = ivAdapter
 
     }
 

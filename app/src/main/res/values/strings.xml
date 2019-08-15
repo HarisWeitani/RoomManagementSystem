@@ -11,4 +11,7 @@
         <item>Las Vegas, NV</item>
     </string-array>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="error_text_fragment">Some Error Occurred</string>
+
 </resources>

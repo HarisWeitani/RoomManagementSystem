@@ -1,13 +1,11 @@
 package com.hw.rms.roommanagementsystem.Model
 
-import android.graphics.Bitmap
+class ImageVideo(imageName : String, imageUrl: String, videoName: String, videoUrl: String) {
 
-class ImageVideo(imageTitle : String,imageUrl: String, videoTitle: String, videoUrl: String) {
-
-    var imageTitle: String? = imageTitle
+    var imageName: String? = imageName
     var imageUrl: String? = imageUrl
 
-    var videoTitle: String? = videoTitle
+    var videoName: String? = videoName
     var videoUrl: String? = videoUrl
 
 }
