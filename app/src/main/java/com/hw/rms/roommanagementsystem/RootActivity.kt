@@ -17,12 +17,8 @@ import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import com.github.nkzawa.emitter.Emitter
-import com.hw.rms.roommanagementsystem.Data.ConfigData
+import com.hw.rms.roommanagementsystem.Data.ResponseConfig
 import com.downloader.OnDownloadListener
-import com.downloader.Progress
-import com.downloader.OnProgressListener
-import com.downloader.OnPauseListener
-import com.downloader.OnStartOrResumeListener
 import com.hw.rms.roommanagementsystem.Data.RequestConfig
 import com.hw.rms.roommanagementsystem.Helper.*
 import retrofit2.Call
@@ -51,12 +47,12 @@ class RootActivity : AppCompatActivity() {
 
     private fun retrofit(){
         var apiService = API.networkApi()
-        apiService.getConfigData(RequestConfig("25")).enqueue(object : Callback<ConfigData> {
-            override fun onFailure(call: Call<ConfigData>?, t: Throwable?) {
+        apiService.getConfigData(RequestConfig("25")).enqueue(object : Callback<ResponseConfig> {
+            override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG,t.toString())
             }
 
-            override fun onResponse(call: Call<ConfigData>?, response: retrofit2.Response<ConfigData>?) {
+            override fun onResponse(call: Call<ResponseConfig>?, response: retrofit2.Response<ResponseConfig>?) {
                 Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
                 DAO.configData = response.body()
                 startActivity()
@@ -121,7 +117,7 @@ class RootActivity : AppCompatActivity() {
         val postRequest = object : StringRequest(Method.POST,url,
             Response.Listener {
                 var gson = Gson()
-                DAO.configData = gson.fromJson(it, ConfigData::class.java)
+                DAO.configData = gson.fromJson(it, ResponseConfig::class.java)
                 startActivity()
                 Log.d(GlobalVal.NETWORK_TAG, it.toString())
             },

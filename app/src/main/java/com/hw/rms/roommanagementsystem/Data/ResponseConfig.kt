@@ -5,7 +5,7 @@ package com.hw.rms.roommanagementsystem.Data
  * room_management_system/api/booking/get_config
  * Created Date 15 Aug 2019
  */
-data class ConfigData(
+data class ResponseConfig(
     var company_address: String? = "UNDEFINED",
     var company_email: String? = "UNDEFINED",
     var company_logo: String? = "UNDEFINED",
