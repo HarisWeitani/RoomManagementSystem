@@ -12,23 +12,21 @@ import com.downloader.Error
 import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
-import com.hw.rms.roommanagementsystem.Helper.GlobalVal
-import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.github.nkzawa.socketio.client.IO
 import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import com.github.nkzawa.emitter.Emitter
 import com.hw.rms.roommanagementsystem.Data.ConfigData
-import com.hw.rms.roommanagementsystem.Helper.DAO
-import com.hw.rms.roommanagementsystem.Helper.NetworkHelper
 import com.downloader.OnDownloadListener
 import com.downloader.Progress
 import com.downloader.OnProgressListener
 import com.downloader.OnPauseListener
 import com.downloader.OnStartOrResumeListener
-
-
+import com.hw.rms.roommanagementsystem.Data.RequestConfig
+import com.hw.rms.roommanagementsystem.Helper.*
+import retrofit2.Call
+import retrofit2.Callback
 
 
 class RootActivity : AppCompatActivity() {
@@ -42,10 +40,31 @@ class RootActivity : AppCompatActivity() {
         val sharepref = SharedPreference(this)
         firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
 
-        postRequest()
+//        postRequest()
 //        startActivity()
 //        socketConnection()
+
+        retrofit()
+
+
     }
+
+    private fun retrofit(){
+        var apiService = API.networkApi()
+        apiService.getConfigData(RequestConfig("25")).enqueue(object : Callback<ConfigData> {
+            override fun onFailure(call: Call<ConfigData>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG,t.toString())
+            }
+
+            override fun onResponse(call: Call<ConfigData>?, response: retrofit2.Response<ConfigData>?) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+                DAO.configData = response.body()
+                startActivity()
+            }
+
+        })
+    }
+
     private fun startActivity(){
 
         Handler().postDelayed({
