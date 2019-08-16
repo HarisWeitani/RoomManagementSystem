@@ -37,10 +37,10 @@ class RootActivity : AppCompatActivity() {
         firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
 
 //        postRequest()
-//        startActivity()
+        startActivity()
 //        socketConnection()
 
-        retrofit()
+//        retrofit()
 
 
     }
@@ -106,7 +106,7 @@ class RootActivity : AppCompatActivity() {
         socket.on("new message", onNewMessage)
         socket.on("user left", disconnect)
         socket.connect()
-        socket.connected()
+        Log.d("socket", "status ${socket.connected()}")
     }
 
     private fun postRequest(){

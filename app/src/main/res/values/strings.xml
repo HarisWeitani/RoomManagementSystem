@@ -1,17 +1,13 @@
 <resources>
     <string name="app_name">RoomManagementSystem</string>
-    <string name="title_activity_login">LoginActivity</string>
 
-    <string-array name="cities">
-        <item>New York, NY</item>
-        <item>Washington, DC</item>
-        <item>Miami, FL</item>
-        <item>Los Angeles, CA</item>
-        <item>San Francisco, CA</item>
-        <item>Las Vegas, NV</item>
-    </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="error_text_fragment">Some Error Occurred</string>
+
+    <!-- activity_admin_setting-->
+    <string name="try_connection_server">Try Connection</string>
+    <string name="try_connection_socket">Try Connection</string>
+    <string name="connecting">Connecting</string>
+    <string name="success">Success</string>
+
 
 </resources>

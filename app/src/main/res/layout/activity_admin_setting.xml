@@ -211,9 +211,10 @@
                     />
                 </LinearLayout>
                 <Button
+                        android:id="@+id/btn_try_serverconn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Try Connection"
+                        android:text="@string/try_connection_server"
                         android:layout_marginBottom="32dp"
                 />
 
@@ -252,13 +253,15 @@
                     />
                 </LinearLayout>
                 <Button
+                        android:id="@+id/btn_try_socketconn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Try Connection"
+                        android:text="@string/try_connection_socket"
                         android:layout_marginBottom="32dp"
                 />
 
                 <LinearLayout
+                        android:id="@+id/linearlay_other_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
