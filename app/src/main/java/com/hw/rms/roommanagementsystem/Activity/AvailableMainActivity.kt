@@ -16,9 +16,7 @@ import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.*
 import com.asura.library.views.PosterSlider
 import com.google.gson.Gson
-import com.hw.rms.roommanagementsystem.Adapter.ImageVideoAdapter
-import com.hw.rms.roommanagementsystem.Adapter.ImageVideoPagerAdapter
-import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
+import com.hw.rms.roommanagementsystem.Adapter.*
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.Model.ImageVideo
@@ -26,7 +24,8 @@ import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
 
-class AvailableMainActivity : AppCompatActivity() {
+class AvailableMainActivity : AppCompatActivity(),
+    ImageFragment.OnFragmentInteractionListener, VideoFragment.OnFragmentInteractionListener {
 
     private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
 
@@ -184,6 +183,10 @@ class AvailableMainActivity : AppCompatActivity() {
             startActivity(intent)
             true
         }
+
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
 
     }
 }

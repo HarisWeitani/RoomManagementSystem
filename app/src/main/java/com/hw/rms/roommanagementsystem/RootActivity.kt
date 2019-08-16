@@ -47,9 +47,10 @@ class RootActivity : AppCompatActivity() {
 //        socketConnection()
     }
     private fun startActivity(){
+
         Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java))
-            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java))
+            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
+            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
         },500)
     }
 
