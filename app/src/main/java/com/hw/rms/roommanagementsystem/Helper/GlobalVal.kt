@@ -6,10 +6,12 @@ class GlobalVal {
          * TAG LOGGING
          */
         const val NETWORK_TAG = "RMS_NETWORK"
+        const val SOCKET_TAG = "RMS_SOCKET"
 
         /**
          * SHARED PREFERENCES KEY
          */
         const val FRESH_INSTALL_KEY = "FRESH_INSTALL_KEY"
+        const val SETTINGS_DATA_KEY = "SETTINGS_DATA_KEY"
     }
 }

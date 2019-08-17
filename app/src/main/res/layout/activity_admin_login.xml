@@ -88,6 +88,8 @@
                     android:textSize="28sp"
                     android:inputType="number"
                     android:maxLength="4"
+
+
             />
         </LinearLayout>
     </FrameLayout>

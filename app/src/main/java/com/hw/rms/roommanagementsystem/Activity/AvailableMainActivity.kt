@@ -18,6 +18,7 @@ import com.asura.library.views.PosterSlider
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.*
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
+import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.Model.News
@@ -32,6 +33,8 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var tv_running_text : TextView
     lateinit var tv_enter_admin : TextView
     lateinit var btn_status : Button
+
+    lateinit var tv_room_name : TextView
 
     lateinit var posterSlider: PosterSlider
     var posters : ArrayList<Poster> = arrayListOf()
@@ -65,11 +68,11 @@ class AvailableMainActivity : AppCompatActivity(),
         val sharedPref = SharedPreference(this)
 
         initView()
-//        initImageSlider()
+        initImageSlider()
         initViewPager()
         initButtonListener()
-        imageVideoAutoScroll()
-        initImageVideoPager()
+//        imageVideoAutoScroll()
+//        initImageVideoPager()
 
         var jsonString = """{"imageName":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
 
@@ -83,9 +86,9 @@ class AvailableMainActivity : AppCompatActivity(),
         val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
         imageVideoList.add(ImageVideo("","","",""))
 
-        ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
-        vPager = findViewById(R.id.view_pager_iv_vv)
-        vPager.adapter = ivAdapter
+//        ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
+//        vPager = findViewById(R.id.view_pager_iv_vv)
+//        vPager.adapter = ivAdapter
 
     }
 
@@ -99,11 +102,14 @@ class AvailableMainActivity : AppCompatActivity(),
         //status
         btn_status = findViewById(R.id.btn_status)
         //poster
-//        posterSlider = findViewById(R.id.poster_slider)
+        posterSlider = findViewById(R.id.poster_slider)
         //news pager
         vpNews = findViewById(R.id.view_pager_news)
         //iv pager
-        vpImageVideo = findViewById(R.id.view_pager_iv_vv)
+//        vpImageVideo = findViewById(R.id.view_pager_iv_vv)
+
+        tv_room_name = findViewById(R.id.tv_room_name)
+        tv_room_name.text = DAO.settingsData?.room_name
 
     }
 
@@ -163,8 +169,8 @@ class AvailableMainActivity : AppCompatActivity(),
         val fileName = "video.mp4"
 
         posters.add(DrawableImage(R.drawable.fox))
-//        posters.add(RawVideo(R.raw.tensecvideo))
-        posters.add(RemoteVideo(Uri.parse("$dirPath/$fileName")))
+        posters.add(RawVideo(R.raw.tensecvideo))
+//        posters.add(RemoteVideo(Uri.parse("$dirPath/$fileName")))
         posters.add(RemoteImage(path))
 
         posterSlider.setPosters(posters)

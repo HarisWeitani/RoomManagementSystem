@@ -30,14 +30,13 @@ class AdminLoginActivity : AppCompatActivity() {
         hideStatusBar()
         setContentView(R.layout.activity_admin_login)
         initView()
-        initButtonListener()
     }
 
     private fun initView(){
         //admin pin
         et_admin_pin = findViewById(R.id.et_admin_pin)
         btnBack = findViewById(R.id.btnBack)
-
+        initButtonListener()
 
     }
     private fun initButtonListener(){

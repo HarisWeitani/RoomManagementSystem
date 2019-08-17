@@ -20,6 +20,7 @@ import com.github.nkzawa.emitter.Emitter
 import com.hw.rms.roommanagementsystem.Data.ResponseConfig
 import com.downloader.OnDownloadListener
 import com.hw.rms.roommanagementsystem.Data.RequestConfig
+import com.hw.rms.roommanagementsystem.Data.SettingsData
 import com.hw.rms.roommanagementsystem.Helper.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,6 +36,7 @@ class RootActivity : AppCompatActivity() {
 
         val sharepref = SharedPreference(this)
         firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
+        DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
 
 //        postRequest()
         startActivity()

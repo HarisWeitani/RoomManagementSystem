@@ -18,6 +18,10 @@ interface API {
     fun getConfigData(@Body requestConfig : RequestConfig) : Call<ResponseConfig>
 
     companion object Factory{
+//        "http://103.82.242.195/room_management_system/"
+        var serverUrl : String? = null
+        var socketUrl : String? = null
+
         fun networkApi() : API{
             val gson = GsonBuilder()
                 .setLenient()
@@ -29,7 +33,7 @@ interface API {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://103.82.242.195/room_management_system/")!!
+                .baseUrl(serverUrl)!!
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
