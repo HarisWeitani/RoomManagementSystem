@@ -13,5 +13,10 @@ class GlobalVal {
          */
         const val FRESH_INSTALL_KEY = "FRESH_INSTALL_KEY"
         const val SETTINGS_DATA_KEY = "SETTINGS_DATA_KEY"
+
+        /**
+         * Naming
+         */
+        const val LOGO_NAME ="imageview_logo.png"
     }
 }

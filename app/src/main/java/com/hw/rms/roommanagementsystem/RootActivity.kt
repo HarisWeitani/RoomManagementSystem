@@ -3,6 +3,7 @@ package com.hw.rms.roommanagementsystem
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
@@ -25,6 +26,7 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
+import java.io.File
 
 class RootActivity : AppCompatActivity() {
 
@@ -200,8 +202,8 @@ class RootActivity : AppCompatActivity() {
         queue.add(postRequest)
     }
 
-    private fun fileDownloader(url : String, dirPath : String, fileName : String){
-
+    private fun fileDownloader(url : String, fileName : String){
+        val dirPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath).toString()
         PRDownloader.initialize(applicationContext)
         PRDownloader.download(url, dirPath, fileName)
             .build()
@@ -216,7 +218,6 @@ class RootActivity : AppCompatActivity() {
                     Log.d(GlobalVal.NETWORK_TAG,"fileDownloader onDownloadComplete")
                 }
             })
-
     }
 
 }

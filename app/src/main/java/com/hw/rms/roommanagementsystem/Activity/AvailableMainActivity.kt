@@ -10,6 +10,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -26,6 +27,11 @@ import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
+
 
 class AvailableMainActivity : AppCompatActivity(),
     ImageFragment.OnFragmentInteractionListener, VideoFragment.OnFragmentInteractionListener {
@@ -37,6 +43,8 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var btn_status : Button
 
     lateinit var tv_room_name : TextView
+
+    lateinit var iv_logo : ImageView
 
     lateinit var posterSlider: PosterSlider
     var posters : ArrayList<Poster> = arrayListOf()
@@ -80,7 +88,7 @@ class AvailableMainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         hideStatusBar()
 
-        if( DAO.onMeeting != null ){
+        if( DAO.onMeeting!!.data!!.isNotEmpty() ){
             booking_status =  DAO.onMeeting!!.data!![0]!!.booking_status!!.toInt()
         }
 
@@ -93,11 +101,11 @@ class AvailableMainActivity : AppCompatActivity(),
             setContentView(R.layout.activity_occupied)
             initOccupiedView()
         }
+
 //        setContentView(R.layout.activity_main_available)
 //        setContentView(R.layout.activity_occupied)
 //        setContentView(R.layout.activity_waiting)
 //        setContentView(R.layout.activity_waiting_occupied)
-        val sharedPref = SharedPreference(this)
 
         initView()
         initImageSlider()
@@ -106,10 +114,10 @@ class AvailableMainActivity : AppCompatActivity(),
 //        imageVideoAutoScroll()
 //        initImageVideoPager()
 
-        var jsonString = """{"imageName":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
-
-        var gson = Gson()
-        var conv = gson.fromJson(jsonString,ImageVideo::class.java)
+//        var jsonString = """{"imageName":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
+//
+//        var gson = Gson()
+//        var conv = gson.fromJson(jsonString,ImageVideo::class.java)
 
     }
 
@@ -144,6 +152,14 @@ class AvailableMainActivity : AppCompatActivity(),
         tv_room_name.text = DAO.settingsData?.room?.room_name
 
         vpBottomSchedule = findViewById(R.id.view_pager_bottom_schedule)
+
+        iv_logo = findViewById(R.id.iv_logo)
+        val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
+
+        if (imgFile.exists()) {
+            val myBitmap = BitmapFactory.decodeFile("${imgFile.absolutePath}/${GlobalVal.LOGO_NAME}")
+            iv_logo.setImageBitmap(myBitmap)
+        }
 
     }
 

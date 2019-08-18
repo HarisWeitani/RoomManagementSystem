@@ -26,9 +26,6 @@ interface API {
     @POST("api/booking/get_next_meeting/")
     fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
 
-//    @POST("api/booking/get_on_meeting/")
-//    fun getOnMeeting(@Body request : RequestGetOnMeeting) : Call<ResponseGetOnMeeting>
-
     @Multipart
     @POST("api/booking/get_on_meeting/")
     fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>

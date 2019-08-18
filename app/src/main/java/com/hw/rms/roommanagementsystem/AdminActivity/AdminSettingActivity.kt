@@ -3,6 +3,7 @@ package com.hw.rms.roommanagementsystem.AdminActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.View
@@ -10,6 +11,9 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.downloader.Error
+import com.downloader.OnDownloadListener
+import com.downloader.PRDownloader
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
@@ -27,6 +31,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class AdminSettingActivity : AppCompatActivity() {
 
@@ -238,7 +243,7 @@ class AdminSettingActivity : AppCompatActivity() {
                 if( response.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
                     fetchingOtherData()
-
+                    fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
                 }else{
                     serverConnected = false
                 }
@@ -263,7 +268,6 @@ class AdminSettingActivity : AppCompatActivity() {
 
                 if( response.code() == 200 && response.body() != null ){
                     DAO.roomList = response.body()
-                    Log.d("ahsiap","asdasd")
                     serverConnected = true
                     serverConnected()
                     initSpinner()
@@ -326,6 +330,24 @@ class AdminSettingActivity : AppCompatActivity() {
                 if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun fileDownloader(url : String, fileName : String){
+        val dirPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath).toString()
+        PRDownloader.initialize(applicationContext)
+        PRDownloader.download(url, dirPath, fileName)
+            .build()
+            .setOnStartOrResumeListener { }
+            .setOnProgressListener { }
+            .start(object : OnDownloadListener {
+                override fun onError(error: Error?) {
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader on Error ${error?.responseCode} | ${error?.serverErrorMessage} ")
+                }
+
+                override fun onDownloadComplete() {
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader onDownloadComplete")
+                }
+            })
     }
 
     override fun onBackPressed() {
