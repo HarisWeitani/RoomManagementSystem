@@ -109,7 +109,7 @@ class AvailableMainActivity : AppCompatActivity(),
 //        vpImageVideo = findViewById(R.id.view_pager_iv_vv)
 
         tv_room_name = findViewById(R.id.tv_room_name)
-        tv_room_name.text = DAO.settingsData?.room_name
+        tv_room_name.text = DAO.settingsData?.room?.room_name
 
     }
 

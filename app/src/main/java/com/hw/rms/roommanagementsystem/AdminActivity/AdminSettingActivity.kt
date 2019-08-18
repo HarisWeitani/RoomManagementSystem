@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -15,9 +14,8 @@ import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
-import com.hw.rms.roommanagementsystem.Data.RequestConfig
-import com.hw.rms.roommanagementsystem.Data.ResponseConfig
-import com.hw.rms.roommanagementsystem.Data.SettingsData
+import com.hw.rms.roommanagementsystem.Adapter.SpinnerAdapter
+import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
@@ -67,6 +65,8 @@ class AdminSettingActivity : AppCompatActivity() {
     var serverUrl : String? = null
     var socketUrl : String? = null
 
+    var selectedRoom : ResponseRoom? = null
+
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -81,7 +81,7 @@ class AdminSettingActivity : AppCompatActivity() {
         sharePref = SharedPreference(this)
         initViews()
         initButtonListener()
-        initSpinner()
+        initUrlSpinner()
     }
 
     private fun initViews(){
@@ -111,20 +111,10 @@ class AdminSettingActivity : AppCompatActivity() {
 
     }
 
-    private fun initSpinner(){
-        sp_room_name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                roomName = room_name[position]
-            }
-        }
-
-        val aaRoomName = ArrayAdapter(this, android.R.layout.simple_spinner_item, room_name)
-        aaRoomName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_room_name.adapter = aaRoomName
-
+    private fun initUrlSpinner(){
+        val aaServer = ArrayAdapter(this, android.R.layout.simple_spinner_item, http_https)
+        aaServer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_server.adapter = aaServer
         sp_server.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -135,10 +125,10 @@ class AdminSettingActivity : AppCompatActivity() {
             }
 
         }
-        val aaServer = ArrayAdapter(this, android.R.layout.simple_spinner_item, http_https)
-        aaServer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_server.adapter = aaServer
 
+        val aaSocket = ArrayAdapter(this, android.R.layout.simple_spinner_item, http_https)
+        aaSocket.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_socket.adapter = aaSocket
         sp_socket.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -149,9 +139,24 @@ class AdminSettingActivity : AppCompatActivity() {
             }
 
         }
-        val aaSocket = ArrayAdapter(this, android.R.layout.simple_spinner_item, http_https)
-        aaSocket.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_socket.adapter = aaSocket
+    }
+
+    private fun initSpinner(){
+        val aaRoomName = SpinnerAdapter(this, android.R.layout.simple_spinner_item,
+            DAO.roomList as MutableList<ResponseRoom>
+        )
+        aaRoomName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_room_name.adapter = aaRoomName
+        sp_room_name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//               roomName = room_name[position]
+                selectedRoom = parent!!.selectedItem as ResponseRoom?
+            }
+        }
+
 
         sp_building_name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -180,14 +185,14 @@ class AdminSettingActivity : AppCompatActivity() {
                 SettingsData(
                     server_url = serverUrl,
                     socket_url = socketUrl,
-                    room_name = roomName,
-                    building_name = buildingName)
+                    building_name = buildingName,
+                    room = selectedRoom)
             val settingDataJson = Gson().toJson(DAO.settingsData)
 
             sharePref!!.save(GlobalVal.FRESH_INSTALL_KEY,false)
             sharePref!!.save(GlobalVal.SETTINGS_DATA_KEY,settingDataJson)
 
-            startActivity(Intent(this@AdminSettingActivity, RootActivity::class.java))
+            startActivity(Intent(this@AdminSettingActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
         }
 
         btn_try_serverconn.setOnClickListener {
@@ -210,14 +215,13 @@ class AdminSettingActivity : AppCompatActivity() {
 
         }
     }
-
     private fun connectServer(){
         runOnUiThread {
             btn_try_serverconn.text = getString(R.string.connecting)
             btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_yellow))
         }
         apiService = API.networkApi()
-        apiService!!.getConfigData(RequestConfig("25")).enqueue(object : Callback<ResponseConfig>{
+        apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
             override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG,t.toString())
 
@@ -233,26 +237,49 @@ class AdminSettingActivity : AppCompatActivity() {
 
                 if( response.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
-                    serverConnected = true
+                    fetchingOtherData()
+
                 }else{
                     serverConnected = false
                 }
             }
         })
-        serverConnection()
+    }
+    private fun fetchingOtherData(){
+        apiService!!.getRoomList().enqueue(object : Callback<List<ResponseRoom>>{
+            override fun onFailure(call: Call<List<ResponseRoom>>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG,t.toString())
+
+                runOnUiThread {
+                    btn_save_and_exit.text = getString(R.string.try_connection_server)
+                    btn_save_and_exit.background.clearColorFilter()
+                    Toast.makeText(this@AdminSettingActivity,"Fetching Data Failed", Toast.LENGTH_LONG).show()
+                }
+                serverConnected = false
+            }
+
+            override fun onResponse(call: Call<List<ResponseRoom>>?, response: Response<List<ResponseRoom>>?) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+
+                if( response.code() == 200 && response.body() != null ){
+                    DAO.roomList = response.body()
+                    Log.d("ahsiap","asdasd")
+                    serverConnected = true
+                    serverConnected()
+                    initSpinner()
+                }else{
+                    serverConnected = false
+                }
+            }
+
+        })
     }
 
-    private fun serverConnection(){
-        if( !serverConnected ){
-            Handler().postDelayed({
-                serverConnection()
-            },2500)
-        }else if( serverConnected ){
-            runOnUiThread {
-                btn_try_serverconn.text = getString(R.string.success)
-                btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-                if( socketConnected ) linearlay_other_settings.visibility = View.VISIBLE
-            }
+    private fun serverConnected(){
+        runOnUiThread {
+            btn_try_serverconn.text = getString(R.string.success)
+            btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
+            if( socketConnected ) linearlay_other_settings.visibility = View.VISIBLE
         }
     }
 
@@ -300,7 +327,6 @@ class AdminSettingActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onBackPressed() {
 

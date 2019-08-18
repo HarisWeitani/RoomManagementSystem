@@ -29,7 +29,10 @@ class AdminLoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         hideStatusBar()
         setContentView(R.layout.activity_admin_login)
-        initView()
+        val thread = Thread{
+            initView()
+        }
+        thread.start()
     }
 
     private fun initView(){

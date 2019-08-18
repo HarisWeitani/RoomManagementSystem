@@ -2,23 +2,26 @@ package com.hw.rms.roommanagementsystem.Helper
 
 import com.google.gson.GsonBuilder
 import com.hw.rms.roommanagementsystem.Data.ResponseConfig
-import com.hw.rms.roommanagementsystem.Data.RequestConfig
+import com.hw.rms.roommanagementsystem.Data.ResponseRoom
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.GET
 import java.util.concurrent.TimeUnit
 
 interface API {
     
-    @POST("api/booking/get_config")
-    fun getConfigData(@Body requestConfig : RequestConfig) : Call<ResponseConfig>
+    @GET("api/configuration/get_data/")
+    fun getConfigData() : Call<ResponseConfig>
+
+    @GET("api/configuration/get_room/")
+    fun getRoomList() : Call<List<ResponseRoom>>
 
     companion object Factory{
 //        "http://103.82.242.195/room_management_system/"
+//        http://139.180.142.76/room_management_system/
         var serverUrl : String? = null
         var socketUrl : String? = null
 

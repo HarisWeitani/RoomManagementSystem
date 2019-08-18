@@ -42,26 +42,8 @@ class RootActivity : AppCompatActivity() {
         startActivity()
 //        socketConnection()
 
-//        retrofit()
-
-
     }
 
-    private fun retrofit(){
-        var apiService = API.networkApi()
-        apiService.getConfigData(RequestConfig("25")).enqueue(object : Callback<ResponseConfig> {
-            override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG,t.toString())
-            }
-
-            override fun onResponse(call: Call<ResponseConfig>?, response: retrofit2.Response<ResponseConfig>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-                DAO.configData = response.body()
-                startActivity()
-            }
-
-        })
-    }
 
     private fun startActivity(){
 
