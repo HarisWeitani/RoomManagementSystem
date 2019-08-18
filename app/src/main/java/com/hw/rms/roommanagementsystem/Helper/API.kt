@@ -1,14 +1,14 @@
 package com.hw.rms.roommanagementsystem.Helper
 
 import com.google.gson.GsonBuilder
-import com.hw.rms.roommanagementsystem.Data.ResponseConfig
-import com.hw.rms.roommanagementsystem.Data.ResponseRoom
+import com.hw.rms.roommanagementsystem.Data.*
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface API {
@@ -19,11 +19,25 @@ interface API {
     @GET("api/configuration/get_room/")
     fun getRoomList() : Call<List<ResponseRoom>>
 
+    @GET("api/newsfeed/get_data/")
+    fun getNews() : Call<ResponseNews>
+
+    @Multipart
+    @POST("api/booking/get_next_meeting/")
+    fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
+
+//    @POST("api/booking/get_on_meeting/")
+//    fun getOnMeeting(@Body request : RequestGetOnMeeting) : Call<ResponseGetOnMeeting>
+
+    @Multipart
+    @POST("api/booking/get_on_meeting/")
+    fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
+
     companion object Factory{
 //        "http://103.82.242.195/room_management_system/"
 //        http://139.180.142.76/room_management_system/
-        var serverUrl : String? = null
-        var socketUrl : String? = null
+        var serverUrl : String? = DAO.settingsData?.server_url
+        var socketUrl : String? = DAO.settingsData?.server_url
 
         fun networkApi() : API{
             val gson = GsonBuilder()

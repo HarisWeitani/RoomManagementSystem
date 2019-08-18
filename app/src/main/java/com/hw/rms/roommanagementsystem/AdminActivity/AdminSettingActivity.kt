@@ -183,8 +183,8 @@ class AdminSettingActivity : AppCompatActivity() {
         btn_save_and_exit.setOnClickListener {
             DAO.settingsData =
                 SettingsData(
-                    server_url = serverUrl,
-                    socket_url = socketUrl,
+                    server_url = API.serverUrl,
+                    socket_url = API.socketUrl,
                     building_name = buildingName,
                     room = selectedRoom)
             val settingDataJson = Gson().toJson(DAO.settingsData)

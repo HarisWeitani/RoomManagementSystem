@@ -74,8 +74,8 @@ class ImageVideoPagerAdapter(internal var imageVideoList: List<ImageVideo>, inte
 
         iv_image.setImageResource(R.drawable.elephant)
 
-//        iv_image.setImage = newsListLeft[position].title
-//        tv_news_content_left.text = newsListLeft[position].content
+//        iv_image.setImage = botSchedLeft[position].title
+//        tv_bottom_schedule_content_left.text = botSchedLeft[position].content
 
         container.addView(itemView)
 

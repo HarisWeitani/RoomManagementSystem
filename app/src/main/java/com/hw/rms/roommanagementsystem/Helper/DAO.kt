@@ -1,8 +1,6 @@
 package com.hw.rms.roommanagementsystem.Helper
 
-import com.hw.rms.roommanagementsystem.Data.ResponseConfig
-import com.hw.rms.roommanagementsystem.Data.ResponseRoom
-import com.hw.rms.roommanagementsystem.Data.SettingsData
+import com.hw.rms.roommanagementsystem.Data.*
 
 /**
  * DATA ACCESS OBJECT
@@ -14,6 +12,9 @@ class DAO {
          */
         var configData : ResponseConfig? = null
         var roomList : List<ResponseRoom>? = null
+        var newsFeed : ResponseNews? = null
+        var nextMeeting : ResponseGetNextMeeting? = null
+        var onMeeting : ResponseGetOnMeeting? = null
 
         /**
          * Not API Object

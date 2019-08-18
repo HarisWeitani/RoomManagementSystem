@@ -16,6 +16,8 @@ import com.asura.library.posters.RemoteVideo
 import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
+import com.hw.rms.roommanagementsystem.Data.DataNews
+import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 
@@ -33,8 +35,8 @@ class WaitingOccupiedActivity : AppCompatActivity() {
     lateinit var mViewPager: ViewPager
     lateinit var newsPagerAdapter: NewsPagerAdapter
 
-    var newsListLeft : MutableList<News> = mutableListOf()
-    var newsListRight : MutableList<News> = mutableListOf()
+    var newsListLeft : MutableList<DataNews> = mutableListOf()
+    var newsListRight : MutableList<DataNews> = mutableListOf()
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -72,12 +74,20 @@ class WaitingOccupiedActivity : AppCompatActivity() {
 
     private fun initViewPager(){
 
-        newsListLeft.add(News("News One","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat cursus ornare. Integer semper a est ac iaculis. Nunc orci odio, efficitur eget tortor eu, malesuada posuere nibh. Donec id orci quis risus consectetur blandit. Cras aliquet risus dui, quis finibus arcu tincidunt at. Duis ac commodo dolor, nec finibus est. Mauris ut elit ultricies, rutrum sem vel, tempus lorem. Quisque auctor, nulla sit amet tempor commodo, orci eros blandit felis, quis consectetur ante lorem at lorem. Mauris vitae leo dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla sed turpis lobortis, suscipit dui fermentum, fermentum tellus. Nullam sollicitudin augue felis. Donec tincidunt mauris massa, quis pellentesque elit imperdiet et. Morbi iaculis turpis arcu, at interdum ipsum maximus vel. Duis vitae purus semper, ultricies arcu at, faucibus est. Nulla aliquam, libero non posuere auctor, ipsum enim mollis dolor, ac cursus nibh odio sed ligula."))
-        newsListRight.add(News("News Two","Content Two"))
-        newsListLeft.add(News("News Three","Content Three"))
-        newsListRight.add(News("News Four","Content Four"))
-        newsListLeft.add(News("News Five", "Content Five"))
-        newsListRight.add(News("",""))
+//        botSchedLeft.add(News("News One","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat cursus ornare. Integer semper a est ac iaculis. Nunc orci odio, efficitur eget tortor eu, malesuada posuere nibh. Donec id orci quis risus consectetur blandit. Cras aliquet risus dui, quis finibus arcu tincidunt at. Duis ac commodo dolor, nec finibus est. Mauris ut elit ultricies, rutrum sem vel, tempus lorem. Quisque auctor, nulla sit amet tempor commodo, orci eros blandit felis, quis consectetur ante lorem at lorem. Mauris vitae leo dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla sed turpis lobortis, suscipit dui fermentum, fermentum tellus. Nullam sollicitudin augue felis. Donec tincidunt mauris massa, quis pellentesque elit imperdiet et. Morbi iaculis turpis arcu, at interdum ipsum maximus vel. Duis vitae purus semper, ultricies arcu at, faucibus est. Nulla aliquam, libero non posuere auctor, ipsum enim mollis dolor, ac cursus nibh odio sed ligula."))
+//        botSchedRight.add(News("News Two","Content Two"))
+//        botSchedLeft.add(News("News Three","Content Three"))
+//        botSchedRight.add(News("News Four","Content Four"))
+//        botSchedLeft.add(News("News Five", "Content Five"))
+//        botSchedRight.add(News("",""))
+
+        for ( i in 0 until DAO.newsFeed!!.data!!.size){
+            if( i % 2 == 0){
+                newsListLeft.add(DAO.newsFeed!!.data!![i]!!)
+            }else{
+                newsListRight.add(DAO.newsFeed!!.data!![i]!!)
+            }
+        }
 
         newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
         mViewPager.adapter = newsPagerAdapter

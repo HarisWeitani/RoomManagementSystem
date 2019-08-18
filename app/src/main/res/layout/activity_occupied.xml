@@ -82,7 +82,7 @@
             />
 
             <Button
-                    android:id="@+id/btn_occupied"
+                    android:id="@+id/btn_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -113,6 +113,7 @@
             />
 
             <TextView
+                    android:id="@+id/tv_meeting_title_with_member_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -142,7 +143,7 @@
                             android:paddingStart="30dp"
                             android:paddingEnd="30dp"
 
-                            android:text="Check In"
+                            android:text="Check Out"
                             android:textAllCaps="false"
                             android:textSize="28sp"
                             android:fontFamily="@font/gotham_light"
@@ -277,77 +278,19 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:orientation="horizontal"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
     >
-        <Button
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:background="@drawable/ic_baseline_navigate_before_24px_wht"
-        />
-        <LinearLayout
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager_bottom_schedule"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center|start"
+                android:layout_gravity="center"
         >
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:text="Next Metting | 13:00 - 15:00"
-                    android:textAllCaps="false"
-                    android:fontFamily="@font/gotham_bold"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-            />
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:text="Meeting vendor Website dan Digital Marketing"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/gotham_light"
-                    android:textSize="20sp"
-            />
-        </LinearLayout>
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center|start"
-        >
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:text="Next Metting | 15:00 - 17:00"
-                    android:textAllCaps="false"
-                    android:fontFamily="@font/gotham_bold"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-            />
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:text="Meeting vendor Website dan Digital Marketing"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/gotham_light"
-                    android:textSize="20sp"
-            />
-        </LinearLayout>
-        <Button
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:background="@drawable/ic_baseline_navigate_next_24px_wht"
-        />
+        </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
 
     <LinearLayout

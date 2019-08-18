@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
+import com.hw.rms.roommanagementsystem.Data.DataNews
+import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 
-class NewsPagerAdapter(internal var newsListLeft: List<News>, internal var newsListRight: List<News> , internal var context: Context) : PagerAdapter() {
+class NewsPagerAdapter(internal var newsListLeft: List<DataNews>, internal var newsListRight: List<DataNews> , internal var context: Context) : PagerAdapter() {
 
     lateinit var tv_news_title_left: TextView
     lateinit var tv_news_title_right: TextView
@@ -39,11 +41,11 @@ class NewsPagerAdapter(internal var newsListLeft: List<News>, internal var newsL
         tv_news_title_right = itemView.findViewById(R.id.tv_news_title_right)
         tv_news_content_right = itemView.findViewById(R.id.tv_news_content_right)
 
-        tv_news_title_left.text = newsListLeft[position].title
-        tv_news_content_left.text = newsListLeft[position].content
+        tv_news_title_left.text = newsListLeft[position].newsfeed_title
+        tv_news_content_left.text = newsListLeft[position].newsfeed_content
 
-        tv_news_title_right.text = newsListRight[position].title
-        tv_news_content_right.text = newsListRight[position].content
+        tv_news_title_right.text = newsListRight[position].newsfeed_title
+        tv_news_content_right.text = newsListRight[position].newsfeed_content
 
         container.addView(itemView)
 

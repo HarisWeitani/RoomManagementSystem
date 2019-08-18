@@ -18,6 +18,8 @@ import com.asura.library.views.PosterSlider
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.*
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
+import com.hw.rms.roommanagementsystem.Data.DataGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.DataNews
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.Model.ImageVideo
@@ -42,10 +44,17 @@ class AvailableMainActivity : AppCompatActivity(),
     //news
     lateinit var vpNews: ViewPager
     lateinit var newsPagerAdapter: NewsPagerAdapter
-    var newsListLeft : MutableList<News> = mutableListOf()
-    var newsListRight : MutableList<News> = mutableListOf()
+    var newsListLeft : MutableList<DataNews> = mutableListOf()
+    var newsListRight : MutableList<DataNews> = mutableListOf()
     var handlerNews : Handler? = null
     var ctrNews : Int = 0
+
+    //bottom schedule
+    lateinit var vpBottomSchedule : ViewPager
+    lateinit var bottomSchedulePagerAdapter: BottomSchedulePagerAdapter
+    var botSchedLeft : MutableList<DataGetNextMeeting> = mutableListOf()
+    var botSchedRigt : MutableList<DataGetNextMeeting> = mutableListOf()
+
 
     lateinit var vpImageVideo: ViewPager
     lateinit var imageVideoPagerAdapter: ImageVideoPagerAdapter
@@ -54,6 +63,12 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var ivAdapter : ImageVideoAdapter
     lateinit var vPager : ViewPager
     var imageVideoList : MutableList<ImageVideo> = mutableListOf()
+
+    lateinit var tv_meeting_title_with_member_name : TextView
+
+    lateinit var btn_check_in : Button
+
+    var booking_status = 0
 
     private fun hideStatusBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -64,7 +79,24 @@ class AvailableMainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideStatusBar()
-        setContentView(R.layout.activity_main_available)
+
+        if( DAO.onMeeting != null ){
+            booking_status =  DAO.onMeeting!!.data!![0]!!.booking_status!!.toInt()
+        }
+
+        if( booking_status == 0 ){
+            setContentView(R.layout.activity_main_available)
+        }else if( booking_status == 1 ){
+            setContentView(R.layout.activity_waiting)
+            initWaitingView()
+        }else if( booking_status == 2 ){
+            setContentView(R.layout.activity_occupied)
+            initOccupiedView()
+        }
+//        setContentView(R.layout.activity_main_available)
+//        setContentView(R.layout.activity_occupied)
+//        setContentView(R.layout.activity_waiting)
+//        setContentView(R.layout.activity_waiting_occupied)
         val sharedPref = SharedPreference(this)
 
         initView()
@@ -111,19 +143,67 @@ class AvailableMainActivity : AppCompatActivity(),
         tv_room_name = findViewById(R.id.tv_room_name)
         tv_room_name.text = DAO.settingsData?.room?.room_name
 
+        vpBottomSchedule = findViewById(R.id.view_pager_bottom_schedule)
+
+    }
+
+    private fun initWaitingView(){
+        tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
+        tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+
+        btn_check_in = findViewById(R.id.btn_check_in)
+        btn_check_in.setOnClickListener {
+            DAO.onMeeting!!.data!![0]!!.booking_status = "2"
+            val i = Intent(this@AvailableMainActivity,AvailableMainActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            finish()
+            overridePendingTransition(0,0)
+            startActivity(i)
+            overridePendingTransition(0,0)
+        }
+    }
+
+    private fun initOccupiedView(){
+        tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
+        tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
     }
 
     private fun initViewPager(){
 
-        newsListLeft.add(News("News One","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat cursus ornare. Integer semper a est ac iaculis. Nunc orci odio, efficitur eget tortor eu, malesuada posuere nibh. Donec id orci quis risus consectetur blandit. Cras aliquet risus dui, quis finibus arcu tincidunt at. Duis ac commodo dolor, nec finibus est. Mauris ut elit ultricies, rutrum sem vel, tempus lorem. Quisque auctor, nulla sit amet tempor commodo, orci eros blandit felis, quis consectetur ante lorem at lorem. Mauris vitae leo dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla sed turpis lobortis, suscipit dui fermentum, fermentum tellus. Nullam sollicitudin augue felis. Donec tincidunt mauris massa, quis pellentesque elit imperdiet et. Morbi iaculis turpis arcu, at interdum ipsum maximus vel. Duis vitae purus semper, ultricies arcu at, faucibus est. Nulla aliquam, libero non posuere auctor, ipsum enim mollis dolor, ac cursus nibh odio sed ligula."))
-        newsListRight.add(News("News Two","Content Two"))
-        newsListLeft.add(News("News Three","Content Three"))
-        newsListRight.add(News("News Four","Content Four"))
-        newsListLeft.add(News("News Five", "Content Five"))
-        newsListRight.add(News("",""))
+        for ( i in 0 until DAO.newsFeed!!.data!!.size){
+            if( i % 2 == 0){
+                newsListLeft.add(DAO.newsFeed!!.data!![i]!!)
+            }else{
+                newsListRight.add(DAO.newsFeed!!.data!![i]!!)
+            }
+        }
 
         newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
         vpNews.adapter = newsPagerAdapter
+
+
+        val nextMeetingSize = DAO.nextMeeting!!.data!!.size
+
+        if( nextMeetingSize > 0) {
+            for (i in 0 until nextMeetingSize) {
+                if (i % 2 == 0) {
+                    botSchedLeft.add(DAO.nextMeeting!!.data!![i]!!)
+                } else {
+                    botSchedRigt.add(DAO.nextMeeting!!.data!![i]!!)
+                }
+            }
+
+            val isRightMeetingNull = DAO.nextMeeting!!.data!!.size % 2 != 0
+            if( isRightMeetingNull ) {
+                botSchedRigt.add(DataGetNextMeeting())
+            }
+        }else{
+            botSchedLeft.add(DataGetNextMeeting())
+            botSchedRigt.add(DataGetNextMeeting())
+        }
+
+        bottomSchedulePagerAdapter = BottomSchedulePagerAdapter(botSchedLeft,botSchedRigt,this)
+        vpBottomSchedule.adapter = bottomSchedulePagerAdapter
 
     }
 
