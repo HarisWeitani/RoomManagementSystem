@@ -124,6 +124,9 @@ class AdminSettingActivity : AppCompatActivity() {
             tv_date.text = dateFormat.format(date)
             tv_clock.text = clockFormat.format(date)
         }
+        Handler().postDelayed({
+            initDateTime()
+        },10000)
     }
     private fun initUrlSpinner(){
         val aaServer = ArrayAdapter(this, android.R.layout.simple_spinner_item, http_https)
@@ -197,8 +200,10 @@ class AdminSettingActivity : AppCompatActivity() {
         btn_save_and_exit.setOnClickListener {
             DAO.settingsData =
                 SettingsData(
-                    server_url = API.serverUrl,
-                    socket_url = API.socketUrl,
+                    server_full_url = API.serverUrl,
+                    socket_full_url = API.socketUrl,
+                    server_url = serverUrl,
+                    socket_url = socketUrl,
                     building_name = buildingName,
                     room = selectedRoom)
             val settingDataJson = Gson().toJson(DAO.settingsData)

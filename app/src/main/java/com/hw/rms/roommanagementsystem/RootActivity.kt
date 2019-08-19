@@ -131,8 +131,8 @@ class RootActivity : AppCompatActivity() {
     private fun startActivity(){
 
         Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
-            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
+            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         },500)
     }
 

@@ -33,8 +33,8 @@ interface API {
     companion object Factory{
 //        "http://103.82.242.195/room_management_system/"
 //        http://139.180.142.76/room_management_system/
-        var serverUrl : String? = DAO.settingsData?.server_url
-        var socketUrl : String? = DAO.settingsData?.server_url
+        var serverUrl : String? = DAO.settingsData?.server_full_url
+        var socketUrl : String? = DAO.settingsData?.server_full_url
 
         fun networkApi() : API{
             val gson = GsonBuilder()

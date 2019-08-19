@@ -59,6 +59,7 @@ class AdminLoginActivity : AppCompatActivity() {
         et_admin_pin.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if(s.toString() == "1111") {
+                    finish()
                     startActivity(Intent(this@AdminLoginActivity, AdminSettingActivity::class.java))
                 }
                 else if ( s.toString().length == 4)
