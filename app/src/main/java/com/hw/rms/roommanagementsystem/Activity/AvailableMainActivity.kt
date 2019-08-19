@@ -25,6 +25,8 @@ import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
 import android.graphics.BitmapFactory
+import com.google.gson.Gson
+import com.hw.rms.roommanagementsystem.Data.ResponseGetNextMeeting
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +46,9 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var tv_room_name : TextView
     lateinit var iv_logo : ImageView
     lateinit var tv_time_meeting_range : TextView
+
+    lateinit var btn_pref_schedule_meeting : Button
+    lateinit var btn_next_schedule_meeting : Button
 
     lateinit var posterSlider: PosterSlider
     var posters : ArrayList<Poster> = arrayListOf()
@@ -149,6 +154,9 @@ class AvailableMainActivity : AppCompatActivity(),
         }
         tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
 
+        btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
+        btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
+
     }
     private fun initDateTime(){
         val date = Date()
@@ -164,6 +172,7 @@ class AvailableMainActivity : AppCompatActivity(),
     }
 
     private fun initAvailableView(){
+        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
         tv_time_meeting_range.text = ""
     }
 
@@ -195,7 +204,7 @@ class AvailableMainActivity : AppCompatActivity(),
     }
 
     private fun initViewPager(){
-
+        //news
         for ( i in 0 until DAO.newsFeed!!.data!!.size){
             if( i % 2 == 0){
                 newsListLeft.add(DAO.newsFeed!!.data!![i]!!)
@@ -207,9 +216,12 @@ class AvailableMainActivity : AppCompatActivity(),
         newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
         vpNews.adapter = newsPagerAdapter
 
-
+        //testing
+//        DAO.nextMeeting = Gson().fromJson("{\"ok\":1,\"message\":\"Success Get Data\",\"data\":[{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"}]}",
+//            ResponseGetNextMeeting::class.java
+//        )
+        //meeting schedule bottom
         val nextMeetingSize = DAO.nextMeeting!!.data!!.size
-
         if( nextMeetingSize > 0) {
             for (i in 0 until nextMeetingSize) {
                 if (i % 2 == 0) {
@@ -294,6 +306,18 @@ class AvailableMainActivity : AppCompatActivity(),
                 AdminLoginActivity::class.java)
             startActivity(intent)
             true
+        }
+
+        btn_pref_schedule_meeting.setOnClickListener {
+            if( vpBottomSchedule.currentItem > 0 ){
+                vpBottomSchedule.currentItem --
+            }
+        }
+
+        btn_next_schedule_meeting.setOnClickListener {
+            if( vpBottomSchedule.currentItem < vpBottomSchedule.childCount ){
+                vpBottomSchedule.currentItem ++
+            }
         }
 
     }
