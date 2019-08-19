@@ -16,21 +16,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.*
 import com.asura.library.views.PosterSlider
-import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.*
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Data.DataGetNextMeeting
 import com.hw.rms.roommanagementsystem.Data.DataNews
 import com.hw.rms.roommanagementsystem.Helper.DAO
-import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.Model.ImageVideo
-import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
 import android.graphics.BitmapFactory
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AvailableMainActivity : AppCompatActivity(),
@@ -39,7 +37,8 @@ class AvailableMainActivity : AppCompatActivity(),
     private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
 
     lateinit var tv_running_text : TextView
-    lateinit var tv_enter_admin : TextView
+    lateinit var tv_clock : TextView
+    lateinit var tv_date : TextView
     lateinit var btn_status : Button
 
     lateinit var tv_room_name : TextView
@@ -78,15 +77,8 @@ class AvailableMainActivity : AppCompatActivity(),
 
     var booking_status = 0
 
-    private fun hideStatusBar(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideStatusBar()
 
         if( DAO.onMeeting!!.data!!.isNotEmpty() ){
             booking_status =  DAO.onMeeting!!.data!![0]!!.booking_status!!.toInt()
@@ -101,6 +93,7 @@ class AvailableMainActivity : AppCompatActivity(),
             setContentView(R.layout.activity_occupied)
             initOccupiedView()
         }
+        actionBar?.hide()
 
 //        setContentView(R.layout.activity_main_available)
 //        setContentView(R.layout.activity_occupied)
@@ -138,7 +131,9 @@ class AvailableMainActivity : AppCompatActivity(),
         tv_running_text = findViewById(R.id.tv_running_text)
         tv_running_text.isSelected = true
         //clock
-        tv_enter_admin = findViewById(R.id.tv_enter_admin)
+        tv_clock = findViewById(R.id.tv_clock)
+        tv_date = findViewById(R.id.tv_date)
+        initDateTime()
         //status
         btn_status = findViewById(R.id.btn_status)
         //poster
@@ -160,6 +155,15 @@ class AvailableMainActivity : AppCompatActivity(),
             val myBitmap = BitmapFactory.decodeFile("${imgFile.absolutePath}/${GlobalVal.LOGO_NAME}")
             iv_logo.setImageBitmap(myBitmap)
         }
+
+    }
+    private fun initDateTime(){
+        val date = Date()
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+        val clockFormat = SimpleDateFormat("HH:mm")
+        tv_date.text = dateFormat.format(date)
+        tv_clock.text = clockFormat.format(date)
+
 
     }
 
@@ -279,7 +283,7 @@ class AvailableMainActivity : AppCompatActivity(),
                 SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
                 SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT
 
-        tv_enter_admin.setOnLongClickListener {
+        tv_clock.setOnLongClickListener {
             val intent = Intent(this@AvailableMainActivity,
                 AdminLoginActivity::class.java)
             startActivity(intent)

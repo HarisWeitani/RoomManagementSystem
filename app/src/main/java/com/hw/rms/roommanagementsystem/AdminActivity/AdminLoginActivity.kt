@@ -19,16 +19,11 @@ class AdminLoginActivity : AppCompatActivity() {
     lateinit var et_admin_pin : EditText
     lateinit var btnBack : Button
 
-    private fun hideStatusBar(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideStatusBar()
         setContentView(R.layout.activity_admin_login)
+        actionBar?.hide()
         val thread = Thread{
             initView()
         }

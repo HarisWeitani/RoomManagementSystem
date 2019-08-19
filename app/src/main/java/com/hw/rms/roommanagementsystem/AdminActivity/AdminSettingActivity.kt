@@ -72,17 +72,10 @@ class AdminSettingActivity : AppCompatActivity() {
 
     var selectedRoom : ResponseRoom? = null
 
-
-    private fun hideStatusBar(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideStatusBar()
         setContentView(R.layout.activity_admin_setting)
+        actionBar?.hide()
         sharePref = SharedPreference(this)
         initViews()
         initButtonListener()

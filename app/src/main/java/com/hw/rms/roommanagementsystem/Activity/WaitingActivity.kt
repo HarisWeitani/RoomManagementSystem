@@ -18,7 +18,6 @@ import com.hw.rms.roommanagementsystem.Adapter.NewsPagerAdapter
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Data.DataNews
 import com.hw.rms.roommanagementsystem.Helper.DAO
-import com.hw.rms.roommanagementsystem.Model.News
 import com.hw.rms.roommanagementsystem.R
 
 class WaitingActivity : AppCompatActivity() {
@@ -62,7 +61,7 @@ class WaitingActivity : AppCompatActivity() {
         tv_running_text = findViewById(R.id.tv_running_text)
         tv_running_text.isSelected = true
         //clock
-        tv_enter_admin = findViewById(R.id.tv_enter_admin)
+        tv_enter_admin = findViewById(R.id.tv_clock)
         //status
         btn_status = findViewById(R.id.btn_status)
         //poster
