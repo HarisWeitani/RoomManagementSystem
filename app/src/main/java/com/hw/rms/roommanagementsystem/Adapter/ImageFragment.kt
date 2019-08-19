@@ -1,28 +1,35 @@
 package com.hw.rms.roommanagementsystem.Adapter
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 
 import com.hw.rms.roommanagementsystem.R
+import java.io.File
 
 class ImageFragment : Fragment() {
 
     // TODO: Rename and change types of parameters
-    private var mParam1: String? = null
-    private var mParam2: String? = null
+    private var imageName: String? = null
+    private var imageUrl: String? = null
 
     private var mListener: OnFragmentInteractionListener? = null
+
+    lateinit var image_view : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mParam1 = arguments!!.getString(ARG_PARAM1)
-            mParam2 = arguments!!.getString(ARG_PARAM2)
+            imageName = arguments!!.getString(ARG_PARAM1)
+            imageUrl = arguments!!.getString(ARG_PARAM2)
         }
     }
 
@@ -30,8 +37,14 @@ class ImageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image, container, false)
+
+        var v = inflater.inflate(R.layout.fragment_image, container, false)
+        image_view = v.findViewById(R.id.image_view)
+
+        val myBitmap = BitmapFactory.decodeFile("$imageUrl/$imageName")
+        image_view.setImageBitmap(myBitmap)
+
+        return v
     }
 
     fun onButtonPressed(uri: Uri) {

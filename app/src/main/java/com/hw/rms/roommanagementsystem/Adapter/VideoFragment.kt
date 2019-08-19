@@ -7,21 +7,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.VideoView
 
 import com.hw.rms.roommanagementsystem.R
 
 class VideoFragment : Fragment() {
 
-    private var mParam1: String? = null
-    private var mParam2: String? = null
+    private var videoName: String? = null
+    private var videoUrl: String? = null
 
     private var mListener: OnFragmentInteractionListener? = null
+
+    lateinit var video_view : VideoView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mParam1 = arguments!!.getString(ARG_PARAM1)
-            mParam2 = arguments!!.getString(ARG_PARAM2)
+            videoName = arguments!!.getString(ARG_PARAM1)
+            videoUrl = arguments!!.getString(ARG_PARAM2)
         }
     }
 
@@ -29,8 +32,12 @@ class VideoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_video, container, false)
+        val v =inflater.inflate(R.layout.fragment_video, container, false)
+        video_view = v.findViewById(R.id.video_view)
+//        video_view.setVideoPath("$videoUrl/$videoName")
+        video_view.setVideoURI(Uri.parse("$videoUrl/$videoName"))
+        video_view.start()
+        return v
     }
 
     fun onButtonPressed(uri: Uri) {

@@ -9,10 +9,10 @@ class ImageVideoAdapter(fm: FragmentManager?, var filePath: String?, var imageVi
 
     override fun getItem(position: Int): Fragment {
 
-        if ( imageVideo[position].imageName != null )
-            return ImageFragment.newInstance("","")
+        if (imageVideo[position].imageName!!.isNotEmpty())
+            return ImageFragment.newInstance(imageVideo[position].imageName!!,imageVideo[position].imageUrl!!)
         else if ( imageVideo[position].videoName != null )
-            return VideoFragment.newInstance("","")
+            return VideoFragment.newInstance(imageVideo[position].videoName!!,imageVideo[position].videoUrl!!)
         else
             return ErrorFragment.newInstance("","")
 

@@ -106,19 +106,7 @@ class AvailableMainActivity : AppCompatActivity(),
         initImageSlider()
         initViewPager()
         initButtonListener()
-//        imageVideoAutoScroll()
 //        initImageVideoPager()
-
-    }
-
-    private fun initImageVideoPager(){
-
-        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-        imageVideoList.add(ImageVideo("","","",""))
-
-//        ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
-//        vPager = findViewById(R.id.view_pager_iv_vv)
-//        vPager.adapter = ivAdapter
 
     }
 
@@ -245,39 +233,6 @@ class AvailableMainActivity : AppCompatActivity(),
 
     }
 
-    private fun newsAutoScroll(){
-        handlerNews = Handler()
-        handlerNews?.postDelayed({
-            if( ctrNews < 3 ){
-                vpNews.setCurrentItem(ctrNews,true)
-                Log.i("ahsiap", " $ctrNews | ${vpNews.currentItem} ")
-                ctrNews++
-                newsAutoScroll()
-            }else{
-                ctrNews = 0
-                newsAutoScroll()
-            }
-        }, 5000 )
-    }
-
-    private fun imageVideoAutoScroll(){
-        imageVideoList.add(ImageVideo("asdasd","asdasd","",""))
-        imageVideoList.add(ImageVideo("asdasd","asdasd","",""))
-
-        val absPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).absolutePath)
-        if( !absPath.exists() ){
-            Log.i("ahsiap", "aaaaa")
-        }else{
-            Log.i("ahsiap","ahsiap")
-        }
-
-        val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-        val fileName = "video.mp4"
-
-        imageVideoPagerAdapter = ImageVideoPagerAdapter(imageVideoList,"$dirPath",this)
-        vpImageVideo.adapter = imageVideoPagerAdapter
-    }
-
     private fun initImageSlider(){
 
         val path = "android.resource://" + packageName + "/" + R.raw.tiger
@@ -292,6 +247,19 @@ class AvailableMainActivity : AppCompatActivity(),
         posters.add(RemoteImage(path))
 
         posterSlider.setPosters(posters)
+
+    }
+
+    private fun initImageVideoPager(){
+
+        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+
+        imageVideoList.add(ImageVideo("tes.jpg",filePath!!,"",""))
+        imageVideoList.add(ImageVideo("","","pidio.mp4",filePath!!))
+
+        ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
+//        vPager = findViewById(R.id.view_pager_iv_vv)
+        vPager.adapter = ivAdapter
 
     }
 

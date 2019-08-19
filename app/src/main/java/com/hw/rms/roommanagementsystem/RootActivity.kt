@@ -47,6 +47,9 @@ class RootActivity : AppCompatActivity() {
             startActivity()
         }
 
+//        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
+//        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
+
     }
 
     private fun getNextMeeting(){
