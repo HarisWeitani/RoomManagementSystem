@@ -32,6 +32,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AdminSettingActivity : AppCompatActivity() {
 
@@ -72,6 +74,9 @@ class AdminSettingActivity : AppCompatActivity() {
 
     var selectedRoom : ResponseRoom? = null
 
+    lateinit var tv_clock : TextView
+    lateinit var tv_date : TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_setting)
@@ -107,8 +112,19 @@ class AdminSettingActivity : AppCompatActivity() {
         linearlay_other_settings = findViewById(R.id.linearlay_other_settings)
         linearlay_other_settings.visibility = View.GONE
 
+        tv_clock = findViewById(R.id.tv_clock)
+        tv_date = findViewById(R.id.tv_date)
+        initDateTime()
     }
-
+    private fun initDateTime(){
+        val date = Date()
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+        val clockFormat = SimpleDateFormat("HH:mm")
+        runOnUiThread{
+            tv_date.text = dateFormat.format(date)
+            tv_clock.text = clockFormat.format(date)
+        }
+    }
     private fun initUrlSpinner(){
         val aaServer = ArrayAdapter(this, android.R.layout.simple_spinner_item, http_https)
         aaServer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

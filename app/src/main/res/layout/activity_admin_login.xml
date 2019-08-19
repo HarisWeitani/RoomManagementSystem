@@ -34,27 +34,28 @@
         />
 
         <TextView
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:gravity="end"
                 android:text="06 August 2019"
                 android:textSize="30sp"
-                android:textStyle="bold"
                 android:textColor="@color/white"
+                android:fontFamily="@font/gotham_book"
         />
 
-        <TextClock
-                android:id="@+id/tc_enter_admin"
+        <TextView
+                android:id="@+id/tv_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:format24Hour="HH:mm"
-                android:format12Hour="@null"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:gravity="center"
                 android:text="12:12"
-                android:textSize="30sp"
+                android:textSize="50sp"
                 android:textColor="@color/white"
+                android:fontFamily="@font/gotham_light"
         />
     </LinearLayout>
 

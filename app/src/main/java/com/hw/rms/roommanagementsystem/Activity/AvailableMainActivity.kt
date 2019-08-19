@@ -161,10 +161,13 @@ class AvailableMainActivity : AppCompatActivity(),
         val date = Date()
         val dateFormat = SimpleDateFormat("dd MMMM yyyy")
         val clockFormat = SimpleDateFormat("HH:mm")
-        tv_date.text = dateFormat.format(date)
-        tv_clock.text = clockFormat.format(date)
-
-
+        runOnUiThread{
+            tv_date.text = dateFormat.format(date)
+            tv_clock.text = clockFormat.format(date)
+        }
+        Handler().postDelayed({
+            initDateTime()
+        },10000)
     }
 
     private fun initWaitingView(){

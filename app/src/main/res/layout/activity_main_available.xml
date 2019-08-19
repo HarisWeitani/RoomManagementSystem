@@ -42,9 +42,6 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-
-                android:format24Hour="HH:mm"
-                android:format12Hour="@null"
                 android:gravity="center"
                 android:text="12:12"
                 android:textSize="50sp"
