@@ -42,8 +42,8 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var btn_status : Button
 
     lateinit var tv_room_name : TextView
-
     lateinit var iv_logo : ImageView
+    lateinit var tv_time_meeting_range : TextView
 
     lateinit var posterSlider: PosterSlider
     var posters : ArrayList<Poster> = arrayListOf()
@@ -86,6 +86,7 @@ class AvailableMainActivity : AppCompatActivity(),
 
         if( booking_status == 0 ){
             setContentView(R.layout.activity_main_available)
+            initAvailableView()
         }else if( booking_status == 1 ){
             setContentView(R.layout.activity_waiting)
             initWaitingView()
@@ -95,10 +96,6 @@ class AvailableMainActivity : AppCompatActivity(),
         }
         actionBar?.hide()
 
-//        setContentView(R.layout.activity_main_available)
-//        setContentView(R.layout.activity_occupied)
-//        setContentView(R.layout.activity_waiting)
-//        setContentView(R.layout.activity_waiting_occupied)
 
         initView()
         initImageSlider()
@@ -106,11 +103,6 @@ class AvailableMainActivity : AppCompatActivity(),
         initButtonListener()
 //        imageVideoAutoScroll()
 //        initImageVideoPager()
-
-//        var jsonString = """{"imageName":1,"imagePath":"Test","bijiKuda":"AHSIAPAPPPPPP"}"""
-//
-//        var gson = Gson()
-//        var conv = gson.fromJson(jsonString,ImageVideo::class.java)
 
     }
 
@@ -155,6 +147,7 @@ class AvailableMainActivity : AppCompatActivity(),
             val myBitmap = BitmapFactory.decodeFile("${imgFile.absolutePath}/${GlobalVal.LOGO_NAME}")
             iv_logo.setImageBitmap(myBitmap)
         }
+        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
 
     }
     private fun initDateTime(){
@@ -170,9 +163,16 @@ class AvailableMainActivity : AppCompatActivity(),
         },10000)
     }
 
+    private fun initAvailableView(){
+        tv_time_meeting_range.text = ""
+    }
+
     private fun initWaitingView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
         tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+
+        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
 
         btn_check_in = findViewById(R.id.btn_check_in)
         btn_check_in.setOnClickListener {
@@ -189,6 +189,9 @@ class AvailableMainActivity : AppCompatActivity(),
     private fun initOccupiedView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
         tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+
+        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
     }
 
     private fun initViewPager(){

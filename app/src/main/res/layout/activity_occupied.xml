@@ -98,6 +98,7 @@
             />
 
             <TextView
+                    android:id="@+id/tv_time_meeting_range"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -136,8 +137,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:padding="20dp"
-                            android:paddingStart="30dp"
-                            android:paddingEnd="30dp"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
 
                             android:text="Check Out"
                             android:textAllCaps="false"
