@@ -18,13 +18,14 @@
             android:layout_margin="16dp"
     >
         <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="30dp"
-            android:background="@drawable/ic_launcher_background"
-            />
+                android:id="@+id/iv_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="30dp"
+        />
 
         <TextView
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
@@ -41,9 +42,6 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-
-                android:format24Hour="HH:mm"
-                android:format12Hour="@null"
                 android:gravity="center"
                 android:text="12:12"
                 android:textSize="50sp"
