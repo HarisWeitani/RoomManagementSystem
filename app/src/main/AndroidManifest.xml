@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+            android:name="androidx.multidex.MultiDexApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -26,11 +27,6 @@
         </activity>
 
         <activity
-                android:name=".Activity.OccupiedActivity"
-                android:screenOrientation="landscape">
-        </activity>
-
-        <activity
                 android:name=".AdminActivity.AdminSettingActivity"
                 android:screenOrientation="landscape">
         </activity>
@@ -43,15 +39,7 @@
                 android:screenOrientation="landscape">
         </activity>
         <activity
-                android:name=".Activity.WaitingActivity"
-                android:screenOrientation="landscape">
-        </activity>
-        <activity
                 android:name=".Activity.AvailableMainActivity"
-                android:screenOrientation="landscape">
-        </activity>
-        <activity
-                android:name=".Activity.WaitingOccupiedActivity"
                 android:screenOrientation="landscape">
         </activity>
     </application>

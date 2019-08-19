@@ -7,9 +7,6 @@ import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.downloader.Error
 import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
@@ -174,32 +171,6 @@ class RootActivity : AppCompatActivity() {
         socket.on("user left", disconnect)
         socket.connect()
         Log.d("socket", "status ${socket.connected()}")
-    }
-
-    private fun postRequest(){
-        val queue = Volley.newRequestQueue(this)
-
-        val url = "http://103.82.242.195/room_management_system/${NetworkHelper.configAPI}"
-
-        val postRequest = object : StringRequest(Method.POST,url,
-            Response.Listener {
-                var gson = Gson()
-                DAO.configData = gson.fromJson(it, ResponseConfig::class.java)
-                startActivity()
-                Log.d(GlobalVal.NETWORK_TAG, it.toString())
-            },
-            Response.ErrorListener {
-                Log.d(GlobalVal.NETWORK_TAG, "Error ${it.networkResponse}")
-            }){
-            override fun getParams(): MutableMap<String, String> {
-                val params = HashMap<String, String>()
-
-                params["room_id"] = "25"
-
-                return params
-            }
-        }
-        queue.add(postRequest)
     }
 
     private fun fileDownloader(url : String, fileName : String){
