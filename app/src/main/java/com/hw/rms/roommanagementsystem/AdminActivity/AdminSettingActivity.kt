@@ -333,24 +333,24 @@ class AdminSettingActivity : AppCompatActivity() {
 
     private fun socketConnection(){
         //for debug
-//        if( !socket.connected() ){
-//            Handler().postDelayed({
-//                socketConnection()
-//            },2500)
-//        }else if ( socket.connected() ){
-//            socketConnected = true
-//            runOnUiThread {
-//                btn_try_socketconn.text = getString(R.string.success)
-//                btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-//                if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
-//            }
-//        }
-        socketConnected = true
-        runOnUiThread {
-            btn_try_socketconn.text = getString(R.string.success)
-            btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-            if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
+        if( !socket.connected() ){
+            Handler().postDelayed({
+                socketConnection()
+            },2500)
+        }else if ( socket.connected() ){
+            socketConnected = true
+            runOnUiThread {
+                btn_try_socketconn.text = getString(R.string.success)
+                btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
+                if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
+            }
         }
+//        socketConnected = true
+//        runOnUiThread {
+//            btn_try_socketconn.text = getString(R.string.success)
+//            btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
+//            if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
+//        }
     }
 
     private fun fileDownloader(url : String, fileName : String){

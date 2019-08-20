@@ -46,8 +46,6 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var newsPagerAdapter: NewsPagerAdapter
     var newsListLeft : MutableList<DataNews> = mutableListOf()
     var newsListRight : MutableList<DataNews> = mutableListOf()
-    var handlerNews : Handler? = null
-    var ctrNews : Int = 0
 
     //bottom schedule
     lateinit var vpBottomSchedule : ViewPager
@@ -233,11 +231,11 @@ class AvailableMainActivity : AppCompatActivity(),
             val dataTemp = DAO.slideShowData!!.data!![x]
             if( dataTemp!!.slideshow_type.equals("1") ){
                 val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.png"
-                imageVideoList.add(ImageVideo(filename,filePath,"",""))
+                if(checkIfFileExist(filename)) imageVideoList.add(ImageVideo(filename,filePath,"",""))
             }
             else if (dataTemp.slideshow_type.equals("2") ){
                 val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.mp4"
-                imageVideoList.add(ImageVideo("","",filename,filePath))
+                if(checkIfFileExist(filename))imageVideoList.add(ImageVideo("","",filename,filePath))
             }
         }
 
@@ -249,6 +247,16 @@ class AvailableMainActivity : AppCompatActivity(),
         ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
         vPager = findViewById(R.id.view_pager_iv_vv)
         vPager.adapter = ivAdapter
+
+    }
+
+    private fun checkIfFileExist( file : String ) : Boolean{
+        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
+        val f = File("$filePath/$file")
+        return f.exists()
+    }
+
+    fun imageNextHandler(){
 
     }
 

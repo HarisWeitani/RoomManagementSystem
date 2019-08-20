@@ -17,8 +17,8 @@ import java.lang.Exception
 
 class VideoFragment : Fragment() {
 
-    private var videoName: String? = null
     private var videoUrl: String? = null
+    private var videoName: String? = null
 
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -38,7 +38,6 @@ class VideoFragment : Fragment() {
     ): View? {
         val v =inflater.inflate(R.layout.fragment_video, container, false)
         video_view = v.findViewById(R.id.video_view)
-        video_view.setVideoPath("$videoUrl/$videoName")
         video_view.setOnCompletionListener {
             AvailableMainActivity.instance.setNextImageVideoPager()
         }
@@ -68,6 +67,7 @@ class VideoFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if ( isVisibleToUser ) {
+            video_view.setVideoPath("$videoUrl/$videoName")
             video_view.start()
         }
         else {
