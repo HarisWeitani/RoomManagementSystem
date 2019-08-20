@@ -14,6 +14,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:allowClearUserData="true"
+            android:usesCleartextTraffic="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         <!-- Root Activity for handling before entering activity when app first open-->
         <activity
