@@ -188,17 +188,14 @@
                 android:orientation="vertical"
         >
 
-            <com.asura.library.views.PosterSlider
-                    android:id="@+id/poster_slider"
+            <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/view_pager_iv_vv"
                     android:layout_width="500dp"
                     android:layout_height="300dp"
-                    app:defaultIndicator="circle"
-                    app:imageSlideInterval="2000"
-                    app:hideIndicators="true"
-                    app:loopSlides="true"
-                    android:scaleType="fitXY"
-                    android:layout_gravity="top|center"
-            />
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+            >
+            </androidx.viewpager.widget.ViewPager>
 
             <LinearLayout
                     android:layout_width="500dp"

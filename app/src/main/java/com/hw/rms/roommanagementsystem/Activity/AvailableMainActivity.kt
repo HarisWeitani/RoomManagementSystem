@@ -103,7 +103,6 @@ class AvailableMainActivity : AppCompatActivity(),
 
 
         initView()
-//        initImageSlider()
         initViewPager()
         initButtonListener()
         initImageVideoPager()
@@ -121,8 +120,6 @@ class AvailableMainActivity : AppCompatActivity(),
         initDateTime()
         //status
         btn_status = findViewById(R.id.btn_status)
-        //poster
-//        posterSlider = findViewById(R.id.poster_slider)
         //news pager
         vpNews = findViewById(R.id.view_pager_news)
         //iv pager
@@ -144,14 +141,6 @@ class AvailableMainActivity : AppCompatActivity(),
 
         btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
         btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
-
-//        val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-//        var video_view = findViewById<VideoView>(R.id.video_view)
-//        video_view.setVideoPath("$dirPath/pidio.mp4")
-//        var media = MediaController(this)
-//        media.setMediaPlayer(video_view)
-//        video_view.visibility = View.VISIBLE
-//        video_view.start()
 
     }
     private fun initDateTime(){
@@ -238,23 +227,6 @@ class AvailableMainActivity : AppCompatActivity(),
 
         bottomSchedulePagerAdapter = BottomSchedulePagerAdapter(botSchedLeft,botSchedRigt,this)
         vpBottomSchedule.adapter = bottomSchedulePagerAdapter
-
-    }
-
-    private fun initImageSlider(){
-
-        val path = "android.resource://" + packageName + "/" + R.raw.tiger
-        val path2 = "android.resource://" + packageName + "/" + R.raw.tensecvideo
-
-        val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-        val fileName = "video.mp4"
-
-        posters.add(DrawableImage(R.drawable.fox))
-        posters.add(RawVideo(R.raw.tensecvideo))
-//        posters.add(RemoteVideo(Uri.parse("$dirPath/$fileName")))
-        posters.add(RemoteImage(path))
-
-        posterSlider.setPosters(posters)
 
     }
 

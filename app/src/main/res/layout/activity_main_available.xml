@@ -158,18 +158,6 @@
                 android:orientation="vertical"
         >
 
-            <!--<com.asura.library.views.PosterSlider-->
-                    <!--android:id="@+id/poster_slider"-->
-                    <!--android:layout_width="500dp"-->
-                    <!--android:layout_height="300dp"-->
-                    <!--app:defaultIndicator="circle"-->
-                    <!--app:imageSlideInterval="2000"-->
-                    <!--app:hideIndicators="true"-->
-                    <!--app:loopSlides="true"-->
-                    <!--android:scaleType="fitXY"-->
-                    <!--android:layout_gravity="top|center"-->
-            <!--/>-->
-
             <androidx.viewpager.widget.ViewPager
                     android:id="@+id/view_pager_iv_vv"
                     android:layout_width="500dp"
@@ -178,10 +166,6 @@
                     android:visibility="visible"
             >
             </androidx.viewpager.widget.ViewPager>
-            <!--<VideoView-->
-                    <!--android:id="@+id/video_view"-->
-                    <!--android:layout_width="500dp" android:layout_height="300dp"-->
-            <!--/>-->
 
             <LinearLayout
                     android:layout_width="500dp"
