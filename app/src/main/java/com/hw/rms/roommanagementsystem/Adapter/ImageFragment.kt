@@ -5,22 +5,27 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
+import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
+import java.lang.Exception
 
 class ImageFragment : Fragment() {
 
     // TODO: Rename and change types of parameters
     private var imageName: String? = null
     private var imageUrl: String? = null
+    private var duration: Long = 5000
 
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -44,6 +49,12 @@ class ImageFragment : Fragment() {
 
         val myBitmap = BitmapFactory.decodeFile("$imageUrl/$imageName")
         image_view.setImageBitmap(myBitmap)
+
+        try {
+            duration = DAO.slideShowData!!.duration!!.toLong()
+        }catch (e:Exception){
+
+        }
 
         return v
     }
@@ -70,6 +81,12 @@ class ImageFragment : Fragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
+
+        if( isVisibleToUser ) {
+            Handler().postDelayed({
+                AvailableMainActivity.instance.setNextImageVideoPager()
+            }, duration)
+        }
         Log.d("ahsiap", "Is Image Visible To User $isVisibleToUser")
     }
 

@@ -1,12 +1,16 @@
 package com.hw.rms.roommanagementsystem
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.downloader.Error
 import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
@@ -29,6 +33,8 @@ class RootActivity : AppCompatActivity() {
 
     var firstInstall : Boolean = true
     var apiService : API? = null
+    var EXTERNAL_REQUEST = 0
+    var INTERNET_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +44,78 @@ class RootActivity : AppCompatActivity() {
         firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
 
-        if( DAO.settingsData != null ){
-            apiService = API.networkApi()
-            getNextMeeting()
-            getOnMeeting()
-            getNewsData()
-        }else{
-            startActivity()
-        }
+        checkPermission()
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
 
+    }
+
+    private fun checkPermission() {
+        var isPermitted: Boolean
+        var internet = false
+        var storage = false
+
+        if( ContextCompat.checkSelfPermission(this@RootActivity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ){
+            ActivityCompat.requestPermissions(this@RootActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.INTERNET),INTERNET_REQUEST)
+        }else{
+            internet = true
+        }
+
+        if(
+            ContextCompat.checkSelfPermission(this@RootActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this@RootActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ){
+            ActivityCompat.requestPermissions(this@RootActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE),EXTERNAL_REQUEST)
+        }else{
+            storage = true
+        }
+
+        isPermitted = internet && storage
+
+        if( isPermitted ){
+            initApp()
+        }
+    }
+
+    private fun initApp(){
+        if( DAO.settingsData != null ){
+            apiService = API.networkApi()
+            getNextMeeting()
+            getOnMeeting()
+
+            getNewsData()
+        }else{
+            startActivity()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            EXTERNAL_REQUEST -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    checkPermission()
+                } else {
+                    finish()
+                    System.exit(0)
+                }
+                return
+            }
+
+            INTERNET_REQUEST -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    checkPermission()
+                } else {
+                    finish()
+                    System.exit(0)
+                }
+                return
+            }
+
+            else -> {
+                // Ignore all other requests.
+            }
+        }
     }
 
     private fun getNextMeeting(){

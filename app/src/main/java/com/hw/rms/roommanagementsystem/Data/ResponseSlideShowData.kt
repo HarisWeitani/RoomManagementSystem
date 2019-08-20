@@ -2,7 +2,8 @@ package com.hw.rms.roommanagementsystem.Data
 
 data class ResponseSlideShowData(
     var data: List<DataSlideShow?>? = listOf(),
-    var ok: Int? = 0
+    var ok: Int? = 0,
+    var duration: Int? = 2000
 )
 
 data class DataSlideShow(

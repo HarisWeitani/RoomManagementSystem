@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
 import android.widget.VideoView
+import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
 
 import com.hw.rms.roommanagementsystem.R
+import java.lang.Exception
 
 class VideoFragment : Fragment() {
 
@@ -38,9 +40,8 @@ class VideoFragment : Fragment() {
         video_view = v.findViewById(R.id.video_view)
         video_view.setVideoPath("$videoUrl/$videoName")
         video_view.setOnCompletionListener {
-            Log.d("ahsiap", " Finish Bro ")
+            AvailableMainActivity.instance.setNextImageVideoPager()
         }
-        video_view.start()
         return v
     }
 
@@ -66,6 +67,14 @@ class VideoFragment : Fragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
+        if ( isVisibleToUser ) {
+            video_view.start()
+        }
+        else {
+            try {
+                video_view.stopPlayback()
+            }catch ( e : Exception ){}
+        }
         Log.d("ahsiap", "Is Video Visible To User $isVisibleToUser")
     }
 
