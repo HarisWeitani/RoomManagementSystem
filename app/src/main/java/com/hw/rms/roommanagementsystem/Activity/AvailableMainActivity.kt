@@ -227,10 +227,24 @@ class AvailableMainActivity : AppCompatActivity(),
 
         val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
 
-        imageVideoList.add(ImageVideo("tes.jpg",filePath,"",""))
-        imageVideoList.add(ImageVideo("","","pidio.mp4",filePath))
-        imageVideoList.add(ImageVideo("imageview_logo.png",filePath,"",""))
-        imageVideoList.add(ImageVideo("","","tensecvideo.mp4",filePath))
+        val sliderSize = DAO.slideShowData!!.data!!.size
+
+        for ( x in 0 until sliderSize ){
+            val dataTemp = DAO.slideShowData!!.data!![x]
+            if( dataTemp!!.slideshow_type.equals("1") ){
+                val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.png"
+                imageVideoList.add(ImageVideo(filename,filePath,"",""))
+            }
+            else if (dataTemp.slideshow_type.equals("2") ){
+                val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.mp4"
+                imageVideoList.add(ImageVideo("","",filename,filePath))
+            }
+        }
+
+//        imageVideoList.add(ImageVideo("tes.jpg",filePath,"",""))
+//        imageVideoList.add(ImageVideo("","","pidio.mp4",filePath))
+//        imageVideoList.add(ImageVideo("imageview_logo.png",filePath,"",""))
+//        imageVideoList.add(ImageVideo("","","tensecvideo.mp4",filePath))
 
         ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
         vPager = findViewById(R.id.view_pager_iv_vv)
