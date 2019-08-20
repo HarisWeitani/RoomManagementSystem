@@ -22,7 +22,8 @@ interface API {
     @GET("api/newsfeed/get_data/")
     fun getNews() : Call<ResponseNews>
 
-
+    @GET("api/slideshow/get_data/")
+    fun getSlideShowData() : Call<ResponseSlideShowData>
 
     @Multipart
     @POST("api/booking/get_next_meeting/")

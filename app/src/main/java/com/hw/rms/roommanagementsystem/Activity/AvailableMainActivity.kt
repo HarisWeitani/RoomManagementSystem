@@ -225,11 +225,11 @@ class AvailableMainActivity : AppCompatActivity(),
 
     private fun initImageVideoPager(){
 
-        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
 
-        imageVideoList.add(ImageVideo("tes.jpg",filePath!!,"",""))
+        imageVideoList.add(ImageVideo("tes.jpg",filePath,"",""))
         imageVideoList.add(ImageVideo("","","pidio.mp4",filePath))
-        imageVideoList.add(ImageVideo("imageview_logo.png",filePath!!,"",""))
+        imageVideoList.add(ImageVideo("imageview_logo.png",filePath,"",""))
         imageVideoList.add(ImageVideo("","","tensecvideo.mp4",filePath))
 
         ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )

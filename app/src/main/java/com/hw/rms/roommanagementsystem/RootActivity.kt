@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,12 +22,14 @@ import org.json.JSONException
 import org.json.JSONObject
 import com.github.nkzawa.emitter.Emitter
 import com.downloader.OnDownloadListener
+import com.downloader.Progress
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 class RootActivity : AppCompatActivity() {
@@ -35,6 +38,8 @@ class RootActivity : AppCompatActivity() {
     var apiService : API? = null
     var EXTERNAL_REQUEST = 0
     var INTERNET_REQUEST = 1
+    lateinit var progressBar : ProgressBar
+    var downloadCtr = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,7 @@ class RootActivity : AppCompatActivity() {
         val sharepref = SharedPreference(this)
         firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
+        progressBar = findViewById(R.id.progress_horizontal)
 
         checkPermission()
 
@@ -83,11 +89,19 @@ class RootActivity : AppCompatActivity() {
             apiService = API.networkApi()
             getNextMeeting()
             getOnMeeting()
-
+            getSlideShowData()
             getNewsData()
         }else{
             startActivity()
         }
+    }
+
+    private fun startActivity(){
+
+        Handler().postDelayed({
+            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        },500)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -132,7 +146,7 @@ class RootActivity : AppCompatActivity() {
 
             override fun onResponse(
                 call: Call<ResponseGetNextMeeting>?,
-                response: retrofit2.Response<ResponseGetNextMeeting>?
+                response: Response<ResponseGetNextMeeting>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
                 if( response.code() == 200 && response.body() != null ){
@@ -157,7 +171,7 @@ class RootActivity : AppCompatActivity() {
 
             override fun onResponse(
                 call: Call<ResponseGetOnMeeting>?,
-                response: retrofit2.Response<ResponseGetOnMeeting>?
+                response: Response<ResponseGetOnMeeting>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
                 if( response.code() == 200 && response.body() != null ){
@@ -179,7 +193,7 @@ class RootActivity : AppCompatActivity() {
 
             override fun onResponse(
                 call: Call<ResponseNews>?,
-                response: retrofit2.Response<ResponseNews>?
+                response: Response<ResponseNews>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
 
@@ -188,76 +202,92 @@ class RootActivity : AppCompatActivity() {
                 }else{
 
                 }
-                startActivity()
             }
 
         })
     }
 
-    private fun startActivity(){
+    private fun getSlideShowData(){
+        apiService!!.getSlideShowData().enqueue(object : Callback<ResponseSlideShowData>{
+            override fun onFailure(call: Call<ResponseSlideShowData>?, t: Throwable?) {
 
-        Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        },500)
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_SHORT).show()
+
+            }
+            override fun onResponse(call: Call<ResponseSlideShowData>?, response: Response<ResponseSlideShowData>?) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+
+                if( response.code() == 200 && response.body() != null ){
+                    DAO.slideShowData = response.body()
+                    //compare ke DB dlu
+                    if( DAO.slideShowData!!.data!!.isNotEmpty() ) {
+                        for (x in 0 until DAO.slideShowData!!.data!!.size){
+
+                            val dataTemp = DAO.slideShowData!!.data!![x]
+
+                            if( dataTemp!!.slideshow_type.equals("1") ){
+                                val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.png"
+                                if( !checkIfFileExist(filename) ) fileDownloader(dataTemp.slideshow!!,filename)
+                            }
+                            else if (dataTemp.slideshow_type.equals("2") ){
+                                val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.mp4"
+                                if( !checkIfFileExist(filename) ) fileDownloader(dataTemp.slideshow!!,filename)
+                            }
+
+                        }
+                    }
+                }else{
+
+                }
+            }
+
+        })
+
     }
 
-    private fun socketConnection(){
-        val onNewMessage = Emitter.Listener { args ->
-            runOnUiThread(Runnable {
-                val data = args[0] as JSONObject
-                val username: String
-                val message: String
-                try {
-                    username = data.getString("username")
-                    message = data.getString("message")
-                } catch (e: JSONException) {
-                    return@Runnable
-                }
-
-                Log.d("socket", "New Message | $username : $message")
-            })
-        }
-
-        val disconnect = Emitter.Listener { args ->
-            runOnUiThread(Runnable {
-                val data = args[0] as JSONObject
-                val username: String
-                val numUsers: String
-                try {
-                    username = data.getString("username")
-                    numUsers = data.getString("numUsers")
-                } catch (e: JSONException) {
-                    return@Runnable
-                }
-
-                Log.d("socket", "Disconnect | $username : $numUsers")
-            })
-        }
-
-        var socket = IO.socket("http://192.168.1.10:3000")
-        socket.on("new message", onNewMessage)
-        socket.on("user left", disconnect)
-        socket.connect()
-        Log.d("socket", "status ${socket.connected()}")
+    private fun checkIfFileExist( name : String ) : Boolean{
+        val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
+        var file = File("$filePath/$name")
+        return file.exists()
     }
 
     private fun fileDownloader(url : String, fileName : String){
+        downloadCtr ++
         val dirPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath).toString()
         PRDownloader.initialize(applicationContext)
         PRDownloader.download(url, dirPath, fileName)
             .build()
-            .setOnStartOrResumeListener { }
-            .setOnProgressListener { }
+            .setOnStartOrResumeListener {
+                Log.d(GlobalVal.NETWORK_TAG,"fileDownloader Start $fileName ")
+            }
+            .setOnProgressListener {
+                var current = it.currentBytes
+                var total = it.totalBytes
+                var progress = ((current*100)/total).toInt()
+                runOnUiThread {
+                    progressBar.progress = progress
+                }
+            }
             .start(object : OnDownloadListener {
                 override fun onError(error: Error?) {
-                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader on Error ${error?.responseCode} | ${error?.serverErrorMessage} ")
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader on Error ${error?.responseCode} $url $fileName ")
+                    downloadFinish()
                 }
 
                 override fun onDownloadComplete() {
-                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader onDownloadComplete")
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader complete $url $fileName")
+                    downloadFinish()
                 }
             })
+    }
+    private fun downloadFinish(){
+        downloadCtr --
+        if( downloadCtr == 0 ){
+            Handler().postDelayed({
+                startActivity()
+            },500)
+        }
     }
 
 }

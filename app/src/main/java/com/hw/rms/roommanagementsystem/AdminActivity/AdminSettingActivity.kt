@@ -7,8 +7,6 @@ import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.downloader.Error
@@ -256,7 +254,9 @@ class AdminSettingActivity : AppCompatActivity() {
 
                 if( response.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
-                    fetchingOtherData()
+                    getRoomListData()
+                    serverConnected()
+                    initSpinner()
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
                 }else{
                     serverConnected = false
@@ -264,7 +264,7 @@ class AdminSettingActivity : AppCompatActivity() {
             }
         })
     }
-    private fun fetchingOtherData(){
+    private fun getRoomListData(){
         apiService!!.getRoomList().enqueue(object : Callback<List<ResponseRoom>>{
             override fun onFailure(call: Call<List<ResponseRoom>>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG,t.toString())
@@ -272,7 +272,7 @@ class AdminSettingActivity : AppCompatActivity() {
                 runOnUiThread {
                     btn_save_and_exit.text = getString(R.string.try_connection_server)
                     btn_save_and_exit.background.clearColorFilter()
-                    Toast.makeText(this@AdminSettingActivity,"Fetching DataSlideShow Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@AdminSettingActivity,"Fetching Data Room List Failed", Toast.LENGTH_LONG).show()
                 }
                 serverConnected = false
             }
@@ -330,7 +330,7 @@ class AdminSettingActivity : AppCompatActivity() {
         socket.connect()
         socketConnection()
     }
-//validasi server juga
+
     private fun socketConnection(){
         //for debug
 //        if( !socket.connected() ){
