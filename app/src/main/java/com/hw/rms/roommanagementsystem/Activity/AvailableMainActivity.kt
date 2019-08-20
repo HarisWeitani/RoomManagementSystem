@@ -9,9 +9,6 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.asura.library.posters.*
@@ -25,9 +22,12 @@ import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
 import android.graphics.BitmapFactory
+import android.widget.*
+import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Data.ResponseGetNextMeeting
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
+import kotlinx.android.synthetic.main.activity_main_available.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -103,10 +103,10 @@ class AvailableMainActivity : AppCompatActivity(),
 
 
         initView()
-        initImageSlider()
+//        initImageSlider()
         initViewPager()
         initButtonListener()
-//        initImageVideoPager()
+        initImageVideoPager()
 
     }
 
@@ -122,11 +122,11 @@ class AvailableMainActivity : AppCompatActivity(),
         //status
         btn_status = findViewById(R.id.btn_status)
         //poster
-        posterSlider = findViewById(R.id.poster_slider)
+//        posterSlider = findViewById(R.id.poster_slider)
         //news pager
         vpNews = findViewById(R.id.view_pager_news)
         //iv pager
-//        vpImageVideo = findViewById(R.id.view_pager_iv_vv)
+        vpImageVideo = findViewById(R.id.view_pager_iv_vv)
 
         tv_room_name = findViewById(R.id.tv_room_name)
         tv_room_name.text = DAO.settingsData?.room?.room_name
@@ -144,6 +144,14 @@ class AvailableMainActivity : AppCompatActivity(),
 
         btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
         btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
+
+//        val dirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+//        var video_view = findViewById<VideoView>(R.id.video_view)
+//        video_view.setVideoPath("$dirPath/pidio.mp4")
+//        var media = MediaController(this)
+//        media.setMediaPlayer(video_view)
+//        video_view.visibility = View.VISIBLE
+//        video_view.start()
 
     }
     private fun initDateTime(){
@@ -205,7 +213,7 @@ class AvailableMainActivity : AppCompatActivity(),
         vpNews.adapter = newsPagerAdapter
 
         //testing
-//        DAO.nextMeeting = Gson().fromJson("{\"ok\":1,\"message\":\"Success Get Data\",\"data\":[{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"}]}",
+//        DAO.nextMeeting = Gson().fromJson("{\"ok\":1,\"message\":\"Success Get DataSlideShow\",\"data\":[{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"}]}",
 //            ResponseGetNextMeeting::class.java
 //        )
         //meeting schedule bottom
@@ -255,10 +263,12 @@ class AvailableMainActivity : AppCompatActivity(),
         val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
 
         imageVideoList.add(ImageVideo("tes.jpg",filePath!!,"",""))
-        imageVideoList.add(ImageVideo("","","pidio.mp4",filePath!!))
+        imageVideoList.add(ImageVideo("","","pidio.mp4",filePath))
+        imageVideoList.add(ImageVideo("imageview_logo.png",filePath!!,"",""))
+        imageVideoList.add(ImageVideo("","","tensecvideo.mp4",filePath))
 
         ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
-//        vPager = findViewById(R.id.view_pager_iv_vv)
+        vPager = findViewById(R.id.view_pager_iv_vv)
         vPager.adapter = ivAdapter
 
     }

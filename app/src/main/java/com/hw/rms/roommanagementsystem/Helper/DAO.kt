@@ -15,6 +15,7 @@ class DAO {
         var newsFeed : ResponseNews? = null
         var nextMeeting : ResponseGetNextMeeting? = null
         var onMeeting : ResponseGetOnMeeting? = null
+        var slideShowData : ResponseSlideShowData? = null
 
         /**
          * Not API Object

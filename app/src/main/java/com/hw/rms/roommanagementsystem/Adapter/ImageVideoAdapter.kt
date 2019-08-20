@@ -18,6 +18,7 @@ class ImageVideoAdapter(fm: FragmentManager?, var filePath: String?, var imageVi
 
     }
 
+
     override fun getCount(): Int {
         return imageVideo.size
     }

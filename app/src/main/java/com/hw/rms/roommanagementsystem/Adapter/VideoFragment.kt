@@ -3,10 +3,12 @@ package com.hw.rms.roommanagementsystem.Adapter
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
 import android.widget.VideoView
 
 import com.hw.rms.roommanagementsystem.R
@@ -34,8 +36,10 @@ class VideoFragment : Fragment() {
     ): View? {
         val v =inflater.inflate(R.layout.fragment_video, container, false)
         video_view = v.findViewById(R.id.video_view)
-//        video_view.setVideoPath("$videoUrl/$videoName")
-        video_view.setVideoURI(Uri.parse("$videoUrl/$videoName"))
+        video_view.setVideoPath("$videoUrl/$videoName")
+        video_view.setOnCompletionListener {
+            Log.d("ahsiap", " Finish Bro ")
+        }
         video_view.start()
         return v
     }
@@ -58,6 +62,11 @@ class VideoFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         mListener = null
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Log.d("ahsiap", "Is Video Visible To User $isVisibleToUser")
     }
 
     interface OnFragmentInteractionListener {

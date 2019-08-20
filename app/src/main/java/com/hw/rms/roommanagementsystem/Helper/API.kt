@@ -22,6 +22,8 @@ interface API {
     @GET("api/newsfeed/get_data/")
     fun getNews() : Call<ResponseNews>
 
+
+
     @Multipart
     @POST("api/booking/get_next_meeting/")
     fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>

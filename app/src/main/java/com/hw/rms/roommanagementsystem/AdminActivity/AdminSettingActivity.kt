@@ -272,7 +272,7 @@ class AdminSettingActivity : AppCompatActivity() {
                 runOnUiThread {
                     btn_save_and_exit.text = getString(R.string.try_connection_server)
                     btn_save_and_exit.background.clearColorFilter()
-                    Toast.makeText(this@AdminSettingActivity,"Fetching Data Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@AdminSettingActivity,"Fetching DataSlideShow Failed", Toast.LENGTH_LONG).show()
                 }
                 serverConnected = false
             }
@@ -330,19 +330,26 @@ class AdminSettingActivity : AppCompatActivity() {
         socket.connect()
         socketConnection()
     }
-
+//validasi server juga
     private fun socketConnection(){
-        if( !socket.connected() ){
-            Handler().postDelayed({
-                socketConnection()
-            },2500)
-        }else if ( socket.connected() ){
-            socketConnected = true
-            runOnUiThread {
-                btn_try_socketconn.text = getString(R.string.success)
-                btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-                if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
-            }
+        //for debug
+//        if( !socket.connected() ){
+//            Handler().postDelayed({
+//                socketConnection()
+//            },2500)
+//        }else if ( socket.connected() ){
+//            socketConnected = true
+//            runOnUiThread {
+//                btn_try_socketconn.text = getString(R.string.success)
+//                btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
+//                if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
+//            }
+//        }
+        socketConnected = true
+        runOnUiThread {
+            btn_try_socketconn.text = getString(R.string.success)
+            btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
+            if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
         }
     }
 
@@ -359,7 +366,7 @@ class AdminSettingActivity : AppCompatActivity() {
                 }
 
                 override fun onDownloadComplete() {
-                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader onDownloadComplete")
+                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader complete $url \n $fileName")
                 }
             })
     }

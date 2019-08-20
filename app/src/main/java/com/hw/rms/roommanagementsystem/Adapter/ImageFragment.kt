@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -67,6 +68,11 @@ class ImageFragment : Fragment() {
         mListener = null
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Log.d("ahsiap", "Is Image Visible To User $isVisibleToUser")
+    }
+
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
@@ -85,4 +91,4 @@ class ImageFragment : Fragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}
