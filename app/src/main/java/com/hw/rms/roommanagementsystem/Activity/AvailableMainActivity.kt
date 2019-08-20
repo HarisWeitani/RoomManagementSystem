@@ -1,36 +1,27 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.util.Log
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.asura.library.posters.*
-import com.asura.library.views.PosterSlider
 import com.hw.rms.roommanagementsystem.Adapter.*
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.hw.rms.roommanagementsystem.Data.DataGetNextMeeting
 import com.hw.rms.roommanagementsystem.Data.DataNews
 import com.hw.rms.roommanagementsystem.Helper.DAO
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import com.hw.rms.roommanagementsystem.Model.ImageVideo
 import com.hw.rms.roommanagementsystem.R
 import java.io.File
-import android.graphics.BitmapFactory
-import android.widget.*
-import androidx.core.content.FileProvider
-import com.google.gson.Gson
-import com.hw.rms.roommanagementsystem.Data.ResponseGetNextMeeting
-import com.hw.rms.roommanagementsystem.Helper.GlobalVal
-import kotlinx.android.synthetic.main.activity_main_available.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class AvailableMainActivity : AppCompatActivity(),
@@ -50,9 +41,6 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var btn_pref_schedule_meeting : Button
     lateinit var btn_next_schedule_meeting : Button
 
-    lateinit var posterSlider: PosterSlider
-    var posters : ArrayList<Poster> = arrayListOf()
-
     //news
     lateinit var vpNews: ViewPager
     lateinit var newsPagerAdapter: NewsPagerAdapter
@@ -69,7 +57,6 @@ class AvailableMainActivity : AppCompatActivity(),
 
 
     lateinit var vpImageVideo: ViewPager
-    lateinit var imageVideoPagerAdapter: ImageVideoPagerAdapter
 
     //image video slideshow
     lateinit var ivAdapter : ImageVideoAdapter
