@@ -214,7 +214,7 @@ class AdminSettingActivity : AppCompatActivity() {
 
         btn_try_serverconn.setOnClickListener {
             if( et_server_url.text.length > 10 ){
-                //        "http://103.82.242.195/room_management_system/"
+//                  "http://103.82.242.195/room_management_system/"
                 API.serverUrl = "$serverProtocol://${et_server_url.text}/room_management_system/"
                 serverUrl = et_server_url.text.toString()
                 connectServer()
@@ -224,7 +224,7 @@ class AdminSettingActivity : AppCompatActivity() {
         }
         btn_try_socketconn.setOnClickListener {
             if( et_socket_url.text.length > 10 ){
-//                "http://192.168.1.10:3000"
+//                  "http://192.168.1.10:3000"
                 API.socketUrl = "$socketProtocol://${et_socket_url.text}"
                 socketUrl = et_socket_url.text.toString()
                 connectSocket()
@@ -255,8 +255,6 @@ class AdminSettingActivity : AppCompatActivity() {
                 if( response.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
                     getRoomListData()
-                    serverConnected()
-                    initSpinner()
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
                 }else{
                     serverConnected = false
@@ -297,7 +295,7 @@ class AdminSettingActivity : AppCompatActivity() {
         runOnUiThread {
             btn_try_serverconn.text = getString(R.string.success)
             btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-            if( socketConnected ) linearlay_other_settings.visibility = View.VISIBLE
+            linearlay_other_settings.visibility = View.VISIBLE
         }
     }
 
@@ -332,7 +330,6 @@ class AdminSettingActivity : AppCompatActivity() {
     }
 
     private fun socketConnection(){
-        //for debug
         if( !socket.connected() ){
             Handler().postDelayed({
                 socketConnection()
@@ -342,7 +339,6 @@ class AdminSettingActivity : AppCompatActivity() {
             runOnUiThread {
                 btn_try_socketconn.text = getString(R.string.success)
                 btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-                if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
             }
         }
 //        socketConnected = true

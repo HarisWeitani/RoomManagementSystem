@@ -97,4 +97,4 @@ class VideoFragment : Fragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}
