@@ -1,5 +1,6 @@
 package com.hw.rms.roommanagementsystem.Activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -64,10 +65,12 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var tv_meeting_title_with_member_name : TextView
 
     lateinit var btn_check_in : Button
+    lateinit var btn_schedule : Button
 
     var booking_status = 0
 
     companion object{
+        @SuppressLint("StaticFieldLeak")
         lateinit var instance : AvailableMainActivity
     }
 
@@ -96,6 +99,8 @@ class AvailableMainActivity : AppCompatActivity(),
         initBottomScheduleViewPager()
         initButtonListener()
         initImageVideoPager()
+
+
 
     }
 
@@ -131,6 +136,8 @@ class AvailableMainActivity : AppCompatActivity(),
 
         btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
         btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
+
+        btn_schedule = findViewById(R.id.btn_schedule)
 
     }
     private fun initDateTime(){

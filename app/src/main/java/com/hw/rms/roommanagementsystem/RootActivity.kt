@@ -3,6 +3,7 @@ package com.hw.rms.roommanagementsystem
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -50,10 +51,31 @@ class RootActivity : AppCompatActivity() {
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
         progressBar = findViewById(R.id.progress_horizontal)
 
-        checkPermission()
+        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
+            checkPermission()
+        }else{
+            initApp()
+        }
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
+
+//        googleCalendar()
+    }
+
+    private fun googleCalendar(){
+
+        val googleApiService = API.googleApi()
+        googleApiService.getCalendar().enqueue(object : Callback<ResponseConfig>{
+            override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+            }
+
+            override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+            }
+
+        })
 
     }
 

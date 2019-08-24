@@ -9,6 +9,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.hw.rms.roommanagementsystem"
+        //min sdk version 23 sebelumnya 20
         minSdkVersion 20
         targetSdkVersion 28
         versionCode 7
@@ -51,5 +52,17 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'pub.devrel:easypermissions:1.2.0'
+    implementation('com.google.api-client:google-api-client-android:1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation('com.google.apis:google-api-services-calendar:v3-rev305-1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+    implementation 'com.github.kizitonwose:CalendarView:0.2.6'
 }
 apply plugin: 'com.google.gms.google-services'
