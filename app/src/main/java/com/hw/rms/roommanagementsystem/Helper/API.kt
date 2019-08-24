@@ -13,12 +13,6 @@ import java.util.concurrent.TimeUnit
 
 interface API {
 
-//  testing
-//    https://www.googleapis.com/calendar/v3/calendars/calendarId/events
-
-    @GET("calendar/v3/calendars/hweitani@gmail.com/events")
-    fun getCalendar() : Call<ResponseConfig>
-
     @GET("api/configuration/get_data/")
     fun getConfigData() : Call<ResponseConfig>
 
@@ -57,25 +51,6 @@ interface API {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(serverUrl)!!
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
-
-            return retrofit.create(API::class.java)
-        }
-
-        fun googleApi() : API{
-            val gson = GsonBuilder()
-                .setLenient()
-                .create()
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-            val client = OkHttpClient.Builder().addInterceptor(interceptor)
-                .connectTimeout(60,TimeUnit.SECONDS)
-                .build()
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://www.googleapis.com/")!!
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()

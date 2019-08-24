@@ -24,6 +24,7 @@ import org.json.JSONObject
 import com.github.nkzawa.emitter.Emitter
 import com.downloader.OnDownloadListener
 import com.downloader.Progress
+import com.hw.rms.roommanagementsystem.Activity.ScheduleActivity
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*
 import okhttp3.MediaType
@@ -51,31 +52,19 @@ class RootActivity : AppCompatActivity() {
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
         progressBar = findViewById(R.id.progress_horizontal)
 
-        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
-            checkPermission()
-        }else{
-            initApp()
-        }
+//        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
+//            checkPermission()
+//        }else{
+//            initApp()
+//        }
+
+        Handler().postDelayed({
+            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            else startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        },500)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
-
-//        googleCalendar()
-    }
-
-    private fun googleCalendar(){
-
-        val googleApiService = API.googleApi()
-        googleApiService.getCalendar().enqueue(object : Callback<ResponseConfig>{
-            override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-            }
-
-            override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-            }
-
-        })
 
     }
 

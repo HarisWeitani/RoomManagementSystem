@@ -7,6 +7,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "io.fabric"
 android {
     compileSdkVersion 28
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.hw.rms.roommanagementsystem"
         //min sdk version 23 sebelumnya 20
@@ -61,6 +65,8 @@ dependencies {
     implementation('com.google.apis:google-api-services-calendar:v3-rev305-1.23.0') {
         exclude group: 'org.apache.httpcomponents'
     }
+
+    implementation 'com.applandeo:material-calendar-view:1.6.0'
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     implementation 'com.github.kizitonwose:CalendarView:0.2.6'

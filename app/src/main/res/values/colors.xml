@@ -13,5 +13,6 @@
 
     <color name="setting_grey">#1a1a1a</color>
 
-
+    <color name="grey">#bdbdbd</color>
+    <color name="grey_light">#616161</color>
 </resources>
