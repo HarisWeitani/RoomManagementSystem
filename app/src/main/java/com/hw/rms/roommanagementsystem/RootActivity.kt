@@ -24,6 +24,7 @@ import org.json.JSONObject
 import com.github.nkzawa.emitter.Emitter
 import com.downloader.OnDownloadListener
 import com.downloader.Progress
+import com.hw.rms.roommanagementsystem.Activity.CalendarActivity
 import com.hw.rms.roommanagementsystem.Activity.ScheduleActivity
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*
@@ -59,8 +60,7 @@ class RootActivity : AppCompatActivity() {
 //        }
 
         Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            else startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            startActivity(Intent(this@RootActivity,CalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         },500)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")

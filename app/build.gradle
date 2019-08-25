@@ -70,5 +70,7 @@ dependencies {
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     implementation 'com.github.kizitonwose:CalendarView:0.2.6'
+
+    implementation 'com.github.npanigrahy:Custom-Calendar-View:v1.0'
 }
 apply plugin: 'com.google.gms.google-services'
