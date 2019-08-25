@@ -71,7 +71,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="64dp"
-                app:type="many_days_picker"
+                app:type="one_day_picker"
                 app:headerColor="@color/calendar_header_bg"
                 app:abbreviationsBarColor="@color/calendar_bg"
                 app:pagesColor="@color/calendar_bg"

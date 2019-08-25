@@ -18,7 +18,7 @@ import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.google.gson.Gson
 import com.downloader.OnDownloadListener
-import com.hw.rms.roommanagementsystem.Activity.ScheduleActivity
+import com.hw.rms.roommanagementsystem.Activity.ScheduleCalendarActivity
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*
 import okhttp3.MediaType
@@ -53,7 +53,7 @@ class RootActivity : AppCompatActivity() {
 //        }
 
         Handler().postDelayed({
-            startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            startActivity(Intent(this@RootActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         },500)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
