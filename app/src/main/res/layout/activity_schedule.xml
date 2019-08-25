@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/black"
         tools:context=".Activity.ScheduleActivity">
 
 
@@ -53,62 +54,84 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:orientation="horizontal"
+
             android:layout_marginStart="64dp"
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="64dp"
+
     >
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/exFiveRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="14dp">
+                android:nestedScrollingEnabled="false"
+                android:layout_weight="1"
 
-            <ImageView
-                    android:id="@+id/exFivePreviousMonthImage"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginEnd="22dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_marginEnd="32dp"
+        />
 
-            <TextView
-                    android:id="@+id/exFiveMonthYearText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:textSize="22sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/exFiveNextMonthImage"
-                    app:layout_constraintStart_toEndOf="@id/exFivePreviousMonthImage"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="April 2018" />
-
-            <ImageView
-                    android:id="@+id/exFiveNextMonthImage"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <com.kizitonwose.calendarview.CalendarView
-                android:id="@+id/calendar_view"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cv_dayViewResource="@layout/calendar_day_layout"
-                app:cv_monthHeaderResource="@layout/calendar_header_layout"
-                app:cv_orientation="horizontal"
-                app:cv_outDateStyle="endOfGrid"
-                app:cv_scrollMode="paged"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="32dp"
         >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
 
-        </com.kizitonwose.calendarview.CalendarView>
+                <Button
+                        android:id="@+id/btn_prev_month"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="22dp"
+                        android:background="@drawable/ic_arrow_left"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                />
 
+                <TextView
+                        android:id="@+id/exFiveMonthYearText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btn_next_month"
+                        app:layout_constraintStart_toEndOf="@id/btn_prev_month"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="April 2018" />
+
+                <Button
+                        android:id="@+id/btn_next_month"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.kizitonwose.calendarview.CalendarView
+                    android:id="@+id/calendar_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cv_dayViewResource="@layout/calendar_day_layout"
+                    app:cv_monthHeaderResource="@layout/calendar_header_layout"
+                    app:cv_orientation="horizontal"
+                    app:cv_outDateStyle="endOfGrid"
+                    app:cv_scrollMode="paged"
+            >
+
+            </com.kizitonwose.calendarview.CalendarView>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -2,8 +2,10 @@ package com.hw.rms.roommanagementsystem.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,6 +20,8 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.previous
 import kotlinx.android.synthetic.main.activity_schedule.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -29,6 +33,8 @@ import java.util.*
 class ScheduleActivity : AppCompatActivity() {
 
     lateinit var calendar_view : CalendarView
+    lateinit var btn_prev_month : Button
+    lateinit var btn_next_month : Button
 
     private var selectedDate: LocalDate? = null
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
@@ -40,7 +46,15 @@ class ScheduleActivity : AppCompatActivity() {
         AndroidThreeTen.init(this)
 
         calendar_view = findViewById(R.id.calendar_view)
+        btn_prev_month = findViewById(R.id.btn_prev_month)
+        btn_next_month = findViewById(R.id.btn_next_month)
 
+        initCalendarView()
+
+
+    }
+
+    fun initCalendarView(){
         val daysOfWeek = daysOfWeekFromLocale()
 
         val currentMonth = YearMonth.now()
@@ -124,6 +138,18 @@ class ScheduleActivity : AppCompatActivity() {
 //                calendar_view.notifyDateChanged(it)
 //                updateAdapterForDate(null)
 //            }
+        }
+
+        btn_prev_month.setOnClickListener {
+            calendar_view.findFirstVisibleMonth()?.let {
+                calendar_view.smoothScrollToMonth(it.yearMonth.previous)
+            }
+        }
+
+        btn_next_month.setOnClickListener {
+            calendar_view.findFirstVisibleMonth()?.let {
+                calendar_view.smoothScrollToMonth(it.yearMonth.next)
+            }
         }
 
     }
