@@ -16,7 +16,8 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ScheduleActivity">
+        <activity android:name=".Activity.ScheduleActivity"
+                  android:screenOrientation="landscape">
         </activity>
         <!-- Root Activity for handling before entering activity when app first open -->
         <activity

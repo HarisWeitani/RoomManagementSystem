@@ -59,7 +59,7 @@ class RootActivity : AppCompatActivity() {
 //        }
 
         Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            if( firstInstall ) startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
             else startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         },500)
 

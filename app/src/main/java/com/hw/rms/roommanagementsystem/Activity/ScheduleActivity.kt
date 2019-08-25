@@ -42,7 +42,7 @@ class ScheduleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
-
+        actionBar?.hide()
         AndroidThreeTen.init(this)
 
         calendar_view = findViewById(R.id.calendar_view)
