@@ -60,7 +60,7 @@ class RootActivity : AppCompatActivity() {
 //        }
 
         Handler().postDelayed({
-            startActivity(Intent(this@RootActivity,CalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            startActivity(Intent(this@RootActivity,ScheduleActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         },500)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
