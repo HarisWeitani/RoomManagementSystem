@@ -16,7 +16,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.CalendarActivity"
+        <activity android:name=".Activity.ScheduleCalendarActivity"
                   android:screenOrientation="landscape">
         </activity>
         <activity

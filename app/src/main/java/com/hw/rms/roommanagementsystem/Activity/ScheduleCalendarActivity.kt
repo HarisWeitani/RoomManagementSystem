@@ -9,7 +9,7 @@ import com.imanoweb.calendarview.CustomCalendarView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CalendarActivity : AppCompatActivity() {
+class ScheduleCalendarActivity : AppCompatActivity() {
 
     lateinit var calendar : CalendarView
 

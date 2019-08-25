@@ -3,7 +3,6 @@ package com.hw.rms.roommanagementsystem
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -17,14 +16,8 @@ import com.downloader.Error
 import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
-import com.github.nkzawa.socketio.client.IO
 import com.google.gson.Gson
-import org.json.JSONException
-import org.json.JSONObject
-import com.github.nkzawa.emitter.Emitter
 import com.downloader.OnDownloadListener
-import com.downloader.Progress
-import com.hw.rms.roommanagementsystem.Activity.CalendarActivity
 import com.hw.rms.roommanagementsystem.Activity.ScheduleActivity
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*

@@ -29,7 +29,6 @@ import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
-
 class ScheduleActivity : AppCompatActivity() {
 
     lateinit var calendar_view : CalendarView
