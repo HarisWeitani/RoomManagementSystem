@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_calendar.*
 class ScheduleCalendarActivity : AppCompatActivity() {
 
     //layout header
-    lateinit var et_admin_pin : EditText
     lateinit var btnBack : Button
     lateinit var tv_clock : TextView
     lateinit var tv_date : TextView

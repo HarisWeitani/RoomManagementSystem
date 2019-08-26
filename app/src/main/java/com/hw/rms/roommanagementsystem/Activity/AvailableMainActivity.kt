@@ -1,6 +1,7 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -23,6 +24,21 @@ import com.hw.rms.roommanagementsystem.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.core.os.HandlerCompat.postDelayed
+import android.telecom.VideoProfile.isPaused
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.AccessibleObject.setAccessible
+import android.os.Build
+import java.lang.reflect.Method
+import android.util.Log
+import android.view.MotionEvent
+import android.view.ViewGroup
+import android.graphics.PixelFormat
+import android.R.attr.height
+import android.view.WindowManager
+import android.view.Gravity
+import android.app.Activity
+
 
 
 class AvailableMainActivity : AppCompatActivity(),
@@ -98,9 +114,7 @@ class AvailableMainActivity : AppCompatActivity(),
         initNewsViewPager()
         initBottomScheduleViewPager()
         initButtonListener()
-        initImageVideoPager()
-
-
+//        initImageVideoPager()
 
     }
 

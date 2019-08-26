@@ -3,10 +3,13 @@ package com.hw.rms.roommanagementsystem
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.provider.Settings
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -18,6 +21,7 @@ import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.google.gson.Gson
 import com.downloader.OnDownloadListener
+import com.hw.rms.roommanagementsystem.Activity.NoConnectionActivity
 import com.hw.rms.roommanagementsystem.Activity.ScheduleCalendarActivity
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*
@@ -46,15 +50,15 @@ class RootActivity : AppCompatActivity() {
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
         progressBar = findViewById(R.id.progress_horizontal)
 
-//        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
-//            checkPermission()
-//        }else{
-//            initApp()
-//        }
+        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
+            checkPermission()
+        }else{
+            initApp()
+        }
 
-        Handler().postDelayed({
-            startActivity(Intent(this@RootActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        },500)
+//        Handler().postDelayed({
+//            startActivity(Intent(this@RootActivity,NoConnectionActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//        },500)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
@@ -89,6 +93,7 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun initApp(){
+
         if( DAO.settingsData != null ){
             apiService = API.networkApi()
             getNextMeeting()

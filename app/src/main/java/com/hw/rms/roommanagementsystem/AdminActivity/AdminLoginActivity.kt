@@ -30,10 +30,7 @@ class AdminLoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_login)
         actionBar?.hide()
-        val thread = Thread{
-            initView()
-        }
-        thread.start()
+        initView()
     }
 
     private fun initView(){
