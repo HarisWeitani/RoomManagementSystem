@@ -110,11 +110,13 @@ class AvailableMainActivity : AppCompatActivity(),
         actionBar?.hide()
         instance = this@AvailableMainActivity
 
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         initView()
         initNewsViewPager()
         initBottomScheduleViewPager()
         initButtonListener()
-//        initImageVideoPager()
+        initImageVideoPager()
 
     }
 

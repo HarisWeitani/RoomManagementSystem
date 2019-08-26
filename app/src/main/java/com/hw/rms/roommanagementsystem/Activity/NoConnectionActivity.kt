@@ -23,15 +23,13 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.annimon.stream.operator.IntArray
 import com.hw.rms.roommanagementsystem.Helper.DAO
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
+import com.hw.rms.roommanagementsystem.Helper.NetworkConnection
 
 
 class NoConnectionActivity : AppCompatActivity() {
 
     lateinit var progressBar : ProgressBar
-
-    companion object{
-        var isConnected : Boolean = false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,46 +42,13 @@ class NoConnectionActivity : AppCompatActivity() {
 
     fun checkConnection(){
         Handler().postDelayed({
-            if( !isConnected ) {
-                IsURLReachable(this).execute()
+            if( !GlobalVal.isNetworkConnected ) {
+                NetworkConnection(this).execute()
                 checkConnection()
+                Log.d(GlobalVal.NETWORK_TAG, " Connection Failed Try Again ")
             }
             else startActivity(Intent(this@NoConnectionActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        },5000)
+        },2000)
     }
-
-    class IsURLReachable(internal var context: Context) : AsyncTask<Void, Void, Boolean>() {
-        override fun doInBackground(vararg params: Void?): Boolean? {
-            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val netInfo = cm.activeNetworkInfo
-            if (netInfo != null && netInfo.isConnected) {
-                try {
-                    val url = URL(DAO.settingsData!!.server_url)   // Change to "http://google.com" for www  test.
-                    val urlc = url.openConnection() as HttpURLConnection
-                    urlc.connectTimeout = 5 * 1000          // 10 s.
-                    urlc.connect()
-                    if (urlc.responseCode == 200) {        // 200 = "OK" code (http connection is fine).
-                        Log.d("Connection", "Success !")
-                        return true
-                    } else {
-                        Log.d("Connection", "Failed !")
-                        return false
-                    }
-                } catch (e1: MalformedURLException) {
-                    return false
-                } catch (e: IOException) {
-                    return false
-                }
-
-            }
-            return false
-        }
-
-        override fun onPostExecute(result: Boolean?) {
-            isConnected = result!!
-            Log.d("Connection", "$result ")
-        }
-    }
-
 
 }

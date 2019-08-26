@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -24,6 +26,7 @@ import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
+import kotlinx.android.synthetic.main.activity_admin_setting.*
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -40,7 +43,6 @@ class AdminSettingActivity : AppCompatActivity() {
     lateinit var sp_building_name : Spinner
     lateinit var sp_socket : Spinner
 
-    var room_name = arrayOf("English", "French", "Spanish", "Hindi", "Russian", "Telugu", "Chinese", "German", "Portuguese", "Arabic", "Dutch", "Urdu", "Italian", "Tamil", "Persian", "Turkish", "Other")
     val http_https = arrayOf("http","https")
     var building_name = arrayOf("JECO","STARBAK","DANKIN DONAT")
 
@@ -53,6 +55,9 @@ class AdminSettingActivity : AppCompatActivity() {
 
     lateinit var et_server_url : EditText
     lateinit var et_socket_url : EditText
+
+    lateinit var etChangeAdminPin : EditText
+    lateinit var screenOnSwitch : Switch
 
     var apiService : API? = null
     lateinit var socket: Socket
@@ -81,11 +86,13 @@ class AdminSettingActivity : AppCompatActivity() {
         actionBar?.hide()
         sharePref = SharedPreference(this)
         initViews()
-        initButtonListener()
-        initUrlSpinner()
+
     }
 
     private fun initViews(){
+
+        //admin pin
+        etChangeAdminPin = et_change_admin_pin
 
         //spinner
         sp_room_name = findViewById(R.id.spinner_room_name)
@@ -106,13 +113,22 @@ class AdminSettingActivity : AppCompatActivity() {
         et_server_url.setText(DAO.settingsData?.server_url)
         et_socket_url.setText(DAO.settingsData?.socket_url)
 
+        //switch
+        screenOnSwitch = screen_on_switch
+        var bool = DAO.settingsData?.isScreenAlwaysOn
+        if( bool == null ) bool = true
+        screenOnSwitch.isChecked = bool
+
         //layout view
         linearlay_other_settings = findViewById(R.id.linearlay_other_settings)
         linearlay_other_settings.visibility = View.GONE
 
         tv_clock = findViewById(R.id.tv_clock)
         tv_date = findViewById(R.id.tv_date)
+
         initDateTime()
+        initButtonListener()
+        initUrlSpinner()
     }
     private fun initDateTime(){
         val date = Date()
@@ -196,6 +212,14 @@ class AdminSettingActivity : AppCompatActivity() {
         }
 
         btn_save_and_exit.setOnClickListener {
+
+            var pin = DAO.settingsData?.admin_pin
+            if( etChangeAdminPin.text.toString().length == 4 ){
+                pin = etChangeAdminPin.text.toString()
+            }else if ( etChangeAdminPin.text.toString().isNotEmpty() ){
+                Toast.makeText(this@AdminSettingActivity," Pin Not Accepted ", Toast.LENGTH_SHORT).show()
+            }
+
             DAO.settingsData =
                 SettingsData(
                     server_full_url = API.serverUrl,
@@ -203,6 +227,8 @@ class AdminSettingActivity : AppCompatActivity() {
                     server_url = serverUrl,
                     socket_url = socketUrl,
                     building_name = buildingName,
+                    isScreenAlwaysOn = screenOnSwitch.isChecked,
+                    admin_pin = pin,
                     room = selectedRoom)
             val settingDataJson = Gson().toJson(DAO.settingsData)
 
@@ -229,7 +255,10 @@ class AdminSettingActivity : AppCompatActivity() {
                 socketUrl = et_socket_url.text.toString()
                 connectSocket()
             }
+        }
 
+        screenOnSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            Log.d("switch", " $isChecked ")
         }
     }
     private fun connectServer(){
@@ -296,6 +325,7 @@ class AdminSettingActivity : AppCompatActivity() {
             btn_try_serverconn.text = getString(R.string.success)
             btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
             linearlay_other_settings.visibility = View.VISIBLE
+            et_server_url.isEnabled = false
         }
     }
 

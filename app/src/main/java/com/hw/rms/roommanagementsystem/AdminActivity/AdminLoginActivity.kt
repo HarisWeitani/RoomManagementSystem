@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
+import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
 import java.text.SimpleDateFormat
@@ -54,9 +55,12 @@ class AdminLoginActivity : AppCompatActivity() {
         }
     }
     private fun initButtonListener(){
+        var pinNow = DAO.settingsData?.admin_pin
+        if( pinNow == null ) pinNow = "1111"
+
         et_admin_pin.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if(s.toString() == "1111") {
+                if( s.toString() == pinNow ) {
                     finish()
                     startActivity(Intent(this@AdminLoginActivity, AdminSettingActivity::class.java))
                 }

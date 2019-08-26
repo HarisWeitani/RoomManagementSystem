@@ -8,5 +8,7 @@ data class SettingsData(
     var building_name : String? = "Building Name",
     var serial_number : String? = "Serial Number",
     var license : String? = "License",
-    var room : ResponseRoom? = ResponseRoom("0","0","No Room", "0")
+    var room : ResponseRoom? = ResponseRoom("0","0","No Room", "0"),
+    var isScreenAlwaysOn : Boolean? = true,
+    var admin_pin : String? = "1111"
 )

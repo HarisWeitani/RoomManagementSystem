@@ -53,12 +53,9 @@ class RootActivity : AppCompatActivity() {
         if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
             checkPermission()
         }else{
-            initApp()
+            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            else checkConnection()
         }
-
-//        Handler().postDelayed({
-//            startActivity(Intent(this@RootActivity,NoConnectionActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-//        },500)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
@@ -90,6 +87,22 @@ class RootActivity : AppCompatActivity() {
         if( isPermitted ){
             initApp()
         }
+    }
+
+    private fun checkConnection(){
+        NetworkConnection(this).execute()
+        Handler().postDelayed({
+            if( GlobalVal.isNetworkConnected ){
+                initApp()
+            }else{
+                Log.d(GlobalVal.NETWORK_TAG, " Connection Failed Start NoConnectionActivity ")
+                waitingForNetwork()
+            }
+        },500)
+    }
+
+    private fun waitingForNetwork(){
+        startActivity(Intent(this@RootActivity,NoConnectionActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
     }
 
     private fun initApp(){
@@ -280,6 +293,11 @@ class RootActivity : AppCompatActivity() {
             }
             .start(object : OnDownloadListener {
                 override fun onError(error: Error?) {
+                    //error 0 kalau ditengah jalan inet putus
+                    if( error?.responseCode == 0 ){
+                        GlobalVal.isNetworkConnected = false
+                        waitingForNetwork()
+                    }
                     Log.d(GlobalVal.NETWORK_TAG,"fileDownloader on Error ${error?.responseCode} $url $fileName ")
                     downloadFinish()
                 }
