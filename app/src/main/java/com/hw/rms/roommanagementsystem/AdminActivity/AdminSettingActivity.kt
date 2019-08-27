@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -354,9 +352,30 @@ class AdminSettingActivity : AppCompatActivity() {
             })
         }
 
-        socket.on("new message", onNewMessage)
+        val disconnect = Emitter.Listener { args ->
+            Log.d(GlobalVal.SOCKET_TAG, "Disconnected From Server")
+        }
+
+        val reconnect = Emitter.Listener { args ->
+            Log.d(GlobalVal.SOCKET_TAG, "Reconnected From Server")
+        }
+
+        val reconnectError = Emitter.Listener { args ->
+            Log.d(GlobalVal.SOCKET_TAG, "Reconnected Error ")
+        }
+
+        socket.on("new message", onNewMessage )
+        socket.on("disconnect", disconnect )
+        socket.on("reconnect", reconnect )
+        socket.on("reconnect_error",reconnectError)
         socket.connect()
+
         socketConnection()
+
+        tv_clock.setOnClickListener {
+            socket.emit("client to server", "AHSIAPPP")
+        }
+
     }
 
     private fun socketConnection(){
