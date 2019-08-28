@@ -12,8 +12,6 @@ import androidx.core.content.ContextCompat
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.github.nkzawa.emitter.Emitter
-import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.SpinnerAdapter
@@ -25,8 +23,6 @@ import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
 import kotlinx.android.synthetic.main.activity_admin_setting.*
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -334,7 +330,9 @@ class AdminSettingActivity : AppCompatActivity() {
             btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_yellow))
         }
 
-        socket = IO.socket(API.socketUrl)
+        API.socketIO()
+
+      /*  socket = IO.socket(API.socketUrl)
 
         val onNewMessage = Emitter.Listener { args ->
             runOnUiThread(Runnable {
@@ -368,34 +366,24 @@ class AdminSettingActivity : AppCompatActivity() {
         socket.on("disconnect", disconnect )
         socket.on("reconnect", reconnect )
         socket.on("reconnect_error",reconnectError)
-        socket.connect()
+        socket.connect()*/
 
         socketConnection()
-
-        tv_clock.setOnClickListener {
-            socket.emit("client to server", "AHSIAPPP")
-        }
-
     }
 
     private fun socketConnection(){
-        if( !socket.connected() ){
+        if( !API.isSocketConnected() ){
             Handler().postDelayed({
                 socketConnection()
             },2500)
-        }else if ( socket.connected() ){
+        }else if ( API.isSocketConnected() ){
             socketConnected = true
+            API.joinUserSocket()
             runOnUiThread {
                 btn_try_socketconn.text = getString(R.string.success)
                 btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
             }
         }
-//        socketConnected = true
-//        runOnUiThread {
-//            btn_try_socketconn.text = getString(R.string.success)
-//            btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
-//            if( serverConnected ) linearlay_other_settings.visibility = View.VISIBLE
-//        }
     }
 
     private fun fileDownloader(url : String, fileName : String){
