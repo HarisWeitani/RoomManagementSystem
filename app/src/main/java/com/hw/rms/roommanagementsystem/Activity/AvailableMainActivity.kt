@@ -116,7 +116,7 @@ class AvailableMainActivity : AppCompatActivity(),
         initNewsViewPager()
         initBottomScheduleViewPager()
         initButtonListener()
-        initImageVideoPager()
+//        initImageVideoPager()
 
     }
 
@@ -314,6 +314,10 @@ class AvailableMainActivity : AppCompatActivity(),
             if( vpBottomSchedule.currentItem < vpBottomSchedule.childCount ){
                 vpBottomSchedule.currentItem ++
             }
+        }
+
+        btn_schedule.setOnClickListener {
+            startActivity(Intent(this,ScheduleCalendarActivity::class.java))
         }
 
     }

@@ -1,12 +1,11 @@
 package com.hw.rms.roommanagementsystem.Activity
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.Adapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +13,6 @@ import com.applandeo.materialcalendarview.CalendarView
 import com.hw.rms.roommanagementsystem.R
 import java.text.SimpleDateFormat
 import java.util.*
-import com.applandeo.materialcalendarview.EventDay
 import com.hw.rms.roommanagementsystem.Adapter.ScheduleAdapter
 import com.hw.rms.roommanagementsystem.Data.ScheduleData
 import kotlinx.android.synthetic.main.activity_calendar.*
@@ -32,7 +30,11 @@ class ScheduleCalendarActivity : AppCompatActivity() {
     var dummyData : MutableList<ScheduleData> = mutableListOf()
     var dummyDataV2 : MutableList<ScheduleData> = mutableListOf()
     lateinit var scheduleAdapter: ScheduleAdapter
-    lateinit var calendar_RV : RecyclerView
+
+    @SuppressLint("SimpleDateFormat")
+    val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+    lateinit var calendarTitle : TextView
+    lateinit var calendarContent : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,10 @@ class ScheduleCalendarActivity : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         tv_clock = findViewById(R.id.tv_clock)
         tv_date = findViewById(R.id.tv_date)
+
+        calendarTitle = calendar_title
+        calendarContent = calendar_content
+
         initDateTime()
         initButtonListener()
         initCalendar()
@@ -52,10 +58,10 @@ class ScheduleCalendarActivity : AppCompatActivity() {
 
     private fun initDateTime(){
         val date = Date()
-        val dateFormat = SimpleDateFormat("dd MMMM yyyy")
         val clockFormat = SimpleDateFormat("HH:mm")
         runOnUiThread{
             tv_date.text = dateFormat.format(date)
+            calendarTitle.text = dateFormat.format(date)
             tv_clock.text = clockFormat.format(date)
         }
         Handler().postDelayed({
@@ -65,12 +71,14 @@ class ScheduleCalendarActivity : AppCompatActivity() {
 
     private fun initButtonListener(){
         btnBack.setOnClickListener {
-            scheduleAdapter = ScheduleAdapter(dummyDataV2)
-            calendar_content.apply {
-                layoutManager = LinearLayoutManager(this@ScheduleCalendarActivity)
-                adapter = scheduleAdapter
-            }
+
+            super.onBackPressed()
+
         }
+    }
+
+    override fun onBackPressed() {
+
     }
 
     fun initCalendar() {
@@ -84,12 +92,18 @@ class ScheduleCalendarActivity : AppCompatActivity() {
             adapter = scheduleAdapter
         }
 
-        val df = SimpleDateFormat("dd-MMM-yyyy")
-
         calendarView = findViewById(R.id.calendarView)
         calendarView.setOnDayClickListener {
-            var selectedDates = calendarView.selectedDates
-            Log.d("date", df.format(it.calendar.time) + " " + it.calendar.time)
+//            val selectedDates = calendarView.selectedDates
+            calendarTitle.text = dateFormat.format(it.calendar.time)
+            Log.d("date", dateFormat.format(it.calendar.time))
+
+            //dummy
+            scheduleAdapter = ScheduleAdapter(dummyDataV2)
+            calendarContent.apply {
+                layoutManager = LinearLayoutManager(this@ScheduleCalendarActivity)
+                adapter = scheduleAdapter
+            }
         }
     }
 

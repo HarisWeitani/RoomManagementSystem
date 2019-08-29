@@ -324,50 +324,11 @@ class AdminSettingActivity : AppCompatActivity() {
     }
 
     private fun connectSocket() {
-
         runOnUiThread {
             btn_try_socketconn.text = getString(R.string.connecting)
             btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_yellow))
         }
-
         API.socketIO()
-
-      /*  socket = IO.socket(API.socketUrl)
-
-        val onNewMessage = Emitter.Listener { args ->
-            runOnUiThread(Runnable {
-                val data = args[0] as JSONObject
-                val username: String
-                val message: String
-                try {
-                    username = data.getString("username")
-                    message = data.getString("message")
-                } catch (e: JSONException) {
-                    return@Runnable
-                }
-
-                Log.d(GlobalVal.SOCKET_TAG, "New Message | $username : $message")
-            })
-        }
-
-        val disconnect = Emitter.Listener { args ->
-            Log.d(GlobalVal.SOCKET_TAG, "Disconnected From Server")
-        }
-
-        val reconnect = Emitter.Listener { args ->
-            Log.d(GlobalVal.SOCKET_TAG, "Reconnected From Server")
-        }
-
-        val reconnectError = Emitter.Listener { args ->
-            Log.d(GlobalVal.SOCKET_TAG, "Reconnected Error ")
-        }
-
-        socket.on("new message", onNewMessage )
-        socket.on("disconnect", disconnect )
-        socket.on("reconnect", reconnect )
-        socket.on("reconnect_error",reconnectError)
-        socket.connect()*/
-
         socketConnection()
     }
 

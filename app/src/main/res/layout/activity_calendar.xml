@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
 
-                    android:text="8 Agustus 2019"
+                    android:text="22 Agustus 2019"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:fontFamily="@font/gotham_bold"
