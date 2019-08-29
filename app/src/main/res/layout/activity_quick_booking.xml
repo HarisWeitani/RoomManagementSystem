@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/black"
+        tools:context=".Activity.ScheduleCalendarActivity">
+
+    <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:layout_margin="16dp"
+            >
+
+        <Button
+                android:id="@+id/btnBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_arrow_back_white_24dp"
+                />
+
+        <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:gravity="end"
+                android:text="06 August 2019"
+                android:textSize="30sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/gotham_book"
+                />
+
+        <TextView
+                android:id="@+id/tv_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:gravity="center"
+                android:text="12:12"
+                android:textSize="50sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/gotham_light"
+                />
+    </LinearLayout>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_margin="32dp"
+
+            android:background="@color/setting_grey"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+
+        <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="32dp"
+                >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Meeting Title"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Meeting Title"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Member Name"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Member Name"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Booking Date"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Booking Date"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Booking Start"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Booking Start"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Duration"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Duration"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Total Participant"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Total Participant"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Room Facility"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Room Facility"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Food / Snack Packages"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Member Name"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Additional Snack Packages"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Member Name"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Meeting Status"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Member Name"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Special Request"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Member Name"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <Button
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="70dp"
+
+                    android:text="Submit"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/gotham_bold"
+                    />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

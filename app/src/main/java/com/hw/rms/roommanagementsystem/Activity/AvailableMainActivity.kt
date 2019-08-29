@@ -38,7 +38,7 @@ import android.R.attr.height
 import android.view.WindowManager
 import android.view.Gravity
 import android.app.Activity
-
+import kotlinx.android.synthetic.main.activity_main_available.*
 
 
 class AvailableMainActivity : AppCompatActivity(),
@@ -81,6 +81,7 @@ class AvailableMainActivity : AppCompatActivity(),
     lateinit var tv_meeting_title_with_member_name : TextView
 
     lateinit var btn_check_in : Button
+    lateinit var btnBookNow : Button
     lateinit var btn_schedule : Button
 
     var booking_status = 0
@@ -172,6 +173,11 @@ class AvailableMainActivity : AppCompatActivity(),
     private fun initAvailableView(){
         tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
         tv_time_meeting_range.text = ""
+
+        btnBookNow = btn_book_now
+        btnBookNow.setOnClickListener {
+            startActivity(Intent(this@AvailableMainActivity,QuickBookingActivity::class.java))
+        }
     }
 
     private fun initWaitingView(){

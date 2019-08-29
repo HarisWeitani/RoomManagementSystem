@@ -17,7 +17,6 @@
             android:supportsRtl="true"
             android:theme="@style/NoActionBar"
             android:usesCleartextTraffic="true">
-
         <activity
                 android:name=".RootActivity"
                 android:screenOrientation="landscape">
@@ -29,21 +28,24 @@
         </activity>
         <activity
                 android:name=".AdminActivity.AdminSettingActivity"
-                android:screenOrientation="landscape"></activity>
+                android:screenOrientation="landscape" />
         <activity
                 android:name=".AdminActivity.AdminLoginActivity"
-                android:screenOrientation="landscape"></activity>
+                android:screenOrientation="landscape" />
         <activity
                 android:name=".Activity.RoomListActivity"
-                android:screenOrientation="landscape"></activity>
+                android:screenOrientation="landscape" />
         <activity
                 android:name=".Activity.AvailableMainActivity"
-                android:screenOrientation="landscape"></activity>
-        <activity android:name=".Activity.NoConnectionActivity"
-                android:screenOrientation="landscape"></activity>
+                android:screenOrientation="landscape" />
+        <activity
+                android:name=".Activity.NoConnectionActivity"
+                android:screenOrientation="landscape" />
         <activity
                 android:name=".Activity.ScheduleCalendarActivity"
-                android:screenOrientation="landscape"></activity>
+                android:screenOrientation="landscape" />
+        <activity android:name=".Activity.QuickBookingActivity"
+                android:screenOrientation="landscape" />
     </application>
 
 </manifest>
