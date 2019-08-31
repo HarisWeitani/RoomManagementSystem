@@ -113,6 +113,19 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
             />
+
+            <TextView
+                android:id="@+id/tv_socket_connection_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+
+                android:text="Socket Is "
+                android:fontFamily="@font/gotham_book"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                />
+
         </LinearLayout>
 
         <ScrollView

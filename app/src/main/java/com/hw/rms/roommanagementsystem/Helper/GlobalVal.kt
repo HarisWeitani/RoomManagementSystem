@@ -23,5 +23,6 @@ class GlobalVal {
          * Other
          */
         var isNetworkConnected : Boolean = false
+        var isSocketConnected : Boolean = false
     }
 }

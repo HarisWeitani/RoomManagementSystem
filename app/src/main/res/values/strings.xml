@@ -6,6 +6,7 @@
     <!-- activity_admin_setting-->
     <string name="try_connection_server">Try Connection</string>
     <string name="try_connection_socket">Try Connection</string>
+    <string name="failed">Failed</string>
     <string name="connecting">Connecting</string>
     <string name="success">Success</string>
     <string name="please_wait">Please Wait</string>

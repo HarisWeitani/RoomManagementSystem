@@ -95,6 +95,7 @@ interface API {
 
         private fun disconnect() : Emitter.Listener{
             return Emitter.Listener { args ->
+                GlobalVal.isSocketConnected = false
                 Log.d(GlobalVal.SOCKET_TAG, "Disconnected From Server")
             }
         }
@@ -127,12 +128,14 @@ interface API {
         private fun reconnect() : Emitter.Listener{
             return Emitter.Listener { args ->
                 joinUserSocket()
+                GlobalVal.isSocketConnected = true
                 Log.d(GlobalVal.SOCKET_TAG, "Reconnected From Server")
             }
         }
 
         private fun reconnectError() : Emitter.Listener{
             return Emitter.Listener { args ->
+                GlobalVal.isSocketConnected = false
                 Log.d(GlobalVal.SOCKET_TAG, "Reconnected Error ")
             }
         }

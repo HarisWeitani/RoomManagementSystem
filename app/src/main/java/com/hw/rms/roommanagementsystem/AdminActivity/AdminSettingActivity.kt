@@ -37,6 +37,8 @@ class AdminSettingActivity : AppCompatActivity() {
     lateinit var sp_building_name : Spinner
     lateinit var sp_socket : Spinner
 
+    lateinit var tvSocketConnectionStatus : TextView
+
     val http_https = arrayOf("http","https")
     var building_name = arrayOf("JECO","STARBAK","DANKIN DONAT")
 
@@ -84,6 +86,10 @@ class AdminSettingActivity : AppCompatActivity() {
     }
 
     private fun initViews(){
+
+        tvSocketConnectionStatus = tv_socket_connection_status
+        if( GlobalVal.isSocketConnected ) tvSocketConnectionStatus.text = "Socket Is Connected"
+        else tvSocketConnectionStatus.text = "Socket Is Not Connected"
 
         //admin pin
         etChangeAdminPin = et_change_admin_pin
@@ -332,15 +338,25 @@ class AdminSettingActivity : AppCompatActivity() {
         socketConnection()
     }
 
+    var tryAttempt  = 0
     private fun socketConnection(){
-        if( !API.isSocketConnected() ){
+        if( tryAttempt > 4 ){
+            runOnUiThread {
+                btn_try_socketconn.text = getString(R.string.failed)
+                btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_red))
+            }
+        }
+        else if( !API.isSocketConnected() ){
             Handler().postDelayed({
                 socketConnection()
+                tryAttempt++
             },2500)
         }else if ( API.isSocketConnected() ){
             socketConnected = true
+            GlobalVal.isSocketConnected = true
             API.joinUserSocket()
             runOnUiThread {
+                tvSocketConnectionStatus.text = "Socket Is Connected"
                 btn_try_socketconn.text = getString(R.string.success)
                 btn_try_socketconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_green))
             }
