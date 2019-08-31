@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(),
         initNewsViewPager()
         initBottomScheduleViewPager()
         initButtonListener()
-//        initImageVideoPager()
+        initImageVideoPager()
 
     }
 
