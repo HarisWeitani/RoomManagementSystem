@@ -30,13 +30,15 @@
     <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
         <!--        <item name="android:colorAccent">@color/white</item>-->
         <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
-        <item name="android:layout_width">500dp</item>
-        <item name="android:layout_height">500dp</item>
     </style>
 
     <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+
         <item name="android:headerBackground">@color/colorPrimary</item>
         <item name="android:dayOfWeekTextAppearance">@style/dayOfWeekText</item>
+        <item name="android:headerMonthTextAppearance">@style/headerMonthTextAppearance</item>
+        <item name="android:headerYearTextAppearance">@style/headerMonthTextAppearance</item>
+
 <!--
         dayOfWeekBackground
         dayOfWeekTextAppearance
@@ -53,6 +55,11 @@
 
     <style name="dayOfWeekText">
         <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="headerMonthTextAppearance">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

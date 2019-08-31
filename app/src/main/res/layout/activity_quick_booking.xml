@@ -145,6 +145,7 @@
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
+
                 <TextView
                         android:id="@+id/tv_booking_date"
                         android:layout_width="match_parent"
@@ -152,11 +153,10 @@
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
-                        android:text="Booking Date"
-                        android:textSize="18sp"
-                        android:textColor="?android:attr/textColorHint"
                         android:fontFamily="@font/gotham_book"
-                        />
+                        android:text="Booking Date"
+                        android:textColor="?android:attr/textColorHint"
+                        android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -175,7 +175,8 @@
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
-                <EditText
+                <TextView
+                        android:id="@+id/tv_booking_time_start"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"

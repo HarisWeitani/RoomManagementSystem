@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -23,8 +24,6 @@ class QuickBookingActivity : AppCompatActivity() {
     var cal = Calendar.getInstance()
 
     lateinit var dateSetListener : OnDateSetListener
-
-
 
     @SuppressLint("SimpleDateFormat")
     val dateFormat = SimpleDateFormat("dd MMMM yyyy")
@@ -48,6 +47,7 @@ class QuickBookingActivity : AppCompatActivity() {
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
+                tvBookingDate.setTextColor(Color.WHITE)
                 tvBookingDate.text = dateFormat.format(cal.time)
 
             }

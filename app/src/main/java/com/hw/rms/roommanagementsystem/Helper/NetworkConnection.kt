@@ -16,7 +16,7 @@ class NetworkConnection(internal var context: Context) : AsyncTask<Void, Void, B
         val netInfo = cm.activeNetworkInfo
         if (netInfo != null && netInfo.isConnected) {
             try {
-                val url = URL("http://"+DAO.settingsData.server_url)   // Change to "http://google.com" for www  test.
+                val url = URL("http://"+DAO.settingsData?.server_url)   // Change to "http://google.com" for www  test.
                 val urlc = url.openConnection() as HttpURLConnection
                 urlc.connectTimeout = 2 * 1000          // 10 s.
                 urlc.connect()
