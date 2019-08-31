@@ -8,6 +8,7 @@
     <string name="try_connection_socket">Try Connection</string>
     <string name="connecting">Connecting</string>
     <string name="success">Success</string>
+    <string name="please_wait">Please Wait</string>
 
 
 </resources>

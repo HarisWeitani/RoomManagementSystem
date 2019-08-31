@@ -4,13 +4,16 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -33,6 +36,9 @@ class QuickBookingActivity : AppCompatActivity() {
 
     lateinit var btnSubmit : Button
 
+    lateinit var tv_clock : TextView
+    lateinit var tv_date : TextView
+
     var cal = Calendar.getInstance()
 
     @SuppressLint("SimpleDateFormat")
@@ -43,6 +49,7 @@ class QuickBookingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quick_booking)
 
         initView()
+
     }
 
     private fun initView(){
@@ -107,8 +114,41 @@ class QuickBookingActivity : AppCompatActivity() {
 
         btnSubmit = btn_submit
         btnSubmit.setOnClickListener {
-            startActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+
+            showDialog()
+
+            Handler().postDelayed({
+                startActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            },2000)
+
         }
+
+        tv_clock = findViewById(R.id.tv_clock)
+        tv_date = findViewById(R.id.tv_date)
+
+        initDateTime()
+
+    }
+    private fun initDateTime(){
+        val date = Date()
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+        val clockFormat = SimpleDateFormat("HH:mm")
+        runOnUiThread{
+            tv_date.text = dateFormat.format(date)
+            tv_clock.text = clockFormat.format(date)
+        }
+        Handler().postDelayed({
+            initDateTime()
+        },10000)
+    }
+
+    fun showDialog(){
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.loading_dialog)
+
+        dialog.show()
 
     }
 
