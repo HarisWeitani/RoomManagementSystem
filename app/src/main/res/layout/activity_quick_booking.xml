@@ -206,12 +206,14 @@
                         android:layout_gravity="start"
                         />
                 <EditText
+                        android:id="@+id/et_duration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
+                        android:inputType="number"
                         android:hint="Duration In Minutes"
                         android:fontFamily="@font/gotham_book"
                         />
@@ -240,6 +242,7 @@
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
+                        android:inputType="number"
                         android:hint="Total Participant"
                         android:fontFamily="@font/gotham_book"
                         />
@@ -386,6 +389,7 @@
             </LinearLayout>
 
             <Button
+                    android:id="@+id/btn_submit"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

@@ -5,12 +5,19 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.Selection
+import android.text.TextWatcher
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.hw.rms.roommanagementsystem.R
+import com.hw.rms.roommanagementsystem.RootActivity
+import kotlinx.android.synthetic.main.activity_admin_setting.*
 import kotlinx.android.synthetic.main.activity_quick_booking.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +29,9 @@ class QuickBookingActivity : AppCompatActivity() {
 
     lateinit var tvBookingDate : TextView
     lateinit var tvBookingTimeStart : TextView
+    lateinit var etDuration : EditText
+
+    lateinit var btnSubmit : Button
 
     var cal = Calendar.getInstance()
 
@@ -81,8 +91,24 @@ class QuickBookingActivity : AppCompatActivity() {
             },hour,minute,true).show()
         }
 
+        etDuration = et_duration
+        etDuration.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
 
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
+        btnSubmit = btn_submit
+        btnSubmit.setOnClickListener {
+            startActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        }
 
     }
 
