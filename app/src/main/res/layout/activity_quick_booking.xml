@@ -175,6 +175,7 @@
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
+
                 <TextView
                         android:id="@+id/tv_booking_time_start"
                         android:layout_width="match_parent"
@@ -182,10 +183,10 @@
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
-                        android:textColor="@color/white"
-                        android:hint="Booking Start"
                         android:fontFamily="@font/gotham_book"
-                        />
+                        android:text="Booking Start"
+                        android:textColor="?android:attr/textColorHint"
+                        android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -211,7 +212,7 @@
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
-                        android:hint="Duration"
+                        android:hint="Duration In Minutes"
                         android:fontFamily="@font/gotham_book"
                         />
             </LinearLayout>

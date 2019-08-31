@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
@@ -20,10 +21,9 @@ class QuickBookingActivity : AppCompatActivity() {
     lateinit var btnBack : Button
 
     lateinit var tvBookingDate : TextView
+    lateinit var tvBookingTimeStart : TextView
 
     var cal = Calendar.getInstance()
-
-    lateinit var dateSetListener : OnDateSetListener
 
     @SuppressLint("SimpleDateFormat")
     val dateFormat = SimpleDateFormat("dd MMMM yyyy")
@@ -33,16 +33,21 @@ class QuickBookingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quick_booking)
 
         initView()
-        initButton()
     }
 
     private fun initView(){
 
         btnBack = btn_back
+
+        btnBack.setOnClickListener {
+            super.onBackPressed()
+        }
+
+
         tvBookingDate = tv_booking_date
 
-        dateSetListener =
-            OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        tvBookingDate.setOnClickListener {
+            DatePickerDialog(this,OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -50,24 +55,34 @@ class QuickBookingActivity : AppCompatActivity() {
                 tvBookingDate.setTextColor(Color.WHITE)
                 tvBookingDate.text = dateFormat.format(cal.time)
 
-            }
-
-
-
-    }
-
-    private fun initButton(){
-        btnBack.setOnClickListener {
-            super.onBackPressed()
-        }
-
-        tvBookingDate.setOnClickListener {
-            DatePickerDialog(this,dateSetListener,
-                cal.get(Calendar.YEAR),
+            },  cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH)).show()
 
         }
+
+        tvBookingTimeStart = tv_booking_time_start
+        tvBookingTimeStart.setOnClickListener {
+            val hour = cal.get(Calendar.HOUR_OF_DAY)
+            val minute = cal.get(Calendar.MINUTE)
+            TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+
+                tvBookingTimeStart.setTextColor(Color.WHITE)
+                val hour: String
+                val min: String
+
+                if( hourOfDay < 10) hour = "0$hourOfDay"
+                else hour = "$hourOfDay"
+                if( minute < 10 ) min = "0$minute"
+                else min = "$minute"
+
+                tvBookingTimeStart.text = "$hour : $min"
+
+            },hour,minute,true).show()
+        }
+
+
+
 
     }
 
