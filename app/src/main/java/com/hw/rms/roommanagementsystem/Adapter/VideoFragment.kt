@@ -8,9 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.MediaController
 import android.widget.VideoView
-import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
+import com.hw.rms.roommanagementsystem.Activity.MainActivity
 
 import com.hw.rms.roommanagementsystem.R
 import java.lang.Exception
@@ -39,7 +38,7 @@ class VideoFragment : Fragment() {
         val v =inflater.inflate(R.layout.fragment_video, container, false)
         video_view = v.findViewById(R.id.video_view)
         video_view.setOnCompletionListener {
-            AvailableMainActivity.instance.setNextImageVideoPager()
+            MainActivity.instance.setNextImageVideoPager()
         }
         return v
     }

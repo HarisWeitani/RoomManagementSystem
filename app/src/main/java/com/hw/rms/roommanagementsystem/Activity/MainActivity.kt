@@ -1,7 +1,6 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -24,24 +23,11 @@ import com.hw.rms.roommanagementsystem.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.core.os.HandlerCompat.postDelayed
-import android.telecom.VideoProfile.isPaused
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.AccessibleObject.setAccessible
-import android.os.Build
-import java.lang.reflect.Method
-import android.util.Log
-import android.view.MotionEvent
-import android.view.ViewGroup
-import android.graphics.PixelFormat
-import android.R.attr.height
 import android.view.WindowManager
-import android.view.Gravity
-import android.app.Activity
 import kotlinx.android.synthetic.main.activity_main_available.*
 
 
-class AvailableMainActivity : AppCompatActivity(),
+class MainActivity : AppCompatActivity(),
     ImageFragment.OnFragmentInteractionListener, VideoFragment.OnFragmentInteractionListener {
 
     private var SAMPLE_LONG_TEXT: String = "The quick brown fox jumps over the lazy dog "
@@ -88,7 +74,7 @@ class AvailableMainActivity : AppCompatActivity(),
 
     companion object{
         @SuppressLint("StaticFieldLeak")
-        lateinit var instance : AvailableMainActivity
+        lateinit var instance : MainActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,7 +95,7 @@ class AvailableMainActivity : AppCompatActivity(),
             initOccupiedView()
         }
         actionBar?.hide()
-        instance = this@AvailableMainActivity
+        instance = this@MainActivity
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -176,7 +162,7 @@ class AvailableMainActivity : AppCompatActivity(),
 
         btnBookNow = btn_book_now
         btnBookNow.setOnClickListener {
-            startActivity(Intent(this@AvailableMainActivity,QuickBookingActivity::class.java))
+            startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java))
         }
     }
 
@@ -190,7 +176,7 @@ class AvailableMainActivity : AppCompatActivity(),
         btn_check_in = findViewById(R.id.btn_check_in)
         btn_check_in.setOnClickListener {
             DAO.onMeeting!!.data!![0]!!.booking_status = "2"
-            val i = Intent(this@AvailableMainActivity,AvailableMainActivity::class.java)
+            val i = Intent(this@MainActivity,MainActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             finish()
             overridePendingTransition(0,0)
@@ -304,7 +290,7 @@ class AvailableMainActivity : AppCompatActivity(),
                 SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT
 
         tv_clock.setOnLongClickListener {
-            val intent = Intent(this@AvailableMainActivity,
+            val intent = Intent(this@MainActivity,
                 AdminLoginActivity::class.java)
             startActivity(intent)
             true

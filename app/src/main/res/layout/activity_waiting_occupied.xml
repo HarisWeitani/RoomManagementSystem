@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/bg_occupied"
-        tools:context=".Activity.WaitingOccupiedActivity">
+        tools:context=".Activity.MainActivity">
 
     <LinearLayout
             android:id="@+id/layout_header"

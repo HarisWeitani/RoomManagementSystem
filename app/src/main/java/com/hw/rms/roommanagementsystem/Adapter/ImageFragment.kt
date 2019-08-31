@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,12 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
+import com.hw.rms.roommanagementsystem.Activity.MainActivity
 import com.hw.rms.roommanagementsystem.Helper.DAO
-import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 
 import com.hw.rms.roommanagementsystem.R
-import java.io.File
 import java.lang.Exception
 
 class ImageFragment : Fragment() {
@@ -84,7 +81,7 @@ class ImageFragment : Fragment() {
 
         if( isVisibleToUser ) {
             Handler().postDelayed({
-                AvailableMainActivity.instance.setNextImageVideoPager()
+                MainActivity.instance.setNextImageVideoPager()
             }, duration)
         }
         Log.d("ahsiap", "Is Image Visible To User $isVisibleToUser")

@@ -3,13 +3,11 @@ package com.hw.rms.roommanagementsystem
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.provider.Settings
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -17,12 +15,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.downloader.Error
 import com.downloader.PRDownloader
-import com.hw.rms.roommanagementsystem.Activity.AvailableMainActivity
+import com.hw.rms.roommanagementsystem.Activity.MainActivity
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
 import com.google.gson.Gson
 import com.downloader.OnDownloadListener
 import com.hw.rms.roommanagementsystem.Activity.NoConnectionActivity
-import com.hw.rms.roommanagementsystem.Activity.ScheduleCalendarActivity
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.*
 import okhttp3.MediaType
@@ -122,7 +119,7 @@ class RootActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            else startActivity(Intent(this@RootActivity,AvailableMainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            else startActivity(Intent(this@RootActivity,MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         },500)
     }
 
