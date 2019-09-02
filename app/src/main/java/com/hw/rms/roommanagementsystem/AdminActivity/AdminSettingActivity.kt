@@ -1,10 +1,15 @@
 package com.hw.rms.roommanagementsystem.AdminActivity
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -54,6 +59,8 @@ class AdminSettingActivity : AppCompatActivity() {
 
     lateinit var etChangeAdminPin : EditText
     lateinit var screenOnSwitch : Switch
+
+    lateinit var tvDeviceSerialNumber : TextView
 
     var apiService : API? = null
     lateinit var socket: Socket
@@ -125,6 +132,17 @@ class AdminSettingActivity : AppCompatActivity() {
 
         tv_clock = findViewById(R.id.tv_clock)
         tv_date = findViewById(R.id.tv_date)
+
+        //serial number
+        tvDeviceSerialNumber = tv_device_serial_number
+        val imeiDevice : String? =
+            if( getImeiDevice() != null){
+                getImeiDevice()
+            }else{
+                "Unknown"
+            }
+
+        tvDeviceSerialNumber.text = imeiDevice
 
         initDateTime()
         initButtonListener()
@@ -203,6 +221,27 @@ class AdminSettingActivity : AppCompatActivity() {
         aaBuildingName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_building_name.adapter = aaBuildingName
 
+    }
+
+    private fun getImeiDevice() : String? {
+        val  telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is  granted
+            val imei : String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                telephonyManager.imei
+            } else { // older OS  versions
+                telephonyManager.deviceId
+            }
+
+            imei?.let {
+                Log.i("imei", "DeviceId=$imei" )
+            }
+
+            return imei?.substring(imei.length - 8 )
+        } else {  // Permission is not granted
+            Toast.makeText(this@AdminSettingActivity, "READ PHONE STATE is Not Permitted", Toast.LENGTH_LONG).show()
+            return null
+        }
     }
 
     private fun initButtonListener(){

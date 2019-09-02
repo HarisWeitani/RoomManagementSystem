@@ -267,7 +267,7 @@
 
                             android:background="@drawable/edit_text_box"
                             android:textColor="@color/white"
-                            android:hint="Server URL"
+                            android:hint="Socket URL"
                     />
                 </LinearLayout>
                 <Button
@@ -327,7 +327,8 @@
                             android:textSize="25sp"
                             android:textColor="@color/white"
                     />
-                    <EditText
+                    <TextView
+                            android:id="@+id/tv_device_serial_number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="32dp"
@@ -335,6 +336,7 @@
                             android:background="@drawable/edit_text_box"
                             android:textColor="@color/white"
                             android:hint="Serial Number"
+                            android:textSize="18sp"
                     />
 
                     <TextView

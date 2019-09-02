@@ -35,6 +35,7 @@ class RootActivity : AppCompatActivity() {
     var apiService : API? = null
     var EXTERNAL_REQUEST = 0
     var INTERNET_REQUEST = 1
+    var READ_PHONE_STATE = 2
     lateinit var progressBar : ProgressBar
     var downloadCtr = 0
 
@@ -63,6 +64,7 @@ class RootActivity : AppCompatActivity() {
         var isPermitted: Boolean
         var internet = false
         var storage = false
+        var readPhoneState = false
 
         if( ContextCompat.checkSelfPermission(this@RootActivity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ){
             ActivityCompat.requestPermissions(this@RootActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.INTERNET),INTERNET_REQUEST)
@@ -79,7 +81,13 @@ class RootActivity : AppCompatActivity() {
             storage = true
         }
 
-        isPermitted = internet && storage
+        if (ContextCompat.checkSelfPermission(this@RootActivity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this@RootActivity, arrayOf(Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_PHONE_STATE),READ_PHONE_STATE)
+        } else {  // Permission is not granted
+            readPhoneState = true
+        }
+
+        isPermitted = internet && storage && readPhoneState
 
         if( isPermitted ){
             initApp()
@@ -136,6 +144,16 @@ class RootActivity : AppCompatActivity() {
             }
 
             INTERNET_REQUEST -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    checkPermission()
+                } else {
+                    finish()
+                    System.exit(0)
+                }
+                return
+            }
+
+            READ_PHONE_STATE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     checkPermission()
                 } else {
