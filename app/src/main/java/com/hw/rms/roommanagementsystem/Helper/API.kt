@@ -79,7 +79,7 @@ interface API {
         }
 
         fun joinUserSocket(){
-            socket.emit("user_join_mobile","Aki Gendeng")
+            socket.emit("user_join_mobile","aki_gendeng")
         }
 
         fun isSocketConnected() : Boolean = socket.connected()

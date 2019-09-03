@@ -144,6 +144,7 @@
                         android:background="@drawable/transparent_bg_bordered_yellow"
                 />
                 <Button
+                        android:id="@+id/btn_book_now"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"

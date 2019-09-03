@@ -24,7 +24,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.activity_main_available.*
 
 
 class MainActivity : AppCompatActivity(),
@@ -128,6 +127,8 @@ class MainActivity : AppCompatActivity(),
 
         vpBottomSchedule = findViewById(R.id.view_pager_bottom_schedule)
 
+        btnBookNow = findViewById(R.id.btn_book_now)
+
         iv_logo = findViewById(R.id.iv_logo)
         val imgFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
 
@@ -160,10 +161,6 @@ class MainActivity : AppCompatActivity(),
         tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
         tv_time_meeting_range.text = ""
 
-        btnBookNow = btn_book_now
-        btnBookNow.setOnClickListener {
-            startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java))
-        }
     }
 
     private fun initWaitingView(){
@@ -271,10 +268,6 @@ class MainActivity : AppCompatActivity(),
         return f.exists()
     }
 
-    fun imageNextHandler(){
-
-    }
-
     fun setNextImageVideoPager(){
         if ( vPager.currentItem  < imageVideoList.size-1 ) {
             vPager.currentItem++
@@ -310,6 +303,10 @@ class MainActivity : AppCompatActivity(),
 
         btn_schedule.setOnClickListener {
             startActivity(Intent(this,ScheduleCalendarActivity::class.java))
+        }
+
+        btnBookNow.setOnClickListener {
+            startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java))
         }
 
     }

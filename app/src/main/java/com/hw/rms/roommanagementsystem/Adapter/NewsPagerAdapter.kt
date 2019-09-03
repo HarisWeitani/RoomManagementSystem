@@ -1,6 +1,8 @@
 package com.hw.rms.roommanagementsystem.Adapter
 
 import android.content.Context
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,10 +44,20 @@ class NewsPagerAdapter(internal var newsListLeft: List<DataNews>, internal var n
         tv_news_content_right = itemView.findViewById(R.id.tv_news_content_right)
 
         tv_news_title_left.text = newsListLeft[position].newsfeed_title
-        tv_news_content_left.text = newsListLeft[position].newsfeed_content
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tv_news_content_left.text = Html.fromHtml(newsListLeft[position].newsfeed_content, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            tv_news_content_left.text = Html.fromHtml(newsListLeft[position].newsfeed_content)
+        }
 
         tv_news_title_right.text = newsListRight[position].newsfeed_title
-        tv_news_content_right.text = newsListRight[position].newsfeed_content
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tv_news_content_left.text = Html.fromHtml(newsListRight[position].newsfeed_content, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            tv_news_content_left.text = Html.fromHtml(newsListRight[position].newsfeed_content)
+        }
 
         container.addView(itemView)
 
