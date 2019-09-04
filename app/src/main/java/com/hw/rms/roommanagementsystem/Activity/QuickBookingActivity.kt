@@ -32,7 +32,16 @@ class QuickBookingActivity : AppCompatActivity() {
 
     lateinit var tvBookingDate : TextView
     lateinit var tvBookingTimeStart : TextView
+
     lateinit var etDuration : EditText
+    lateinit var etMeetingTitle : EditText
+    lateinit var etMemberName : EditText
+    lateinit var etTotalParticipant : EditText
+    lateinit var etRoomFacility : EditText
+    lateinit var etFoodSnack : EditText
+    lateinit var etAdditionalPackage : EditText
+    lateinit var etMeetingStatus : EditText
+    lateinit var etSpecialRequest : EditText
 
     lateinit var btnSubmit : Button
 
@@ -54,8 +63,17 @@ class QuickBookingActivity : AppCompatActivity() {
 
     private fun initView(){
 
-        btnBack = btn_back
+        etDuration = et_duration
+        etMeetingTitle = et_meeting_title
+        etMemberName = et_member_name
+        etTotalParticipant = et_total_participant
+        etRoomFacility = et_room_facility
+        etFoodSnack = et_food_snack
+        etAdditionalPackage = et_additional_package
+        etMeetingStatus = et_meeting_status
+        etSpecialRequest = et_special_request
 
+        btnBack = btn_back
         btnBack.setOnClickListener {
             super.onBackPressed()
         }
@@ -98,20 +116,6 @@ class QuickBookingActivity : AppCompatActivity() {
             },hour,minute,true).show()
         }
 
-        etDuration = et_duration
-        etDuration.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
-
         btnSubmit = btn_submit
         btnSubmit.setOnClickListener {
 
@@ -129,6 +133,11 @@ class QuickBookingActivity : AppCompatActivity() {
         initDateTime()
 
     }
+
+    private fun validate(){
+
+    }
+
     private fun initDateTime(){
         val date = Date()
         val dateFormat = SimpleDateFormat("dd MMMM yyyy")
