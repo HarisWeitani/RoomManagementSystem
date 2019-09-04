@@ -1,7 +1,6 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
@@ -10,9 +9,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.Selection
-import android.text.TextWatcher
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
@@ -20,7 +16,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
-import kotlinx.android.synthetic.main.activity_admin_setting.*
 import kotlinx.android.synthetic.main.activity_quick_booking.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -119,11 +114,11 @@ class QuickBookingActivity : AppCompatActivity() {
         btnSubmit = btn_submit
         btnSubmit.setOnClickListener {
 
-            showDialog()
+            submitQuickBooking()
 
-            Handler().postDelayed({
-                startActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            },2000)
+//            Handler().postDelayed({
+//                startActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//            },2000)
 
         }
 
@@ -134,7 +129,11 @@ class QuickBookingActivity : AppCompatActivity() {
 
     }
 
-    private fun validate(){
+    private fun submitQuickBooking(){
+        showLoadingDialog()
+    }
+
+    private fun validateBookingData(){
 
     }
 
@@ -151,7 +150,7 @@ class QuickBookingActivity : AppCompatActivity() {
         },10000)
     }
 
-    fun showDialog(){
+    fun showLoadingDialog(){
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)

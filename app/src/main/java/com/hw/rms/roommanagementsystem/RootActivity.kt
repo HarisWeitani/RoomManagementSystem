@@ -189,8 +189,8 @@ class RootActivity : AppCompatActivity() {
                 call: Call<ResponseGetNextMeeting>?,
                 response: Response<ResponseGetNextMeeting>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-                if( response.code() == 200 && response.body() != null ){
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
                 }else{
 
@@ -214,8 +214,8 @@ class RootActivity : AppCompatActivity() {
                 call: Call<ResponseGetOnMeeting>?,
                 response: Response<ResponseGetOnMeeting>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-                if( response.code() == 200 && response.body() != null ){
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.onMeeting = response.body()
                 }else{
 
@@ -236,9 +236,9 @@ class RootActivity : AppCompatActivity() {
                 call: Call<ResponseNews>?,
                 response: Response<ResponseNews>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
 
-                if( response.code() == 200 && response.body() != null ){
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.newsFeed = response.body()
                 }else{
 
@@ -258,9 +258,9 @@ class RootActivity : AppCompatActivity() {
 
             }
             override fun onResponse(call: Call<ResponseSlideShowData>?, response: Response<ResponseSlideShowData>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
 
-                if( response.code() == 200 && response.body() != null ){
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.slideShowData = response.body()
                     //compare ke DB dlu
                     if( DAO.slideShowData!!.data!!.isNotEmpty() ) {

@@ -38,9 +38,17 @@ interface API {
     @POST("api/booking/get_on_meeting/")
     fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
 
+    @Multipart
+    @POST("api/booking/quick_booking_gsuite")
+    fun quickBookingGsuite(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseQuickBooking>
+
+    @Multipart
+    @POST("api/booking/listing_schedule")
+    fun getListSchedule(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseListSchedule>
+
     companion object Factory{
 
-//        http://139.180.142.76/room_management_system/
+//        http://139.180.142.76/room_management_system
 
         var serverUrl : String? = DAO.settingsData?.server_full_url
         var socketUrl : String? = DAO.settingsData?.server_full_url

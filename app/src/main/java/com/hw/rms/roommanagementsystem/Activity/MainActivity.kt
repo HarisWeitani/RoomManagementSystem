@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,7 +25,14 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
+import android.widget.Toast
+import com.hw.rms.roommanagementsystem.Data.ResponseListSchedule
 import com.hw.rms.roommanagementsystem.Helper.API
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(),
@@ -72,6 +80,8 @@ class MainActivity : AppCompatActivity(),
 
     var booking_status = 0
 
+    var apiService : API? = null
+
     companion object{
         @SuppressLint("StaticFieldLeak")
         lateinit var instance : MainActivity
@@ -104,7 +114,7 @@ class MainActivity : AppCompatActivity(),
         initBottomScheduleViewPager()
         initButtonListener()
         initImageVideoPager()
-
+        apiService = API.networkApi()
     }
 
     private fun initView(){
@@ -303,13 +313,45 @@ class MainActivity : AppCompatActivity(),
         }
 
         btn_schedule.setOnClickListener {
-            startActivity(Intent(this,ScheduleCalendarActivity::class.java))
+            getScheduleData()
         }
 
         btnBookNow.setOnClickListener {
             startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java))
         }
 
+    }
+
+    private fun getScheduleData(){
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+//        var room_id = RequestBody.create(MediaType.parse("text/plain"), "22")
+        var current_date = RequestBody.create(MediaType.parse("text/plain"), "2019-09-04")
+        val requestBodyMap = HashMap<String, RequestBody>()
+        requestBodyMap["room_id"] = body
+        requestBodyMap["current_date"] = current_date
+
+        apiService!!.getListSchedule(requestBodyMap).enqueue(object : Callback<ResponseListSchedule> {
+            override fun onFailure(call: Call<ResponseListSchedule>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseListSchedule>?,
+                response: Response<ResponseListSchedule>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+                if( response.code() == 200 && response.body() != null ){
+                    openScheduleActivity()
+                }else{
+
+                }
+            }
+        })
+    }
+
+    private fun openScheduleActivity(){
+        startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java))
     }
 
     override fun onFragmentInteraction(uri: Uri) {
