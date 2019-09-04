@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.provider.Settings
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -248,6 +249,7 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun getSlideShowData(){
+        var isDownload = false
         apiService!!.getSlideShowData().enqueue(object : Callback<ResponseSlideShowData>{
             override fun onFailure(call: Call<ResponseSlideShowData>?, t: Throwable?) {
 
@@ -268,14 +270,22 @@ class RootActivity : AppCompatActivity() {
 
                             if( dataTemp!!.slideshow_type.equals("1") ){
                                 val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.png"
-                                if( !checkIfFileExist(filename) ) fileDownloader(dataTemp.slideshow!!,filename)
+                                if( !checkIfFileExist(filename) ) {
+                                    isDownload = true
+                                    fileDownloader(dataTemp.slideshow!!,filename)
+                                }
                             }
                             else if (dataTemp.slideshow_type.equals("2") ){
                                 val filename = "${dataTemp.slideshow_id}${dataTemp.slideshow_name}.mp4"
-                                if( !checkIfFileExist(filename) ) fileDownloader(dataTemp.slideshow!!,filename)
+                                if( !checkIfFileExist(filename) ) {
+                                    isDownload = true
+                                    fileDownloader(dataTemp.slideshow!!,filename)
+                                }
                             }
 
                         }
+                        if( !isDownload ) startActivity()
+                        Log.d(GlobalVal.NETWORK_TAG,"No File Downloaded")
                     }
                 }else{
 
