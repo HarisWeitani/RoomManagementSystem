@@ -10,6 +10,7 @@
     <string name="connecting">Connecting</string>
     <string name="success">Success</string>
     <string name="please_wait">Please Wait</string>
+    <string name="no_meeting">No Meeting</string>
 
 
 </resources>

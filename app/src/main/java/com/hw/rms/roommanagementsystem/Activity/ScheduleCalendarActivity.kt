@@ -1,12 +1,17 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.applandeo.materialcalendarview.CalendarView
@@ -14,8 +19,18 @@ import com.hw.rms.roommanagementsystem.R
 import java.text.SimpleDateFormat
 import java.util.*
 import com.hw.rms.roommanagementsystem.Adapter.ScheduleAdapter
+import com.hw.rms.roommanagementsystem.Data.DataScheduleByDate
+import com.hw.rms.roommanagementsystem.Data.ResponseScheduleByDate
 import com.hw.rms.roommanagementsystem.Data.ScheduleData
+import com.hw.rms.roommanagementsystem.Helper.API
+import com.hw.rms.roommanagementsystem.Helper.DAO
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import kotlinx.android.synthetic.main.activity_calendar.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ScheduleCalendarActivity : AppCompatActivity() {
@@ -24,17 +39,22 @@ class ScheduleCalendarActivity : AppCompatActivity() {
     lateinit var btnBack : Button
     lateinit var tv_clock : TextView
     lateinit var tv_date : TextView
+    lateinit var tv_no_meeting : TextView
 
     lateinit var calendarView : CalendarView
 
     var dummyData : MutableList<ScheduleData> = mutableListOf()
     var dummyDataV2 : MutableList<ScheduleData> = mutableListOf()
+    var dataEventBySelectedDate : List<DataScheduleByDate?>? = listOf()
     lateinit var scheduleAdapter: ScheduleAdapter
 
     @SuppressLint("SimpleDateFormat")
-    val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd")
     lateinit var calendarTitle : TextView
     lateinit var calendarContent : RecyclerView
+
+    var dialog : Dialog? = null
+    var apiService : API? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +67,17 @@ class ScheduleCalendarActivity : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         tv_clock = findViewById(R.id.tv_clock)
         tv_date = findViewById(R.id.tv_date)
+        tv_no_meeting = findViewById(R.id.tv_no_meeting)
 
         calendarTitle = calendar_title
         calendarContent = calendar_content
+        apiService = API.networkApi()
+        dialog = Dialog(this)
 
         initDateTime()
         initButtonListener()
         initCalendar()
+        initLoadingDialog()
     }
 
     private fun initDateTime(){
@@ -85,8 +109,8 @@ class ScheduleCalendarActivity : AppCompatActivity() {
 
         initDummyData()
 
-        scheduleAdapter = ScheduleAdapter(dummyData)
-
+        dataEventBySelectedDate = DAO.scheduleEventByDate?.data
+        scheduleAdapter = ScheduleAdapter(dataEventBySelectedDate as List<DataScheduleByDate>)
         calendar_content.apply {
             layoutManager = LinearLayoutManager(this@ScheduleCalendarActivity)
             adapter = scheduleAdapter
@@ -96,15 +120,72 @@ class ScheduleCalendarActivity : AppCompatActivity() {
         calendarView.setOnDayClickListener {
 //            val selectedDates = calendarView.selectedDates
             calendarTitle.text = dateFormat.format(it.calendar.time)
+
+            dialog?.show()
+            getEventBySelectedDate(it.calendar.time)
+
             Log.d("date", dateFormat.format(it.calendar.time))
 
-            //dummy
-            scheduleAdapter = ScheduleAdapter(dummyDataV2)
-            calendarContent.apply {
-                layoutManager = LinearLayoutManager(this@ScheduleCalendarActivity)
-                adapter = scheduleAdapter
-            }
+//            //dummy
+//            scheduleAdapter = ScheduleAdapter(dummyDataV2)
+//            calendarContent.apply {
+//                layoutManager = LinearLayoutManager(this@ScheduleCalendarActivity)
+//                adapter = scheduleAdapter
+//            }
         }
+    }
+
+    private fun getEventBySelectedDate(date : Date){
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+        val currentDate = RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date))
+        val requestBodyMap = HashMap<String, RequestBody>()
+        requestBodyMap["date"] = currentDate
+
+        apiService!!.getEventByDate(requestBodyMap).enqueue(object :
+            Callback<ResponseScheduleByDate> {
+            override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@ScheduleCalendarActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseScheduleByDate>?,
+                response: Response<ResponseScheduleByDate>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.scheduleEventByDate = response.body()
+                    refreshCalendarData()
+                    dialog?.dismiss()
+                }else{
+                    Toast.makeText(this@ScheduleCalendarActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+
+    }
+
+    fun refreshCalendarData(){
+        tv_no_meeting.visibility = View.GONE
+        dataEventBySelectedDate = DAO.scheduleEventByDate?.data
+        scheduleAdapter = ScheduleAdapter(dataEventBySelectedDate as List<DataScheduleByDate>)
+        calendar_content.apply {
+            layoutManager = LinearLayoutManager(this@ScheduleCalendarActivity)
+            adapter = scheduleAdapter
+        }
+        if( DAO.scheduleEventByDate?.data?.size!! > 0 ) {
+            tv_no_meeting.visibility = View.GONE
+        }else{
+            tv_no_meeting.visibility = View.VISIBLE
+        }
+    }
+
+    fun initLoadingDialog(){
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(false)
+        dialog?.setContentView(R.layout.loading_dialog)
     }
 
     fun initDummyData(){

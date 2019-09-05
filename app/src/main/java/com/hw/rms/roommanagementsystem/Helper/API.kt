@@ -39,12 +39,12 @@ interface API {
     fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
 
     @Multipart
-    @POST("api/booking/quick_booking_gsuite")
-    fun quickBookingGsuite(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseQuickBooking>
+    @POST("google/booking/add_event")
+    fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseAddEvent>
 
     @Multipart
-    @POST("api/booking/listing_schedule")
-    fun getListSchedule(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseListSchedule>
+    @POST("google/booking/get_event_by_date")
+    fun getEventByDate(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseScheduleByDate>
 
     companion object Factory{
 

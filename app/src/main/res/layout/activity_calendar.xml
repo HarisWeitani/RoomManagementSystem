@@ -81,6 +81,20 @@
                     android:fontFamily="@font/gotham_bold"
             />
 
+            <TextView
+                android:id="@+id/tv_no_meeting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
+
+                android:text="@string/no_meeting"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:fontFamily="@font/gotham_bold"
+                android:visibility="gone"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/calendar_content"
                     android:layout_width="match_parent"

@@ -244,8 +244,8 @@ class RootActivity : AppCompatActivity() {
 
                 }
             }
-
         })
+
     }
 
     private fun getSlideShowData(){

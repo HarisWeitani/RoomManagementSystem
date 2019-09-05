@@ -1,6 +1,7 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,7 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
-import com.hw.rms.roommanagementsystem.Data.ResponseListSchedule
+import com.hw.rms.roommanagementsystem.Data.ResponseScheduleByDate
 import com.hw.rms.roommanagementsystem.Helper.API
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity(),
     var booking_status = 0
 
     var apiService : API? = null
+    var dialog : Dialog? = null
 
     companion object{
         @SuppressLint("StaticFieldLeak")
@@ -108,13 +111,15 @@ class MainActivity : AppCompatActivity(),
         instance = this@MainActivity
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        apiService = API.networkApi()
+        dialog = Dialog(this)
 
         initView()
         initNewsViewPager()
         initBottomScheduleViewPager()
         initButtonListener()
         initImageVideoPager()
-        apiService = API.networkApi()
+        initLoadingDialog()
     }
 
     private fun initView(){
@@ -313,7 +318,8 @@ class MainActivity : AppCompatActivity(),
         }
 
         btn_schedule.setOnClickListener {
-            getScheduleData()
+            getEventByDateNow()
+            dialog?.show()
         }
 
         btnBookNow.setOnClickListener {
@@ -322,36 +328,42 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    private fun getScheduleData(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
-//        var room_id = RequestBody.create(MediaType.parse("text/plain"), "22")
-        var current_date = RequestBody.create(MediaType.parse("text/plain"), "2019-09-04")
-        val requestBodyMap = HashMap<String, RequestBody>()
-        requestBodyMap["room_id"] = body
-        requestBodyMap["current_date"] = current_date
+    private fun getEventByDateNow(){
+        val date = Date()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-        apiService!!.getListSchedule(requestBodyMap).enqueue(object : Callback<ResponseListSchedule> {
-            override fun onFailure(call: Call<ResponseListSchedule>?, t: Throwable?) {
+        val currentDate = RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date))
+        val requestBodyMap = HashMap<String, RequestBody>()
+        requestBodyMap["date"] = currentDate
+
+        apiService!!.getEventByDate(requestBodyMap).enqueue(object : Callback<ResponseScheduleByDate>{
+            override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
-                call: Call<ResponseListSchedule>?,
-                response: Response<ResponseListSchedule>?
+                call: Call<ResponseScheduleByDate>?,
+                response: Response<ResponseScheduleByDate>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-                if( response.code() == 200 && response.body() != null ){
-                    openScheduleActivity()
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.scheduleEventByDate = response.body()
+                    startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                    dialog?.dismiss()
                 }else{
-
+                    Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
                 }
             }
+
         })
+
     }
 
-    private fun openScheduleActivity(){
-        startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java))
+    fun initLoadingDialog(){
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(false)
+        dialog?.setContentView(R.layout.loading_dialog)
     }
 
     override fun onFragmentInteraction(uri: Uri) {
