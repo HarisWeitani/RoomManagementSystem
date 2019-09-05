@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -21,6 +22,7 @@ import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import com.hw.rms.roommanagementsystem.R
+import com.hw.rms.roommanagementsystem.RootActivity
 import kotlinx.android.synthetic.main.activity_quick_booking_old.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -72,7 +74,7 @@ class QuickBookingActivity : AppCompatActivity() {
     var apiService : API? = null
 
     @SuppressLint("SimpleDateFormat")
-    val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +123,7 @@ class QuickBookingActivity : AppCompatActivity() {
                 if( minute < 10 ) min = "0$minute"
                 else min = "$minute"
 
-                tv_booking_time_start.text = "$hour : $min"
+                tv_booking_time_start.text = "$hour:$min"
 
             },hour,minute,true).show()
         }
@@ -141,7 +143,7 @@ class QuickBookingActivity : AppCompatActivity() {
                 if( minute < 10 ) min = "0$minute"
                 else min = "$minute"
 
-                tv_booking_time_end.text = "$hour : $min"
+                tv_booking_time_end.text = "$hour:$min"
 
             },hour,minute,true).show()
         }
@@ -219,8 +221,8 @@ class QuickBookingActivity : AppCompatActivity() {
         var description = RequestBody.create(MediaType.parse("text/plain"), et_description.text.toString())
         var start_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
         var end_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
-        var start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString())
-        var end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString())
+        var start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
+        var end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
         var attendees_email = RequestBody.create(MediaType.parse("text/plain"), et_attendees_email.text.toString())
 
         val requestBodyMap = HashMap<String, RequestBody>()
@@ -249,7 +251,10 @@ class QuickBookingActivity : AppCompatActivity() {
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
-
+                    finish()
+                    startActivity(
+                        Intent(this@QuickBookingActivity, RootActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP))
                 }else{
 
                 }

@@ -13,6 +13,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
@@ -37,6 +38,10 @@ interface API {
     @Multipart
     @POST("api/booking/get_on_meeting/")
     fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
+
+//    @Multipart
+//    @POST("google/booking/add_event")
+//    fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<String>
 
     @Multipart
     @POST("google/booking/add_event")
@@ -71,6 +76,7 @@ interface API {
                 .baseUrl(serverUrl)!!
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
 
             return retrofit.create(API::class.java)
