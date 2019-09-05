@@ -22,7 +22,7 @@ class ImageFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var imageName: String? = null
     private var imageUrl: String? = null
-    private var duration: Long = 5000
+    private var duration : Long = 5000
 
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -78,7 +78,9 @@ class ImageFragment : Fragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-
+        try {
+            duration = DAO.slideShowData?.duration!!.toLong()
+        }catch (e : Exception){}
         if( isVisibleToUser ) {
             Handler().postDelayed({
                 MainActivity.instance.setNextImageVideoPager()

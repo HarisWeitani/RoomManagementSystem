@@ -11,6 +11,13 @@
     <string name="success">Success</string>
     <string name="please_wait">Please Wait</string>
     <string name="no_meeting">No Meeting</string>
+    <string name="location">Location</string>
+    <string name="summary">Summary</string>
+    <string name="description">Description</string>
+    <string name="attendees_email">Attendees Email</string>
+    <string name="booking_start">Booking Start</string>
+    <string name="booking_end">Booking End</string>
+    <string name="booking_date">Booking Date</string>
 
 
 </resources>

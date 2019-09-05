@@ -83,21 +83,21 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/location"
+                        android:text="Meeting Title"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
                 <EditText
-                        android:id="@+id/et_location"
+                        android:id="@+id/et_meeting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
-                        android:hint="@string/location"
+                        android:hint="Meeting Title"
                         android:fontFamily="@font/gotham_book"
                         />
             </LinearLayout>
@@ -112,21 +112,21 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/summary"
+                        android:text="Member Name"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
                 <EditText
-                        android:id="@+id/et_summary"
+                        android:id="@+id/et_member_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
-                        android:hint="@string/summary"
+                        android:hint="Member Name"
                         android:fontFamily="@font/gotham_book"
                         />
             </LinearLayout>
@@ -141,7 +141,7 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/booking_date"
+                        android:text="Booking Date"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
@@ -156,7 +156,7 @@
                         android:background="@drawable/edit_text_box"
 
                         android:fontFamily="@font/gotham_book"
-                        android:text="@string/booking_date"
+                        android:text="Booking Date"
                         android:textColor="?android:attr/textColorHint"
                         android:textSize="18sp" />
             </LinearLayout>
@@ -171,7 +171,7 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/booking_start"
+                        android:text="Booking Start"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
@@ -186,7 +186,7 @@
                         android:background="@drawable/edit_text_box"
 
                         android:fontFamily="@font/gotham_book"
-                        android:text="@string/booking_start"
+                        android:text="Booking Start"
                         android:textColor="?android:attr/textColorHint"
                         android:textSize="18sp" />
             </LinearLayout>
@@ -201,50 +201,22 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/booking_end"
-                        android:textColor="@color/white"
-                        android:fontFamily="@font/gotham_bold"
-                        android:textSize="24sp"
-                        android:layout_gravity="start"
-                        />
-                <TextView
-                        android:id="@+id/tv_booking_time_end"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:background="@drawable/edit_text_box"
-
-                        android:fontFamily="@font/gotham_book"
-                        android:text="@string/booking_end"
-                        android:textColor="?android:attr/textColorHint"
-                        android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
-                    android:orientation="horizontal"
-                    >
-                <TextView
-                        android:layout_width="@dimen/marginTextQuickBooking"
-                        android:layout_height="wrap_content"
-
-                        android:text="@string/description"
+                        android:text="Duration"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
                 <EditText
-                        android:id="@+id/et_description"
+                        android:id="@+id/et_duration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
-                        android:hint="@string/description"
+                        android:inputType="number"
+                        android:hint="Duration In Minutes"
                         android:fontFamily="@font/gotham_book"
                         />
             </LinearLayout>
@@ -259,43 +231,169 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/attendees_email"
+                        android:text="Total Participant"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
-                    <LinearLayout
-                        android:id="@+id/layout_attendees_email"
+                <EditText
+                        android:id="@+id/et_total_participant"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <EditText
-                                android:id="@+id/et_attendees_email"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="end"
-                                android:layout_marginBottom="16dp"
-                                android:background="@drawable/edit_text_box"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
 
-                                android:textColor="@color/white"
-                                android:hint="@string/attendees_email"
-                                android:fontFamily="@font/gotham_book"
-                                />
-                    </LinearLayout>
-                    <ImageView
-                        android:id="@+id/add_more_attendees"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_add_circle_outline_white_24dp"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:hint="Total Participant"
+                        android:fontFamily="@font/gotham_book"
                         />
-                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Room Facility"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:id="@+id/et_room_facility"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Room Facility"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Food / Snack Packages"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:id="@+id/et_food_snack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Food / Snack"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Additional Snack Packages"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:id="@+id/et_additional_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Additional Package"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Meeting Status"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:id="@+id/et_meeting_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Meeting Status"
+                        android:fontFamily="@font/gotham_book"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                        android:layout_width="@dimen/marginTextQuickBooking"
+                        android:layout_height="wrap_content"
+
+                        android:text="Special Request"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_bold"
+                        android:textSize="24sp"
+                        android:layout_gravity="start"
+                        />
+                <EditText
+                        android:id="@+id/et_special_request"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="@drawable/edit_text_box"
+
+                        android:textColor="@color/white"
+                        android:hint="Special Request"
+                        android:fontFamily="@font/gotham_book"
+                        />
             </LinearLayout>
 
             <Button
