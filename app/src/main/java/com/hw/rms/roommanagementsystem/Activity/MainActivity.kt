@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity(),
     lateinit var btn_pref_schedule_meeting : Button
     lateinit var btn_next_schedule_meeting : Button
 
+    lateinit var tv_next_meeting_name : TextView
+
     //news
     lateinit var vpNews: ViewPager
     lateinit var newsPagerAdapter: NewsPagerAdapter
@@ -109,8 +111,14 @@ class MainActivity : AppCompatActivity(),
             setContentView(R.layout.activity_waiting)
             initWaitingView()
         }else if( booking_status == 2 ){
+//            if( DAO.nextMeeting?.data?.get(0)?.booking_time_start.isNullOrEmpty() ){
+//                setContentView(R.layout.activity_occupied)
+//                initOccupiedView()
+//            }
             setContentView(R.layout.activity_occupied)
             initOccupiedView()
+//            setContentView(R.layout.activity_waiting_occupied)
+//            waitingOccupied()
         }
         actionBar?.hide()
         instance = this@MainActivity
@@ -218,6 +226,33 @@ class MainActivity : AppCompatActivity(),
             startActivity(i)
             overridePendingTransition(0,0)
         }
+    }
+
+    private fun waitingOccupied(){
+
+        tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
+        tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+
+        tv_next_meeting_name = findViewById(R.id.tv_next_meeting_name)
+        tv_next_meeting_name.text = "${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+
+//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+        tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
+        tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
+        tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
+        tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
+
+        btn_check_in = findViewById(R.id.btn_check_in)
+        btn_check_in.setOnClickListener {
+            DAO.onMeeting!!.data!![0]!!.booking_status = "2"
+            val i = Intent(this@MainActivity,MainActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            finish()
+            overridePendingTransition(0,0)
+            startActivity(i)
+            overridePendingTransition(0,0)
+        }
+
     }
 
     private fun initOccupiedView(){
