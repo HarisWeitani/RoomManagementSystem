@@ -43,6 +43,7 @@
                 android:gravity="center"
                 >
                 <ImageView
+                    android:id="@+id/iv_review_sad"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:src="@drawable/sad"
@@ -67,6 +68,7 @@
                 android:gravity="center"
                 >
                 <ImageView
+                    android:id="@+id/iv_review_happy"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:src="@drawable/happy"

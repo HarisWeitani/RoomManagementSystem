@@ -1,6 +1,7 @@
 package com.hw.rms.roommanagementsystem.Activity
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
@@ -84,13 +86,17 @@ class MainActivity : AppCompatActivity(),
     lateinit var tv_meeting_title_with_member_name : TextView
 
     lateinit var btn_check_in : Button
+    lateinit var btn_check_out : Button
     lateinit var btnBookNow : Button
     lateinit var btn_schedule : Button
 
     var booking_status = 0
 
     var apiService : API? = null
-    var dialog : Dialog? = null
+    var loadingDialog : Dialog? = null
+    var reviewDialogBuilder : AlertDialog.Builder? = null
+    var reviewDialog : AlertDialog? = null
+    lateinit var dialogInflater : LayoutInflater
 
     companion object{
         @SuppressLint("StaticFieldLeak")
@@ -127,7 +133,8 @@ class MainActivity : AppCompatActivity(),
         }catch (e : Exception){}
 
         apiService = API.networkApi()
-        dialog = Dialog(this)
+        loadingDialog = Dialog(this)
+        reviewDialogBuilder = AlertDialog.Builder(this)
 
         initView()
         initNewsViewPager()
@@ -263,6 +270,12 @@ class MainActivity : AppCompatActivity(),
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
         tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
         tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
+
+        btn_check_out = findViewById(R.id.btn_check_out)
+        btn_check_out.setOnClickListener {
+            initReviewDialog()
+        }
+
 
 //        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
 //        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
@@ -410,7 +423,7 @@ class MainActivity : AppCompatActivity(),
 
         btn_schedule.setOnClickListener {
             getEventByDateNow()
-            dialog?.show()
+            loadingDialog?.show()
         }
 
         btnBookNow.setOnClickListener {
@@ -430,7 +443,7 @@ class MainActivity : AppCompatActivity(),
         apiService!!.getEventByDate(requestBodyMap).enqueue(object : Callback<ResponseScheduleByDate>{
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                dialog?.dismiss()
+                loadingDialog?.dismiss()
                 Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
             }
 
@@ -442,9 +455,9 @@ class MainActivity : AppCompatActivity(),
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.scheduleEventByDate = response.body()
                     startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                    dialog?.dismiss()
+                    loadingDialog?.dismiss()
                 }else{
-                    dialog?.dismiss()
+                    loadingDialog?.dismiss()
                     Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -453,9 +466,29 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun initLoadingDialog(){
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.loading_dialog)
+        loadingDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        loadingDialog?.setCancelable(false)
+        loadingDialog?.setContentView(R.layout.loading_dialog)
+    }
+
+    fun initReviewDialog(){
+        dialogInflater = layoutInflater
+        val dialogView = dialogInflater.inflate(R.layout.review_room_dialog,null)
+        reviewDialogBuilder?.setView(dialogView)
+        reviewDialogBuilder?.setCancelable(false)
+
+        var iv_review_sad = dialogView.findViewById<ImageView>(R.id.iv_review_sad)
+        var iv_review_happy = dialogView.findViewById<ImageView>(R.id.iv_review_happy)
+
+        iv_review_sad.setOnClickListener {
+            reviewDialog?.dismiss()
+            Toast.makeText(this,"Review Sad", Toast.LENGTH_SHORT).show()
+        }
+        iv_review_happy.setOnClickListener {
+            reviewDialog?.dismiss()
+            Toast.makeText(this,"Review Happy", Toast.LENGTH_SHORT).show()
+        }
+        reviewDialog = reviewDialogBuilder?.show()
     }
 
     override fun onFragmentInteraction(uri: Uri) {
