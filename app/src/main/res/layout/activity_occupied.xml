@@ -183,6 +183,8 @@
                             android:textColor="@color/status_red"
 
                             android:background="@drawable/transparent_bg_bordered_red"
+
+                            android:visibility="gone"
                     />
 
                 </LinearLayout>

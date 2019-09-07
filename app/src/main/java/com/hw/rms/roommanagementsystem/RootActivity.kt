@@ -39,6 +39,7 @@ class RootActivity : AppCompatActivity() {
     var READ_PHONE_STATE = 2
     lateinit var progressBar : ProgressBar
     var downloadCtr = 0
+    var isPermitted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,7 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun checkPermission() {
-        var isPermitted: Boolean
+
         var internet = false
         var storage = false
         var readPhoneState = false
@@ -123,7 +124,7 @@ class RootActivity : AppCompatActivity() {
             getSlideShowData()
             getNewsData()
         }else{
-            startActivity()
+            if(isPermitted) startActivity()
         }
     }
 
@@ -140,9 +141,6 @@ class RootActivity : AppCompatActivity() {
             EXTERNAL_REQUEST -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     checkPermission()
-                } else {
-                    finish()
-                    System.exit(0)
                 }
                 return
             }
@@ -150,9 +148,6 @@ class RootActivity : AppCompatActivity() {
             INTERNET_REQUEST -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     checkPermission()
-                } else {
-                    finish()
-                    System.exit(0)
                 }
                 return
             }
@@ -160,9 +155,6 @@ class RootActivity : AppCompatActivity() {
             READ_PHONE_STATE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     checkPermission()
-                } else {
-                    finish()
-                    System.exit(0)
                 }
                 return
             }

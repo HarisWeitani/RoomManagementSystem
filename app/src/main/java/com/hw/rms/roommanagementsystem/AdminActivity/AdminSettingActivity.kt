@@ -12,6 +12,7 @@ import android.os.Handler
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.downloader.Error
@@ -32,6 +33,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -89,9 +91,13 @@ class AdminSettingActivity : AppCompatActivity() {
         actionBar?.hide()
         sharePref = SharedPreference(this)
         initViews()
-
+        try {
+            checkIfScreenAlwaysOn()
+        }catch (e : Exception){}
     }
-
+    private fun checkIfScreenAlwaysOn(){
+        if( DAO.settingsData?.isScreenAlwaysOn!! ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
     private fun initViews(){
 
         tvSocketConnectionStatus = tv_socket_connection_status
@@ -311,8 +317,8 @@ class AdminSettingActivity : AppCompatActivity() {
                 Log.d(GlobalVal.NETWORK_TAG,t.toString())
 
                 runOnUiThread {
-                    btn_try_serverconn.text = getString(R.string.try_connection_server)
-                    btn_try_serverconn.background.clearColorFilter()
+                    btn_try_serverconn.text = getString(R.string.failed)
+                    btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_red))
                     Toast.makeText(this@AdminSettingActivity,"Connection Failed Please Try Again", Toast.LENGTH_LONG).show()
                 }
                 serverConnected = false

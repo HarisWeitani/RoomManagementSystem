@@ -242,6 +242,7 @@
                         android:text="Socket URL"
                         android:textSize="25sp"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                 />
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -249,6 +250,8 @@
                         android:orientation="horizontal"
 
                         android:layout_marginBottom="16dp"
+
+                        android:visibility="gone"
                 >
                     <Spinner
                             android:id="@+id/spinner_socket"
@@ -276,6 +279,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/try_connection_socket"
                         android:layout_marginBottom="32dp"
+                    android:visibility="gone"
                 />
 
                 <LinearLayout

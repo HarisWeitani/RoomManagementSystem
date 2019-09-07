@@ -17,6 +17,7 @@ import com.crashlytics.android.Crashlytics
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,8 +33,13 @@ class AdminLoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin_login)
         actionBar?.hide()
         initView()
+        try {
+            checkIfScreenAlwaysOn()
+        }catch (e : Exception){}
     }
-
+    private fun checkIfScreenAlwaysOn(){
+        if( DAO.settingsData?.isScreenAlwaysOn!! ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
     private fun initView(){
         //admin pin
         et_admin_pin = findViewById(R.id.et_admin_pin)

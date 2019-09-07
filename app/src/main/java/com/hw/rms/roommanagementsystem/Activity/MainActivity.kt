@@ -29,12 +29,14 @@ import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
 import com.hw.rms.roommanagementsystem.Data.ResponseScheduleByDate
+import com.hw.rms.roommanagementsystem.Data.SettingsData
 import com.hw.rms.roommanagementsystem.Helper.API
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity(),
@@ -109,8 +111,10 @@ class MainActivity : AppCompatActivity(),
         }
         actionBar?.hide()
         instance = this@MainActivity
+        try {
+            checkIfScreenAlwaysOn()
+        }catch (e : Exception){}
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         apiService = API.networkApi()
         dialog = Dialog(this)
 
@@ -120,6 +124,10 @@ class MainActivity : AppCompatActivity(),
         initButtonListener()
         initImageVideoPager()
         initLoadingDialog()
+    }
+
+    private fun checkIfScreenAlwaysOn(){
+        if( DAO.settingsData?.isScreenAlwaysOn!! ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun initView(){

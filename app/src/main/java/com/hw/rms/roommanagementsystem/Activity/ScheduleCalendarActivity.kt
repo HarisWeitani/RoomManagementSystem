@@ -9,6 +9,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -31,6 +32,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 
 class ScheduleCalendarActivity : AppCompatActivity() {
@@ -61,8 +63,13 @@ class ScheduleCalendarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_calendar)
         actionBar?.hide()
         initView()
+        try {
+            checkIfScreenAlwaysOn()
+        }catch (e : Exception){}
     }
-
+    private fun checkIfScreenAlwaysOn(){
+        if( DAO.settingsData?.isScreenAlwaysOn!! ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
     private fun initView(){
         btnBack = findViewById(R.id.btnBack)
         tv_clock = findViewById(R.id.tv_clock)

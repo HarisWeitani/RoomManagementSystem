@@ -12,6 +12,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -29,6 +30,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -83,7 +85,14 @@ class QuickBookingActivity : AppCompatActivity() {
         initView()
         apiService = API.networkApi()
         dialog = Dialog(this)
+        try {
+            checkIfScreenAlwaysOn()
+        }catch (e : Exception){}
         initLoadingDialog()
+    }
+
+    private fun checkIfScreenAlwaysOn(){
+        if( DAO.settingsData?.isScreenAlwaysOn!! ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun initView(){
