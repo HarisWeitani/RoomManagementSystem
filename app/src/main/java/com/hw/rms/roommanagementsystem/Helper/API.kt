@@ -31,6 +31,9 @@ interface API {
     @GET("api/slideshow/get_data/")
     fun getSlideShowData() : Call<ResponseSlideShowData>
 
+    /***
+     * Versi 1
+     */
     @Multipart
     @POST("api/booking/get_next_meeting/")
     fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
@@ -46,6 +49,10 @@ interface API {
     @Multipart
     @POST("google/booking/add_event")
     fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseAddEvent>
+
+    @Multipart
+    @POST("google/booking/upcoming_events")
+    fun googleUpcomingEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseUpcomingEvent>
 
     @Multipart
     @POST("google/booking/get_event_by_date")

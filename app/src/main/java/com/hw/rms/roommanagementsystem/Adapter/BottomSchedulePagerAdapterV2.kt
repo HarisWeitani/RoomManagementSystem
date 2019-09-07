@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.hw.rms.roommanagementsystem.Data.DataGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.DataUpcomingEvent
 import com.hw.rms.roommanagementsystem.R
 
-class BottomSchedulePagerAdapter(internal var botSchedLeft: List<DataGetNextMeeting>, internal var botSchedRight: List<DataGetNextMeeting>, internal var context: Context) : PagerAdapter() {
+class BottomSchedulePagerAdapterV2(internal var botSchedLeft: List<DataUpcomingEvent>, internal var botSchedRight: List<DataUpcomingEvent>, internal var context: Context) : PagerAdapter() {
 
     lateinit var tv_bottom_schedule_title_left: TextView
     lateinit var tv_bottom_schedule_title_right: TextView
@@ -39,8 +40,8 @@ class BottomSchedulePagerAdapter(internal var botSchedLeft: List<DataGetNextMeet
         tv_bottom_schedule_title_right = itemView.findViewById(R.id.tv_bottom_schedule_title_right)
         tv_bottom_schedule_content_right = itemView.findViewById(R.id.tv_bottom_schedule_content_right)
 
-        var leftStartTime = botSchedLeft[position].booking_time_start
-        var leftEndTime = botSchedLeft[position].booking_time_end
+        var leftStartTime = botSchedLeft[position].start_dateTime
+        var leftEndTime = botSchedLeft[position].end_dateTime
 
         if( leftStartTime!!.length > 5 && leftEndTime!!.length > 5 ){
             leftStartTime = leftStartTime.substring(0,5)
@@ -49,10 +50,10 @@ class BottomSchedulePagerAdapter(internal var botSchedLeft: List<DataGetNextMeet
 
         tv_bottom_schedule_title_left.text =
             "Next Meeting $leftStartTime - $leftEndTime"
-        tv_bottom_schedule_content_left.text = botSchedLeft[position].meeting_title
+        tv_bottom_schedule_content_left.text = botSchedLeft[position].summary
 
-        var rightStartTime = botSchedRight[position].booking_time_start
-        var rightEndTime = botSchedRight[position].booking_time_end
+        var rightStartTime = botSchedRight[position].start_dateTime
+        var rightEndTime = botSchedRight[position].end_dateTime
 
         if( rightStartTime!!.length > 5 && rightEndTime!!.length > 5 ){
             rightStartTime = rightStartTime.substring(0,5)
@@ -61,7 +62,7 @@ class BottomSchedulePagerAdapter(internal var botSchedLeft: List<DataGetNextMeet
 
         tv_bottom_schedule_title_right.text =
             "Next Meeting $rightStartTime - $rightEndTime"
-        tv_bottom_schedule_content_right.text = botSchedRight[position].meeting_title
+        tv_bottom_schedule_content_right.text = botSchedRight[position].summary
 
         container.addView(itemView)
 

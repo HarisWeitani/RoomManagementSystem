@@ -10,6 +10,7 @@ import android.os.Environment
 import android.os.Handler
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -49,6 +50,7 @@ class RootActivity : AppCompatActivity() {
         firstInstall = sharepref.getValueBoolean(GlobalVal.FRESH_INSTALL_KEY,true)
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
         progressBar = findViewById(R.id.progress_horizontal)
+        progressBar.visibility = View.GONE
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
@@ -120,6 +122,7 @@ class RootActivity : AppCompatActivity() {
         if( DAO.settingsData != null ){
             apiService = API.networkApi()
             getNextMeeting()
+            getUpcomingEvents()
             getOnMeeting()
             getSlideShowData()
             getNewsData()
@@ -185,7 +188,32 @@ class RootActivity : AppCompatActivity() {
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
                 }else{
+                    Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 
+    private fun getUpcomingEvents(){
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["location_id"] = body
+
+        apiService!!.googleUpcomingEvent(requestBodyMap).enqueue(object : Callback<ResponseUpcomingEvent>{
+            override fun onFailure(call: Call<ResponseUpcomingEvent>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@RootActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseUpcomingEvent>?,
+                response: Response<ResponseUpcomingEvent>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.upcomingEvent = response.body()
+                }else{
+                    Toast.makeText(this@RootActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -199,7 +227,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getOnMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetOnMeeting>{
             override fun onFailure(call: Call<ResponseGetOnMeeting>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -210,7 +238,7 @@ class RootActivity : AppCompatActivity() {
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.onMeeting = response.body()
                 }else{
-
+                    Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -233,7 +261,7 @@ class RootActivity : AppCompatActivity() {
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.newsFeed = response.body()
                 }else{
-
+                    Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -280,7 +308,7 @@ class RootActivity : AppCompatActivity() {
                         Log.d(GlobalVal.NETWORK_TAG,"No File Downloaded")
                     }
                 }else{
-
+                    Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -296,6 +324,7 @@ class RootActivity : AppCompatActivity() {
 
     private fun fileDownloader(url : String, fileName : String){
         downloadCtr ++
+        progressBar.visibility = View.VISIBLE
         val dirPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath).toString()
         PRDownloader.initialize(applicationContext)
         PRDownloader.download(url, dirPath, fileName)

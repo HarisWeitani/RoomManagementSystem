@@ -181,7 +181,10 @@ class QuickBookingActivity : AppCompatActivity() {
 
         btnBack = findViewById(R.id.btn_back)
         btnBack.setOnClickListener {
-            super.onBackPressed()
+            finish()
+            startActivity(
+                Intent(this@QuickBookingActivity, RootActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP))
         }
 
         tv_clock = findViewById(R.id.tv_clock)
@@ -270,7 +273,8 @@ class QuickBookingActivity : AppCompatActivity() {
         apiService!!.googleAddEvent(requestBodyMap).enqueue(object : Callback<ResponseAddEvent> {
             override fun onFailure(call: Call<ResponseAddEvent>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@QuickBookingActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                dialog?.dismiss()
+                Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -279,12 +283,14 @@ class QuickBookingActivity : AppCompatActivity() {
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
+                    dialog?.dismiss()
                     finish()
                     startActivity(
                         Intent(this@QuickBookingActivity, RootActivity::class.java).setFlags(
                             Intent.FLAG_ACTIVITY_SINGLE_TOP))
                 }else{
-
+                    dialog?.dismiss()
+                    Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_SHORT).show()
                 }
             }
         })

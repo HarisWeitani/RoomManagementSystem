@@ -17,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.hw.rms.roommanagementsystem.Adapter.*
 import com.hw.rms.roommanagementsystem.AdminActivity.AdminLoginActivity
-import com.hw.rms.roommanagementsystem.Data.DataGetNextMeeting
-import com.hw.rms.roommanagementsystem.Data.DataNews
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import com.hw.rms.roommanagementsystem.Model.ImageVideo
@@ -28,9 +26,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
-import com.hw.rms.roommanagementsystem.Data.ResponseScheduleByDate
-import com.hw.rms.roommanagementsystem.Data.SettingsData
+import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
+import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -68,6 +66,9 @@ class MainActivity : AppCompatActivity(),
     var botSchedLeft : MutableList<DataGetNextMeeting> = mutableListOf()
     var botSchedRigt : MutableList<DataGetNextMeeting> = mutableListOf()
 
+    lateinit var bottomSchedulePagerAdapterV2: BottomSchedulePagerAdapterV2
+    var botSchedLeftV2 : MutableList<DataUpcomingEvent> = mutableListOf()
+    var botSchedRigtV2 : MutableList<DataUpcomingEvent> = mutableListOf()
 
     lateinit var vpImageVideo: ViewPager
 
@@ -124,6 +125,7 @@ class MainActivity : AppCompatActivity(),
         initButtonListener()
         initImageVideoPager()
         initLoadingDialog()
+        refreshMeetingStatus()
     }
 
     private fun checkIfScreenAlwaysOn(){
@@ -168,6 +170,12 @@ class MainActivity : AppCompatActivity(),
         btn_schedule = findViewById(R.id.btn_schedule)
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("ASD","asdasdasd")
+    }
+
     private fun initDateTime(){
         val date = Date()
         val dateFormat = SimpleDateFormat("dd MMMM yyyy")
@@ -234,6 +242,8 @@ class MainActivity : AppCompatActivity(),
 //            ResponseGetNextMeeting::class.java
 //        )
         //meeting schedule bottom
+        botSchedLeft.clear()
+        botSchedRigt.clear()
         val nextMeetingSize = DAO.nextMeeting!!.data!!.size
         if( nextMeetingSize > 0) {
             for (i in 0 until nextMeetingSize) {
@@ -255,6 +265,33 @@ class MainActivity : AppCompatActivity(),
 
         bottomSchedulePagerAdapter = BottomSchedulePagerAdapter(botSchedLeft,botSchedRigt,this)
         vpBottomSchedule.adapter = bottomSchedulePagerAdapter
+
+        /***
+         * V2 belum dipake
+         */
+        /*botSchedLeftV2.clear()
+        botSchedRigtV2.clear()
+        val upcomingEventSize = DAO.upcomingEvent!!.data!!.size
+        if( upcomingEventSize > 0) {
+            for (i in 0 until upcomingEventSize) {
+                if (i % 2 == 0) {
+                    botSchedLeftV2.add(DAO.upcomingEvent!!.data!![i]!!)
+                } else {
+                    botSchedRigtV2.add(DAO.upcomingEvent!!.data!![i]!!)
+                }
+            }
+
+            val isRightMeetingNull = DAO.upcomingEvent!!.data!!.size % 2 != 0
+            if( isRightMeetingNull ) {
+                botSchedRigtV2.add(DataUpcomingEvent())
+            }
+        }else{
+            botSchedLeftV2.add(DataUpcomingEvent())
+            botSchedRigtV2.add(DataUpcomingEvent())
+        }
+
+        bottomSchedulePagerAdapterV2 = BottomSchedulePagerAdapterV2(botSchedLeftV2,botSchedRigtV2,this)
+        vpBottomSchedule.adapter = bottomSchedulePagerAdapterV2*/
     }
 
     private fun initImageVideoPager(){
@@ -347,6 +384,7 @@ class MainActivity : AppCompatActivity(),
         apiService!!.getEventByDate(requestBodyMap).enqueue(object : Callback<ResponseScheduleByDate>{
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                dialog?.dismiss()
                 Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
             }
 
@@ -360,12 +398,12 @@ class MainActivity : AppCompatActivity(),
                     startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     dialog?.dismiss()
                 }else{
+                    dialog?.dismiss()
                     Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
                 }
             }
 
         })
-
     }
 
     fun initLoadingDialog(){
@@ -377,4 +415,105 @@ class MainActivity : AppCompatActivity(),
     override fun onFragmentInteraction(uri: Uri) {
 
     }
+
+    /***
+     * Get Data By API
+     */
+
+    private fun refreshMeetingStatus(){
+        getNextMeeting()
+        getUpcomingEvents()
+        getOnMeeting()
+        Handler().postDelayed({
+            Log.d("handler_testing", " GET IT ")
+            refreshMeetingStatus()
+        },60000)
+    }
+
+    private fun getNextMeeting(){
+
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["room_id"] = body
+
+        apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
+            override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseGetNextMeeting>?,
+                response: Response<ResponseGetNextMeeting>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.nextMeeting = response.body()
+                    initBottomScheduleViewPager()
+                }else{
+
+                }
+            }
+        })
+    }
+
+    private fun getOnMeeting(){
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["room_id"] = body
+
+        apiService!!.getOnMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetOnMeeting>{
+            override fun onFailure(call: Call<ResponseGetOnMeeting>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseGetOnMeeting>?,
+                response: Response<ResponseGetOnMeeting>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+
+                    if( DAO.onMeeting != response.body()){
+                        DAO.onMeeting = response.body()
+                        finish()
+                        startActivity(
+                            Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP))
+
+                    }
+                }else{
+
+                }
+            }
+        })
+    }
+
+    private fun getUpcomingEvents(){
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["location_id"] = body
+
+        apiService!!.googleUpcomingEvent(requestBodyMap).enqueue(object : Callback<ResponseUpcomingEvent>{
+            override fun onFailure(call: Call<ResponseUpcomingEvent>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@MainActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseUpcomingEvent>?,
+                response: Response<ResponseUpcomingEvent>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.upcomingEvent = response.body()
+                    initBottomScheduleViewPager()
+                }else{
+                    Toast.makeText(this@MainActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
 }

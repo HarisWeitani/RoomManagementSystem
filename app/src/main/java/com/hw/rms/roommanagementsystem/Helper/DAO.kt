@@ -17,6 +17,7 @@ class DAO {
         var onMeeting : ResponseGetOnMeeting? = null
         var slideShowData : ResponseSlideShowData? = null
         var scheduleEventByDate : ResponseScheduleByDate? = null
+        var upcomingEvent : ResponseUpcomingEvent? = null
 
         /**
          * Not API Object
