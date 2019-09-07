@@ -26,6 +26,7 @@ import com.hw.rms.roommanagementsystem.Data.ScheduleData
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
+import com.hw.rms.roommanagementsystem.RootActivity
 import kotlinx.android.synthetic.main.activity_calendar.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -103,8 +104,10 @@ class ScheduleCalendarActivity : AppCompatActivity() {
     private fun initButtonListener(){
         btnBack.setOnClickListener {
 
-            super.onBackPressed()
-
+            finish()
+            startActivity(
+                Intent(this@ScheduleCalendarActivity, RootActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP))
         }
     }
 

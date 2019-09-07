@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity(),
 
     lateinit var tv_room_name : TextView
     lateinit var iv_logo : ImageView
-    lateinit var tv_time_meeting_range : TextView
+//    lateinit var tv_time_meeting_range : TextView
+    lateinit var tv_time_meeting_start : TextView
+    lateinit var tv_time_meeting_end : TextView
 
     lateinit var btn_pref_schedule_meeting : Button
     lateinit var btn_next_schedule_meeting : Button
@@ -125,7 +127,7 @@ class MainActivity : AppCompatActivity(),
         initButtonListener()
         initImageVideoPager()
         initLoadingDialog()
-        refreshMeetingStatus()
+//        refreshMeetingStatus()
     }
 
     private fun checkIfScreenAlwaysOn(){
@@ -162,7 +164,8 @@ class MainActivity : AppCompatActivity(),
             val myBitmap = BitmapFactory.decodeFile("${imgFile.absolutePath}/${GlobalVal.LOGO_NAME}")
             iv_logo.setImageBitmap(myBitmap)
         }
-        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+        tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
+        tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
 
         btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
         btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
@@ -190,8 +193,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initAvailableView(){
-        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-        tv_time_meeting_range.text = ""
+//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+//        tv_time_meeting_range.text = ""
 
     }
 
@@ -199,8 +202,11 @@ class MainActivity : AppCompatActivity(),
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
         tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
 
-        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
+//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+        tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
+        tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
+        tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
+        tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
 
         btn_check_in = findViewById(R.id.btn_check_in)
         btn_check_in.setOnClickListener {
@@ -218,8 +224,13 @@ class MainActivity : AppCompatActivity(),
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
         tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
 
-        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
+        tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
+        tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
+        tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
+        tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
+
+//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
+//        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
     }
 
     private fun initNewsViewPager(){
