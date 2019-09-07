@@ -432,6 +432,16 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    /*var cal = Calendar.getInstance()
+    var time = "17:30:00"
+    var dateFormat = SimpleDateFormat("HH:mm:ss")
+    var dateFormat2 = SimpleDateFormat("HH:mm")
+
+    var date = dateFormat.parse(time)
+    var subs = (date.time - ( 15*60*1000) )
+    val now = Date(subs)
+    dateFormat2.format(now)*/
+
     private fun getEventByDateNow(){
         val date = Date()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -477,12 +487,17 @@ class MainActivity : AppCompatActivity(),
         reviewDialogBuilder?.setView(dialogView)
         reviewDialogBuilder?.setCancelable(false)
 
-        var iv_review_sad = dialogView.findViewById<ImageView>(R.id.iv_review_sad)
-        var iv_review_happy = dialogView.findViewById<ImageView>(R.id.iv_review_happy)
+        val iv_review_sad = dialogView.findViewById<ImageView>(R.id.iv_review_sad)
+        val iv_review_neutral = dialogView.findViewById<ImageView>(R.id.iv_review_neutral)
+        val iv_review_happy = dialogView.findViewById<ImageView>(R.id.iv_review_happy)
 
         iv_review_sad.setOnClickListener {
             reviewDialog?.dismiss()
             Toast.makeText(this,"Review Sad", Toast.LENGTH_SHORT).show()
+        }
+        iv_review_neutral.setOnClickListener {
+            reviewDialog?.dismiss()
+            Toast.makeText(this,"Review Neutral", Toast.LENGTH_SHORT).show()
         }
         iv_review_happy.setOnClickListener {
             reviewDialog?.dismiss()

@@ -49,7 +49,7 @@ class AdminSettingActivity : AppCompatActivity() {
     val http_https = arrayOf("http","https")
     var building_name = arrayOf("JECO","STARBAK","DANKIN DONAT")
 
-    lateinit var btnBack : Button
+    lateinit var btnBack : LinearLayout
     lateinit var btn_save_and_exit :Button
     var sharePref : SharedPreference? = null
 

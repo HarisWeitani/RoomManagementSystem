@@ -51,14 +51,37 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Not Happy"
+                    android:text="Sad"
                     android:textColor="@color/white"
                     android:textSize="30sp"
 
                     android:fontFamily="@font/gotham_bold"
                     />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginStart="64dp"
 
+                >
+                <ImageView
+                    android:id="@+id/iv_review_neutral"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/netral"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Neutral"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+
+                    android:fontFamily="@font/gotham_bold"
+                    />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
