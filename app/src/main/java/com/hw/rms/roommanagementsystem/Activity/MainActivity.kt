@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity(),
         initButtonListener()
         initImageVideoPager()
         initLoadingDialog()
-//        refreshMeetingStatus()
+        refreshMeetingStatus()
     }
 
     private fun checkIfScreenAlwaysOn(){
@@ -432,7 +432,7 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    /*var cal = Calendar.getInstance()
+/*    var cal = Calendar.getInstance()
     var time = "17:30:00"
     var dateFormat = SimpleDateFormat("HH:mm:ss")
     var dateFormat2 = SimpleDateFormat("HH:mm")
@@ -440,7 +440,10 @@ class MainActivity : AppCompatActivity(),
     var date = dateFormat.parse(time)
     var subs = (date.time - ( 15*60*1000) )
     val now = Date(subs)
-    dateFormat2.format(now)*/
+    val never = Date()
+    dateFormat2.format(now)
+
+    val comp = dateFormat2.format(now).equals("17:15")*/
 
     private fun getEventByDateNow(){
         val date = Date()
