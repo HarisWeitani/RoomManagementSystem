@@ -10,13 +10,16 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.core.view.marginBottom
+import androidx.core.view.size
 import com.hw.rms.roommanagementsystem.Data.ResponseAddEvent
 import com.hw.rms.roommanagementsystem.Data.ResponseGetOnMeeting
 import com.hw.rms.roommanagementsystem.Helper.API
@@ -60,6 +63,7 @@ class QuickBookingActivity : AppCompatActivity() {
     lateinit var et_description : EditText
     lateinit var et_attendees_email : EditText
     lateinit var add_more_attendees : ImageView
+    lateinit var remove_attendees : ImageView
     lateinit var btnSubmit : Button
 
     lateinit var tv_clock : TextView
@@ -162,6 +166,11 @@ class QuickBookingActivity : AppCompatActivity() {
             addAttendeesLine()
         }
 
+        remove_attendees = findViewById(R.id.remove_attendees)
+        remove_attendees.setOnClickListener {
+            removeAttendeesLine()
+        }
+
         et_description = findViewById(R.id.et_description)
         et_attendees_email = findViewById(R.id.et_attendees_email)
 
@@ -193,11 +202,20 @@ class QuickBookingActivity : AppCompatActivity() {
         layout_attendees_email.addView(et)
         etIdDynamic++
     }
+    private fun removeAttendeesLine(){
+        if(etIdDynamic>0) {
+            layout_attendees_email.removeView(layout_attendees_email[layout_attendees_email.size-1])
+            etIdDynamic--
+        }
+    }
 
     private fun getAllAttendees(){
-        for (x in 0 until attendeesEmailETList!!.size){
-            if(attendeesEmailETList!![x].text.toString().isNotEmpty()){
-                emailList?.add(attendeesEmailETList!![x].text.toString())
+//        attendeesEmailETList!!.size
+        val size = (layout_attendees_email.size)
+
+        for (x in 1 until size ){
+            if( (layout_attendees_email[x] as EditText).text.toString().isNotEmpty() ){
+                emailList?.add((layout_attendees_email[x] as EditText).text.toString())
             }
         }
     }
@@ -242,11 +260,12 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["end_date"] = end_date
         requestBodyMap["start_time"] = start_time
         requestBodyMap["end_time"] = end_time
-        requestBodyMap["attendees_email[]"] = attendees_email
-//        for( x in 0 until emailList!!.size ){
-//            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![0])
-//            requestBodyMap["attendees_email[]"] = attendees_emails
-//        }
+        requestBodyMap["attendees_email[0]"] = attendees_email
+        val size = emailList!!.size
+        for( x in 0 until size ){
+            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![0])
+            requestBodyMap["attendees_email[${x+1}]"] = attendees_emails
+        }
 
         apiService!!.googleAddEvent(requestBodyMap).enqueue(object : Callback<ResponseAddEvent> {
             override fun onFailure(call: Call<ResponseAddEvent>?, t: Throwable?) {
