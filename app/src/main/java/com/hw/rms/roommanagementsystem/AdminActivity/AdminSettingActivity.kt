@@ -22,6 +22,7 @@ import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.SpinnerAdapter
 import com.hw.rms.roommanagementsystem.Data.*
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal

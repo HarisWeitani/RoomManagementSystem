@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -23,6 +23,8 @@ import com.google.gson.Gson
 import com.downloader.OnDownloadListener
 import com.hw.rms.roommanagementsystem.Activity.NoConnectionActivity
 import com.hw.rms.roommanagementsystem.Data.*
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
 import com.hw.rms.roommanagementsystem.Helper.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -51,6 +53,7 @@ class RootActivity : AppCompatActivity() {
         DAO.settingsData = Gson().fromJson(sharepref.getValueString(GlobalVal.SETTINGS_DATA_KEY), SettingsData::class.java)
         progressBar = findViewById(R.id.progress_horizontal)
         progressBar.visibility = View.GONE
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")

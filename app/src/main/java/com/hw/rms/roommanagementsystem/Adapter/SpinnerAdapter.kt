@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.recyclerview.widget.ListAdapter
-import com.hw.rms.roommanagementsystem.Data.ResponseRoom
-import com.hw.rms.roommanagementsystem.Helper.DAO
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 
 class SpinnerAdapter(internal val context: Context, resource: Int, private val responseRooms: List<ResponseRoom>) :
     ArrayAdapter<ResponseRoom>(context, resource, responseRooms) {

@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
@@ -18,16 +17,13 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
-import androidx.core.view.marginBottom
 import androidx.core.view.size
 import com.hw.rms.roommanagementsystem.Data.ResponseAddEvent
-import com.hw.rms.roommanagementsystem.Data.ResponseGetOnMeeting
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
-import kotlinx.android.synthetic.main.activity_quick_booking_old.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call

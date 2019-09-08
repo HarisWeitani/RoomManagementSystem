@@ -1,6 +1,9 @@
 package com.hw.rms.roommanagementsystem.Helper
 
 import com.hw.rms.roommanagementsystem.Data.*
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 
 /**
  * DATA ACCESS OBJECT

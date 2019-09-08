@@ -1,12 +1,13 @@
-package com.hw.rms.roommanagementsystem.Data
+package com.hw.rms.roommanagementsystem.Data.Old
 
-data class ResponseGetOnMeeting(
-    var data: List<DataGetOnMeeting?>? = listOf(),
+data class ResponseGetNextMeeting(
+    var data: List<DataGetNextMeeting?>? = listOf(),
     var message: String? = "",
     var ok: Int? = 0
 )
 
-data class DataGetOnMeeting(
+
+data class DataGetNextMeeting(
     var additional_package: String? = "",
     var booking_date: String? = "",
     var booking_id: String? = "",

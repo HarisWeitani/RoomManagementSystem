@@ -1,4 +1,4 @@
-package com.hw.rms.roommanagementsystem.Data
+package com.hw.rms.roommanagementsystem.Data.Old
 
 data class ResponseRoom(
     var room_config: String? = "",

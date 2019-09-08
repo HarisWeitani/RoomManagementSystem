@@ -6,6 +6,9 @@ import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.GsonBuilder
 import com.hw.rms.roommanagementsystem.Data.*
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor

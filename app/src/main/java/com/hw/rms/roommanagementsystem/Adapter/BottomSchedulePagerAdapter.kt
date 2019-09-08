@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
-import com.hw.rms.roommanagementsystem.Data.DataGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.DataGetNextMeeting
 import com.hw.rms.roommanagementsystem.R
 
 class BottomSchedulePagerAdapter(internal var botSchedLeft: List<DataGetNextMeeting>, internal var botSchedRight: List<DataGetNextMeeting>, internal var context: Context) : PagerAdapter() {

@@ -29,6 +29,9 @@ import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
 import com.hw.rms.roommanagementsystem.Data.*
+import com.hw.rms.roommanagementsystem.Data.Old.DataGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
+import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
@@ -73,8 +76,8 @@ class MainActivity : AppCompatActivity(),
     var botSchedRigt : MutableList<DataGetNextMeeting> = mutableListOf()
 
     lateinit var bottomSchedulePagerAdapterV2: BottomSchedulePagerAdapterV2
-    var botSchedLeftV2 : MutableList<DataUpcomingEvent> = mutableListOf()
-    var botSchedRigtV2 : MutableList<DataUpcomingEvent> = mutableListOf()
+    var botSchedLeftV2 : MutableList<DataGetNextMeeting> = mutableListOf()
+    var botSchedRigtV2 : MutableList<DataGetNextMeeting> = mutableListOf()
 
     lateinit var vpImageVideo: ViewPager
 
@@ -342,11 +345,11 @@ class MainActivity : AppCompatActivity(),
 
             val isRightMeetingNull = DAO.upcomingEvent!!.data!!.size % 2 != 0
             if( isRightMeetingNull ) {
-                botSchedRigtV2.add(DataUpcomingEvent())
+                botSchedRigtV2.add(DataGetNextMeeting())
             }
         }else{
-            botSchedLeftV2.add(DataUpcomingEvent())
-            botSchedRigtV2.add(DataUpcomingEvent())
+            botSchedLeftV2.add(DataGetNextMeeting())
+            botSchedRigtV2.add(DataGetNextMeeting())
         }
 
         bottomSchedulePagerAdapterV2 = BottomSchedulePagerAdapterV2(botSchedLeftV2,botSchedRigtV2,this)
