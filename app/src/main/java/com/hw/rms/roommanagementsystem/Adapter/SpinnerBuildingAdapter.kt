@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.hw.rms.roommanagementsystem.Data.DataGetAllBuildings
 import com.hw.rms.roommanagementsystem.Data.DataGetAllRooms
 
-class SpinnerAdapter(internal val context: Context, resource: Int, private val responseRooms: List<DataGetAllRooms>) :
-    ArrayAdapter<DataGetAllRooms>(context, resource, responseRooms) {
+class SpinnerBuildingAdapter(internal val context: Context, resource: Int, private val responseRooms: List<DataGetAllBuildings>) :
+    ArrayAdapter<DataGetAllBuildings>(context, resource, responseRooms) {
 
     override fun getCount(): Int {
         return responseRooms.size
     }
 
-    override fun getItem(position: Int): DataGetAllRooms? {
+    override fun getItem(position: Int): DataGetAllBuildings? {
         return responseRooms[position]
     }
 
@@ -26,7 +27,7 @@ class SpinnerAdapter(internal val context: Context, resource: Int, private val r
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val textView = super.getView(position, convertView, parent) as TextView
         textView.setTextColor(Color.WHITE)
-        textView.text = responseRooms[position].room_name
+        textView.text = responseRooms[position].building_name
 
         return textView
     }
@@ -34,7 +35,7 @@ class SpinnerAdapter(internal val context: Context, resource: Int, private val r
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val textView = super.getView(position, convertView, parent) as TextView
         textView.setTextColor(Color.WHITE)
-        textView.text = responseRooms[position].room_name
+        textView.text = responseRooms[position].building_name
 
         return textView
     }

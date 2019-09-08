@@ -30,23 +30,6 @@ interface API {
     @GET("api/slideshow/get_data/")
     fun getSlideShowData() : Call<ResponseSlideShowData>
 
-    //Deprecated
-
-//    @GET("api/configuration/get_room/")
-//    fun getRoomList() : Call<List<ResponseRoom>>
-//    @Multipart
-//    @POST("api/booking/get_next_meeting/")
-//    fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
-//
-//    @Multipart
-//    @POST("api/booking/get_on_meeting/")
-//    fun getCurrentMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
-
-//    @Multipart
-//    @POST("google/booking/add_event")
-//    fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<String>
-
-
     /***
      * Versi 2
      */
@@ -116,6 +99,9 @@ interface API {
             return retrofit.create(API::class.java)
         }
 
+        /***
+         * Unused
+         */
         fun socketIO(){
             socket = IO.socket(socketUrl)
             socket.on("global_message_from_master", globalMessageFromMaster() )

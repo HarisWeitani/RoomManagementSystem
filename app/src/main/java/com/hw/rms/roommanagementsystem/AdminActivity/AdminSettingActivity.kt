@@ -20,7 +20,8 @@ import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
-import com.hw.rms.roommanagementsystem.Adapter.SpinnerAdapter
+import com.hw.rms.roommanagementsystem.Adapter.SpinnerRoomAdapter
+import com.hw.rms.roommanagementsystem.Adapter.SpinnerBuildingAdapter
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
@@ -83,6 +84,7 @@ class AdminSettingActivity : AppCompatActivity() {
     var socketUrl : String? = null
 
     var selectedRoom : DataGetAllRooms? = null
+    var selectedBuilding : DataGetAllBuildings? = null
 
     lateinit var tv_clock : TextView
     lateinit var tv_date : TextView
@@ -199,7 +201,7 @@ class AdminSettingActivity : AppCompatActivity() {
     }
 
     private fun initSpinner(){
-        val aaRoomName = SpinnerAdapter(this, android.R.layout.simple_spinner_item,
+        val aaRoomName = SpinnerRoomAdapter(this, android.R.layout.simple_spinner_item,
             DAO.roomList?.data as List<DataGetAllRooms>
         )
         aaRoomName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -214,21 +216,21 @@ class AdminSettingActivity : AppCompatActivity() {
             }
         }
 
-
+        val aaBuildingName = SpinnerBuildingAdapter(this, android.R.layout.simple_spinner_item,
+            DAO.buildingList?.data as List<DataGetAllBuildings>
+        )
+        aaBuildingName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_building_name.adapter = aaBuildingName
         sp_building_name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                buildingName = building_name[position]
+                selectedBuilding = parent!!.selectedItem as DataGetAllBuildings?
             }
 
         }
-        val aaBuildingName = ArrayAdapter(this, android.R.layout.simple_spinner_item, building_name)
-        aaBuildingName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_building_name.adapter = aaBuildingName
-
     }
 
     private fun getImeiDevice() : String? {
@@ -273,10 +275,10 @@ class AdminSettingActivity : AppCompatActivity() {
                     socket_full_url = API.socketUrl,
                     server_url = serverUrl,
                     socket_url = socketUrl,
-                    building_name = buildingName,
                     isScreenAlwaysOn = screenOnSwitch.isChecked,
                     admin_pin = pin,
-                    room = selectedRoom)
+                    room = selectedRoom,
+                    building = selectedBuilding)
             val settingDataJson = Gson().toJson(DAO.settingsData)
 
             sharePref!!.save(GlobalVal.FRESH_INSTALL_KEY,false)
@@ -330,12 +332,33 @@ class AdminSettingActivity : AppCompatActivity() {
 
                 if( response.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
-                    getRoomListData()
+                    getBuildingList()
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
                 }else{
                     serverConnected = false
                 }
             }
+        })
+    }
+    private fun getBuildingList(){
+        var body = RequestBody.create(MediaType.parse("text/plain"), "1")
+        val requestBodyMap = HashMap<String, RequestBody>()
+        requestBodyMap["building_id"] = body
+
+        apiService!!.getAllBuildings().enqueue(object : Callback<ResponseGetAllBuildings>{
+            override fun onFailure(call: Call<ResponseGetAllBuildings>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG,t.toString())
+            }
+
+            override fun onResponse(
+                call: Call<ResponseGetAllBuildings>?,
+                response: Response<ResponseGetAllBuildings>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+                DAO.buildingList = response.body()
+                getRoomListData()
+            }
+
         })
     }
     private fun getRoomListData(){
@@ -367,7 +390,6 @@ class AdminSettingActivity : AppCompatActivity() {
                     serverConnected = false
                 }
             }
-
         })
     }
 
