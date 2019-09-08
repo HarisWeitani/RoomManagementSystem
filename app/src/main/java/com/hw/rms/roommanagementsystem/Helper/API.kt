@@ -6,9 +6,6 @@ import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.GsonBuilder
 import com.hw.rms.roommanagementsystem.Data.*
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,49 +14,74 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.PartMap
 import java.util.concurrent.TimeUnit
 
 interface API {
-
-    @GET("api/configuration/get_data/")
-    fun getConfigData() : Call<ResponseConfig>
-
-    @GET("api/configuration/get_room/")
-    fun getRoomList() : Call<List<ResponseRoom>>
-
+    /***
+     * Versi 1
+     */
     @GET("api/newsfeed/get_data/")
     fun getNews() : Call<ResponseNews>
 
     @GET("api/slideshow/get_data/")
     fun getSlideShowData() : Call<ResponseSlideShowData>
 
-    /***
-     * Versi 1
-     */
-    @Multipart
-    @POST("api/booking/get_next_meeting/")
-    fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
+    //Deprecated
 
-    @Multipart
-    @POST("api/booking/get_on_meeting/")
-    fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
+//    @GET("api/configuration/get_room/")
+//    fun getRoomList() : Call<List<ResponseRoom>>
+//    @Multipart
+//    @POST("api/booking/get_next_meeting/")
+//    fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
+//
+//    @Multipart
+//    @POST("api/booking/get_on_meeting/")
+//    fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
 
 //    @Multipart
 //    @POST("google/booking/add_event")
 //    fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<String>
+
+
+    /***
+     * Versi 2
+     */
+
+    @POST("google/booking/get_events_by_date/")
+    fun getEventByDate(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseScheduleByDate>
+
+    @POST("google/booking/get_current_event/")
+    fun getCurrentMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetCurrentMeeting>
+
+    @Multipart
+    @POST("google/booking/get_upcoming_events")
+    fun getNextMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetNextMeeting>
 
     @Multipart
     @POST("google/booking/add_event")
     fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseAddEvent>
 
     @Multipart
-    @POST("google/booking/upcoming_events")
-    fun googleUpcomingEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseUpcomingEvent>
+    @POST("google/booking/extend_event")
+    fun googleExtendEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseExtendEvent>
+
+    @GET("api/running_text/get_data/")
+    fun getRunningText() : Call<ResponseGetRunningText>
+
+    @GET("api/configuration/get_data/")
+    fun getConfigData() : Call<ResponseConfig>
+
+    @GET("google/resource/get_all_buildings")
+    fun getAllBuildings() : Call<ResponseGetAllBuildings>
 
     @Multipart
-    @POST("google/booking/get_event_by_date")
-    fun getEventByDate(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseScheduleByDate>
+    @POST("google/resource/get_all_rooms")
+    fun getRoomList(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetAllRooms>
+
 
     companion object Factory{
 

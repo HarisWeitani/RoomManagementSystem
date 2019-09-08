@@ -29,9 +29,6 @@ import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
 import com.hw.rms.roommanagementsystem.Data.*
-import com.hw.rms.roommanagementsystem.Data.Old.DataGetNextMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
@@ -71,9 +68,9 @@ class MainActivity : AppCompatActivity(),
 
     //bottom schedule
     lateinit var vpBottomSchedule : ViewPager
-    lateinit var bottomSchedulePagerAdapter: BottomSchedulePagerAdapter
+/*    lateinit var bottomSchedulePagerAdapter: BottomSchedulePagerAdapter
     var botSchedLeft : MutableList<DataGetNextMeeting> = mutableListOf()
-    var botSchedRigt : MutableList<DataGetNextMeeting> = mutableListOf()
+    var botSchedRigt : MutableList<DataGetNextMeeting> = mutableListOf()*/
 
     lateinit var bottomSchedulePagerAdapterV2: BottomSchedulePagerAdapterV2
     var botSchedLeftV2 : MutableList<DataGetNextMeeting> = mutableListOf()
@@ -304,34 +301,34 @@ class MainActivity : AppCompatActivity(),
 //            ResponseGetNextMeeting::class.java
 //        )
         //meeting schedule bottom
-        botSchedLeft.clear()
-        botSchedRigt.clear()
-        val nextMeetingSize = DAO.nextMeeting!!.data!!.size
-        if( nextMeetingSize > 0) {
-            for (i in 0 until nextMeetingSize) {
-                if (i % 2 == 0) {
-                    botSchedLeft.add(DAO.nextMeeting!!.data!![i]!!)
-                } else {
-                    botSchedRigt.add(DAO.nextMeeting!!.data!![i]!!)
-                }
-            }
-
-            val isRightMeetingNull = DAO.nextMeeting!!.data!!.size % 2 != 0
-            if( isRightMeetingNull ) {
-                botSchedRigt.add(DataGetNextMeeting())
-            }
-        }else{
-            botSchedLeft.add(DataGetNextMeeting())
-            botSchedRigt.add(DataGetNextMeeting())
-        }
-
-        bottomSchedulePagerAdapter = BottomSchedulePagerAdapter(botSchedLeft,botSchedRigt,this)
-        vpBottomSchedule.adapter = bottomSchedulePagerAdapter
+//        botSchedLeft.clear()
+//        botSchedRigt.clear()
+//        val nextMeetingSize = DAO.nextMeeting!!.data!!.size
+//        if( nextMeetingSize > 0) {
+//            for (i in 0 until nextMeetingSize) {
+//                if (i % 2 == 0) {
+//                    botSchedLeft.add(DAO.nextMeeting!!.data!![i]!!)
+//                } else {
+//                    botSchedRigt.add(DAO.nextMeeting!!.data!![i]!!)
+//                }
+//            }
+//
+//            val isRightMeetingNull = DAO.nextMeeting!!.data!!.size % 2 != 0
+//            if( isRightMeetingNull ) {
+//                botSchedRigt.add(DataGetNextMeeting())
+//            }
+//        }else{
+//            botSchedLeft.add(DataGetNextMeeting())
+//            botSchedRigt.add(DataGetNextMeeting())
+//        }
+//
+//        bottomSchedulePagerAdapter = BottomSchedulePagerAdapter(botSchedLeft,botSchedRigt,this)
+//        vpBottomSchedule.adapter = bottomSchedulePagerAdapter
 
         /***
          * V2 belum dipake
          */
-        /*botSchedLeftV2.clear()
+        botSchedLeftV2.clear()
         botSchedRigtV2.clear()
         val upcomingEventSize = DAO.upcomingEvent!!.data!!.size
         if( upcomingEventSize > 0) {
@@ -353,7 +350,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         bottomSchedulePagerAdapterV2 = BottomSchedulePagerAdapterV2(botSchedLeftV2,botSchedRigtV2,this)
-        vpBottomSchedule.adapter = bottomSchedulePagerAdapterV2*/
+        vpBottomSchedule.adapter = bottomSchedulePagerAdapterV2
     }
 
     private fun initImageVideoPager(){
@@ -522,8 +519,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun refreshMeetingStatus(){
         getNextMeeting()
-        getUpcomingEvents()
-        getOnMeeting()
+        getCurrentMeeting()
         Handler().postDelayed({
             Log.d("handler_testing", " GET IT ")
             refreshMeetingStatus()
@@ -557,20 +553,20 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
-    private fun getOnMeeting(){
+    private fun getCurrentMeeting(){
         var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
         val requestBodyMap = HashMap<String,RequestBody>()
         requestBodyMap["room_id"] = body
 
-        apiService!!.getOnMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetOnMeeting>{
-            override fun onFailure(call: Call<ResponseGetOnMeeting>?, t: Throwable?) {
+        apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
+            override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
-                call: Call<ResponseGetOnMeeting>?,
-                response: Response<ResponseGetOnMeeting>?
+                call: Call<ResponseGetCurrentMeeting>?,
+                response: Response<ResponseGetCurrentMeeting>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
@@ -589,31 +585,4 @@ class MainActivity : AppCompatActivity(),
             }
         })
     }
-
-    private fun getUpcomingEvents(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
-        val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["location_id"] = body
-
-        apiService!!.googleUpcomingEvent(requestBodyMap).enqueue(object : Callback<ResponseUpcomingEvent>{
-            override fun onFailure(call: Call<ResponseUpcomingEvent>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@MainActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(
-                call: Call<ResponseUpcomingEvent>?,
-                response: Response<ResponseUpcomingEvent>?
-            ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-                if( response?.code() == 200 && response.body() != null ){
-                    DAO.upcomingEvent = response.body()
-                    initBottomScheduleViewPager()
-                }else{
-                    Toast.makeText(this@MainActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
 }

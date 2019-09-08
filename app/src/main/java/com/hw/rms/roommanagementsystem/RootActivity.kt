@@ -23,8 +23,6 @@ import com.google.gson.Gson
 import com.downloader.OnDownloadListener
 import com.hw.rms.roommanagementsystem.Activity.NoConnectionActivity
 import com.hw.rms.roommanagementsystem.Data.*
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
 import com.hw.rms.roommanagementsystem.Helper.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -125,8 +123,7 @@ class RootActivity : AppCompatActivity() {
         if( DAO.settingsData != null ){
             apiService = API.networkApi()
             getNextMeeting()
-            getUpcomingEvents()
-            getOnMeeting()
+            getCurrentMeeting()
             getSlideShowData()
             getNewsData()
         }else{
@@ -197,45 +194,20 @@ class RootActivity : AppCompatActivity() {
         })
     }
 
-    private fun getUpcomingEvents(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
-        val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["location_id"] = body
-
-        apiService!!.googleUpcomingEvent(requestBodyMap).enqueue(object : Callback<ResponseUpcomingEvent>{
-            override fun onFailure(call: Call<ResponseUpcomingEvent>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(
-                call: Call<ResponseUpcomingEvent>?,
-                response: Response<ResponseUpcomingEvent>?
-            ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-                if( response?.code() == 200 && response.body() != null ){
-                    DAO.upcomingEvent = response.body()
-                }else{
-                    Toast.makeText(this@RootActivity,"get Upcoming Events Failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
-    private fun getOnMeeting(){
+    private fun getCurrentMeeting(){
         var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
         val requestBodyMap = HashMap<String,RequestBody>()
         requestBodyMap["room_id"] = body
 
-        apiService!!.getOnMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetOnMeeting>{
-            override fun onFailure(call: Call<ResponseGetOnMeeting>?, t: Throwable?) {
+        apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
+            override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
-                call: Call<ResponseGetOnMeeting>?,
-                response: Response<ResponseGetOnMeeting>?
+                call: Call<ResponseGetCurrentMeeting>?,
+                response: Response<ResponseGetCurrentMeeting>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){

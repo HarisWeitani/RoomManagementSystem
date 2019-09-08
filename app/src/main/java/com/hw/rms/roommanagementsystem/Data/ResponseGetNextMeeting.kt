@@ -1,6 +1,6 @@
 package com.hw.rms.roommanagementsystem.Data
 
-data class ResponseUpcomingEvent(
+data class ResponseGetNextMeeting(
     var data: List<DataGetNextMeeting?>? = listOf(),
     var message: String? = "",
     var ok: Int? = 0

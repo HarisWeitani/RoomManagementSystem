@@ -42,9 +42,6 @@
                 android:name=".AdminActivity.AdminLoginActivity"
                 android:screenOrientation="landscape" />
         <activity
-                android:name=".Activity.RoomListActivity"
-                android:screenOrientation="landscape" />
-        <activity
                 android:name=".Activity.MainActivity"
                 android:screenOrientation="landscape" />
         <activity
