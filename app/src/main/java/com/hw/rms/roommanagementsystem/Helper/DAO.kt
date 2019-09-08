@@ -1,9 +1,6 @@
 package com.hw.rms.roommanagementsystem.Helper
 
 import com.hw.rms.roommanagementsystem.Data.*
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetNextMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseGetOnMeeting
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 
 /**
  * DATA ACCESS OBJECT
@@ -14,13 +11,14 @@ class DAO {
          * API Object
          */
         var configData : ResponseConfig? = null
-        var roomList : List<ResponseRoom>? = null
+        var roomList : ResponseGetAllRooms? = null
         var newsFeed : ResponseNews? = null
         var nextMeeting : ResponseGetNextMeeting? = null
-        var onMeeting : ResponseGetOnMeeting? = null
+        var currentMeeting : ResponseGetCurrentMeeting? = null
         var slideShowData : ResponseSlideShowData? = null
         var scheduleEventByDate : ResponseScheduleByDate? = null
-        var upcomingEvent : ResponseUpcomingEvent? = null
+        var runningText : ResponseGetRunningText? = null
+        var buildingList : ResponseGetAllBuildings? = null
 
         /**
          * Not API Object

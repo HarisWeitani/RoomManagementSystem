@@ -1,7 +1,7 @@
 package com.hw.rms.roommanagementsystem.Data
 
 data class ResponseGetAllRooms(
-    var `data`: List<DataGetAllRooms?>? = listOf(),
+    var data: List<DataGetAllRooms?>? = listOf(),
     var message: String? = "",
     var ok: Int? = 0
 )

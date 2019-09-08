@@ -1,7 +1,5 @@
 package com.hw.rms.roommanagementsystem.Data
 
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
-
 data class SettingsData(
     var server_url : String? = "",
     var socket_url : String? = "",
@@ -10,10 +8,17 @@ data class SettingsData(
     var building_name : String? = "Building Name",
     var serial_number : String? = "Serial Number",
     var license : String? = "License",
-    var room : ResponseRoom? = ResponseRoom(
+    var room : DataGetAllRooms? = DataGetAllRooms(
         "0",
         "0",
         "No Room",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
         "0"
     ),
     var isScreenAlwaysOn : Boolean? = true,

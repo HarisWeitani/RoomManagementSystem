@@ -22,7 +22,6 @@ import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.SpinnerAdapter
 import com.hw.rms.roommanagementsystem.Data.*
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
 import com.hw.rms.roommanagementsystem.Helper.GlobalVal
@@ -30,6 +29,8 @@ import com.hw.rms.roommanagementsystem.Helper.SharedPreference
 import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
 import kotlinx.android.synthetic.main.activity_admin_setting.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,7 +82,7 @@ class AdminSettingActivity : AppCompatActivity() {
     var serverUrl : String? = null
     var socketUrl : String? = null
 
-    var selectedRoom : ResponseRoom? = null
+    var selectedRoom : DataGetAllRooms? = null
 
     lateinit var tv_clock : TextView
     lateinit var tv_date : TextView
@@ -199,7 +200,7 @@ class AdminSettingActivity : AppCompatActivity() {
 
     private fun initSpinner(){
         val aaRoomName = SpinnerAdapter(this, android.R.layout.simple_spinner_item,
-            DAO.roomList as MutableList<ResponseRoom>
+            DAO.roomList?.data as List<DataGetAllRooms>
         )
         aaRoomName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_room_name.adapter = aaRoomName
@@ -209,7 +210,7 @@ class AdminSettingActivity : AppCompatActivity() {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 //               roomName = room_name[position]
-                selectedRoom = parent!!.selectedItem as ResponseRoom?
+                selectedRoom = parent!!.selectedItem as DataGetAllRooms?
             }
         }
 
@@ -338,8 +339,12 @@ class AdminSettingActivity : AppCompatActivity() {
         })
     }
     private fun getRoomListData(){
-        apiService!!.getRoomList().enqueue(object : Callback<List<ResponseRoom>>{
-            override fun onFailure(call: Call<List<ResponseRoom>>?, t: Throwable?) {
+        var body = RequestBody.create(MediaType.parse("text/plain"), "1")
+        val requestBodyMap = HashMap<String, RequestBody>()
+        requestBodyMap["building_id"] = body
+
+        apiService!!.getRoomList(requestBodyMap).enqueue(object : Callback<ResponseGetAllRooms>{
+            override fun onFailure(call: Call<ResponseGetAllRooms>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG,t.toString())
 
                 runOnUiThread {
@@ -350,7 +355,7 @@ class AdminSettingActivity : AppCompatActivity() {
                 serverConnected = false
             }
 
-            override fun onResponse(call: Call<List<ResponseRoom>>?, response: Response<List<ResponseRoom>>?) {
+            override fun onResponse(call: Call<ResponseGetAllRooms>?, response: Response<ResponseGetAllRooms>?) {
                 Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
 
                 if( response.code() == 200 && response.body() != null ){

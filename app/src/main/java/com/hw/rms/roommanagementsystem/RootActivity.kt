@@ -211,7 +211,7 @@ class RootActivity : AppCompatActivity() {
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
-                    DAO.onMeeting = response.body()
+                    DAO.currentMeeting = response.body()
                 }else{
                     Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
                 }

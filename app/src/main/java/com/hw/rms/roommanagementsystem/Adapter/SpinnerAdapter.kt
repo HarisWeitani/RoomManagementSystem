@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.hw.rms.roommanagementsystem.Data.Old.ResponseRoom
+import com.hw.rms.roommanagementsystem.Data.DataGetAllRooms
 
-class SpinnerAdapter(internal val context: Context, resource: Int, private val responseRooms: List<ResponseRoom>) :
-    ArrayAdapter<ResponseRoom>(context, resource, responseRooms) {
+class SpinnerAdapter(internal val context: Context, resource: Int, private val responseRooms: List<DataGetAllRooms>) :
+    ArrayAdapter<DataGetAllRooms>(context, resource, responseRooms) {
 
     override fun getCount(): Int {
         return responseRooms.size
     }
 
-    override fun getItem(position: Int): ResponseRoom? {
+    override fun getItem(position: Int): DataGetAllRooms? {
         return responseRooms[position]
     }
 

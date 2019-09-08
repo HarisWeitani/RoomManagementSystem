@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(),
     lateinit var btnBookNow : Button
     lateinit var btn_schedule : Button
 
-    var booking_status = 0
+    var booking_status = "available"
 
     var apiService : API? = null
     var loadingDialog : Dialog? = null
@@ -106,25 +106,22 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if( DAO.onMeeting!!.data!!.isNotEmpty() ){
-            booking_status =  DAO.onMeeting!!.data!![0]!!.booking_status!!.toInt()
+        if( DAO.currentMeeting?.ok == 1 ){
+//            booking_status =  DAO.currentMeeting!!.data!!.booking_status!!.toInt()
+            booking_status =  DAO.currentMeeting!!.data!!.status!!
         }
 
-        if( booking_status == 0 ){
+        if( booking_status == "available" ){
             setContentView(R.layout.activity_main_available)
             initAvailableView()
-        }else if( booking_status == 1 ){
-            setContentView(R.layout.activity_waiting)
-            initWaitingView()
-        }else if( booking_status == 2 ){
-//            if( DAO.nextMeeting?.data?.get(0)?.booking_time_start.isNullOrEmpty() ){
-//                setContentView(R.layout.activity_occupied)
-//                initOccupiedView()
-//            }
+        }
+//        else if( booking_status == 1 ){
+//            setContentView(R.layout.activity_waiting)
+////            initWaitingView()
+//        }
+        else if( booking_status == "confirmed" ){
             setContentView(R.layout.activity_occupied)
             initOccupiedView()
-//            setContentView(R.layout.activity_waiting_occupied)
-//            waitingOccupied()
         }
         actionBar?.hide()
         instance = this@MainActivity
@@ -213,19 +210,18 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    private fun initWaitingView(){
+    /*private fun initWaitingView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
-        tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+//        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
 
 //        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
-        tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
-        tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
+        tv_time_meeting_start.text = DAO.currentMeeting!!.data!!.start_dateTime
+        tv_time_meeting_end.text = DAO.currentMeeting!!.data!!.end_dateTime
 
         btn_check_in = findViewById(R.id.btn_check_in)
         btn_check_in.setOnClickListener {
-            DAO.onMeeting!!.data!![0]!!.booking_status = "2"
             val i = Intent(this@MainActivity,MainActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             finish()
@@ -233,25 +229,25 @@ class MainActivity : AppCompatActivity(),
             startActivity(i)
             overridePendingTransition(0,0)
         }
-    }
+    }*/
 
-    private fun waitingOccupied(){
+    /*private fun waitingOccupied(){
 
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
-        tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
 
         tv_next_meeting_name = findViewById(R.id.tv_next_meeting_name)
-        tv_next_meeting_name.text = "${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+        tv_next_meeting_name.text = "${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
 
 //        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
-        tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
-        tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
+        tv_time_meeting_start.text = DAO.currentMeeting!!.data!![0]!!.booking_time_start
+        tv_time_meeting_end.text = DAO.currentMeeting!!.data!![0]!!.booking_time_end
 
         btn_check_in = findViewById(R.id.btn_check_in)
         btn_check_in.setOnClickListener {
-            DAO.onMeeting!!.data!![0]!!.booking_status = "2"
+            DAO.currentMeeting!!.data!![0]!!.booking_status = "2"
             val i = Intent(this@MainActivity,MainActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             finish()
@@ -260,25 +256,25 @@ class MainActivity : AppCompatActivity(),
             overridePendingTransition(0,0)
         }
 
-    }
+    }*/
 
     private fun initOccupiedView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
-        tv_meeting_title_with_member_name.text = "${DAO.onMeeting!!.data!![0]!!.meeting_title} by ${DAO.onMeeting!!.data!![0]!!.member_first_name} ${DAO.onMeeting!!.data!![0]!!.member_last_name}"
+//        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
+        tv_meeting_title_with_member_name.text = " "
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
-        tv_time_meeting_start.text = DAO.onMeeting!!.data!![0]!!.booking_time_start
-        tv_time_meeting_end.text = DAO.onMeeting!!.data!![0]!!.booking_time_end
+        tv_time_meeting_start.text = DAO.currentMeeting!!.data!!.start_dateTime
+        tv_time_meeting_end.text = DAO.currentMeeting!!.data!!.end_dateTime
 
         btn_check_out = findViewById(R.id.btn_check_out)
         btn_check_out.setOnClickListener {
             initReviewDialog()
         }
 
-
 //        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-//        tv_time_meeting_range.text = "${DAO.onMeeting!!.data!![0]!!.booking_time_start} - ${DAO.onMeeting!!.data!![0]!!.booking_time_end}"
+//        tv_time_meeting_range.text = "${DAO.currentMeeting!!.data!![0]!!.booking_time_start} - ${DAO.currentMeeting!!.data!![0]!!.booking_time_end}"
     }
 
     private fun initNewsViewPager(){
@@ -296,51 +292,19 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initBottomScheduleViewPager(){
-        //testing
-//        DAO.nextMeeting = Gson().fromJson("{\"ok\":1,\"message\":\"Success Get DataSlideShow\",\"data\":[{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"},{\"booking_id\":\"369\",\"room_id\":\"23\",\"member_id\":\"1\",\"booking_date\":\"2019-08-19\",\"booking_time_start\":\"23:30:00\",\"booking_time_end\":\"00:00:00\",\"booking_status\":\"1\",\"meeting_status\":\"0\",\"meeting_title\":\"dddddddd23123123\",\"total_participant\":\"5\",\"booking_pin\":\"0\",\"special_request\":\"\",\"additional_package\":\"\",\"created_date\":\"0000-00-00 00:00:00\",\"edited_date\":\"2019-07-30 14:00:04\",\"created_by\":\"1\",\"edited_by\":\"1\",\"member_first_name\":\"Kemendikbud\",\"member_last_name\":\"Group\",\"member_username\":\"test123\",\"member_password\":\"cc03e747a6afbbcbf8be7668acfebee5\",\"member_gender\":\"0\",\"member_email\":\"fandyeffendi24@gmail.com\",\"member_phone\":\"6281617677633\",\"member_address\":\"Kosambi\",\"member_status\":\"1\",\"member_class\":\"0\"}]}",
-//            ResponseGetNextMeeting::class.java
-//        )
-        //meeting schedule bottom
-//        botSchedLeft.clear()
-//        botSchedRigt.clear()
-//        val nextMeetingSize = DAO.nextMeeting!!.data!!.size
-//        if( nextMeetingSize > 0) {
-//            for (i in 0 until nextMeetingSize) {
-//                if (i % 2 == 0) {
-//                    botSchedLeft.add(DAO.nextMeeting!!.data!![i]!!)
-//                } else {
-//                    botSchedRigt.add(DAO.nextMeeting!!.data!![i]!!)
-//                }
-//            }
-//
-//            val isRightMeetingNull = DAO.nextMeeting!!.data!!.size % 2 != 0
-//            if( isRightMeetingNull ) {
-//                botSchedRigt.add(DataGetNextMeeting())
-//            }
-//        }else{
-//            botSchedLeft.add(DataGetNextMeeting())
-//            botSchedRigt.add(DataGetNextMeeting())
-//        }
-//
-//        bottomSchedulePagerAdapter = BottomSchedulePagerAdapter(botSchedLeft,botSchedRigt,this)
-//        vpBottomSchedule.adapter = bottomSchedulePagerAdapter
-
-        /***
-         * V2 belum dipake
-         */
         botSchedLeftV2.clear()
         botSchedRigtV2.clear()
-        val upcomingEventSize = DAO.upcomingEvent!!.data!!.size
+        val upcomingEventSize = DAO.nextMeeting!!.data!!.size
         if( upcomingEventSize > 0) {
             for (i in 0 until upcomingEventSize) {
                 if (i % 2 == 0) {
-                    botSchedLeftV2.add(DAO.upcomingEvent!!.data!![i]!!)
+                    botSchedLeftV2.add(DAO.nextMeeting!!.data!![i]!!)
                 } else {
-                    botSchedRigtV2.add(DAO.upcomingEvent!!.data!![i]!!)
+                    botSchedRigtV2.add(DAO.nextMeeting!!.data!![i]!!)
                 }
             }
 
-            val isRightMeetingNull = DAO.upcomingEvent!!.data!!.size % 2 != 0
+            val isRightMeetingNull = DAO.nextMeeting!!.data!!.size % 2 != 0
             if( isRightMeetingNull ) {
                 botSchedRigtV2.add(DataGetNextMeeting())
             }
@@ -571,8 +535,8 @@ class MainActivity : AppCompatActivity(),
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
 
-                    if( DAO.onMeeting != response.body()){
-                        DAO.onMeeting = response.body()
+                    if( DAO.currentMeeting != response.body()){
+                        DAO.currentMeeting = response.body()
                         finish()
                         startActivity(
                             Intent(this@MainActivity, RootActivity::class.java).setFlags(

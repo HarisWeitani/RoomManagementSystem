@@ -40,7 +40,7 @@ interface API {
 //
 //    @Multipart
 //    @POST("api/booking/get_on_meeting/")
-//    fun getOnMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
+//    fun getCurrentMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetOnMeeting>
 
 //    @Multipart
 //    @POST("google/booking/add_event")
@@ -51,9 +51,11 @@ interface API {
      * Versi 2
      */
 
+    @Multipart
     @POST("google/booking/get_events_by_date/")
     fun getEventByDate(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseScheduleByDate>
 
+    @Multipart
     @POST("google/booking/get_current_event/")
     fun getCurrentMeeting(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetCurrentMeeting>
 
