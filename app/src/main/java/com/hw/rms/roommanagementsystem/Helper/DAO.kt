@@ -17,7 +17,7 @@ class DAO {
         var currentMeeting : ResponseGetCurrentMeeting? = null
         var slideShowData : ResponseSlideShowData? = null
         var scheduleEventByDate : ResponseScheduleByDate? = null
-        var runningText : ResponseGetRunningText? = null
+        var runningText : List<ResponseGetRunningText>? = null
         var buildingList : ResponseGetAllBuildings? = null
 
         /**

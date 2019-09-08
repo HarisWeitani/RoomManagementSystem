@@ -38,6 +38,6 @@ data class ResponseConfig(
     var config_request_to_server: String? = "",
     var config_send_reminder_after: String? = "",
     var config_show_waiting_time_after: String? = "",
-    var config_timestamp: String? = "", //For Extend Time
+    var config_timestamp: String? = "15", //For Extend Time
     var config_show_survey_before: String? = ""
 )

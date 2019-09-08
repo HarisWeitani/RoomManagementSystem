@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/curve_edge_box"
+        android:padding="32dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Extend"
+
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/gotham_bold"
+            android:layout_marginBottom="16dp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_minus_time"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_remove_circle_outline_black_80dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_time_extend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60"
+                android:textColor="@color/white"
+                android:textSize="80sp"
+                android:layout_gravity="center"
+
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+
+                android:fontFamily="@font/gotham_bold"
+                />
+            <ImageView
+                android:id="@+id/iv_plus_time"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_add_circle_outline_black_80dp"
+                />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:layout_marginTop="32dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+
+            android:textSize="30sp"
+            />
+
+    </LinearLayout>
+</LinearLayout>

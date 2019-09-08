@@ -55,7 +55,7 @@ interface API {
     fun googleExtendEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseExtendEvent>
 
     @GET("api/running_text/get_data/")
-    fun getRunningText() : Call<ResponseGetRunningText>
+    fun getRunningText() : Call<List<ResponseGetRunningText>>
 
     @GET("api/configuration/get_data/")
     fun getConfigData() : Call<ResponseConfig>
@@ -67,6 +67,9 @@ interface API {
     @POST("google/resource/get_all_rooms")
     fun getRoomList(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetAllRooms>
 
+    @Multipart
+    @POST("api/survey/add_survey")
+    fun addSurvey(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseSurvey>
 
     companion object Factory{
 

@@ -122,6 +122,8 @@ class RootActivity : AppCompatActivity() {
 
         if( DAO.settingsData != null ){
             apiService = API.networkApi()
+            getConfig()
+            getRunningText()
             getNextMeeting()
             getCurrentMeeting()
             getSlideShowData()
@@ -166,6 +168,46 @@ class RootActivity : AppCompatActivity() {
                 // Ignore all other requests.
             }
         }
+    }
+    private fun getConfig(){
+
+        apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
+            override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG,t.toString())
+
+            }
+            override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
+                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+
+                if( response.code() == 200 && response.body() != null ){
+                    DAO.configData = response.body()
+                    fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
+                }else{
+
+                }
+            }
+        })
+    }
+    private fun getRunningText(){
+        apiService!!.getRunningText().enqueue(object : Callback<List<ResponseGetRunningText>>{
+            override fun onFailure(call: Call<List<ResponseGetRunningText>>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<List<ResponseGetRunningText>>?,
+                response: Response<List<ResponseGetRunningText>>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.runningText = response.body()
+                }else{
+                    Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
     }
 
     private fun getNextMeeting(){
@@ -218,6 +260,7 @@ class RootActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun getNewsData(){
 //        apiService = API.networkApi()

@@ -33,6 +33,7 @@ import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -85,18 +86,22 @@ class MainActivity : AppCompatActivity(),
 
     lateinit var tv_meeting_title_with_member_name : TextView
 
-    lateinit var btn_check_in : Button
-    lateinit var btn_check_out : Button
     lateinit var btnBookNow : Button
     lateinit var btn_schedule : Button
+    lateinit var btn_extend : Button
 
     var booking_status = "available"
 
     var apiService : API? = null
     var loadingDialog : Dialog? = null
+
     var reviewDialogBuilder : AlertDialog.Builder? = null
     var reviewDialog : AlertDialog? = null
-    lateinit var dialogInflater : LayoutInflater
+    lateinit var reviewDialogInflater : LayoutInflater
+
+    var extendDialogBuilder : AlertDialog.Builder? = null
+    var extendDialog : AlertDialog? = null
+    lateinit var extendDialogInflater : LayoutInflater
 
     companion object{
         @SuppressLint("StaticFieldLeak")
@@ -110,7 +115,6 @@ class MainActivity : AppCompatActivity(),
 //            booking_status =  DAO.currentMeeting!!.data!!.booking_status!!.toInt()
             booking_status =  DAO.currentMeeting!!.data!!.status!!
         }
-
         if( booking_status == "available" ){
             setContentView(R.layout.activity_main_available)
             initAvailableView()
@@ -120,7 +124,8 @@ class MainActivity : AppCompatActivity(),
 ////            initWaitingView()
 //        }
         else if( booking_status == "confirmed" ){
-            setContentView(R.layout.activity_occupied)
+//            setContentView(R.layout.activity_occupied)
+            setContentView(R.layout.activity_occupied_v2)
             initOccupiedView()
         }
         actionBar?.hide()
@@ -132,6 +137,7 @@ class MainActivity : AppCompatActivity(),
         apiService = API.networkApi()
         loadingDialog = Dialog(this)
         reviewDialogBuilder = AlertDialog.Builder(this)
+        extendDialogBuilder = AlertDialog.Builder(this)
 
         initView()
         initNewsViewPager()
@@ -261,20 +267,84 @@ class MainActivity : AppCompatActivity(),
     private fun initOccupiedView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
 //        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-        tv_meeting_title_with_member_name.text = " "
+        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting?.data?.summary}"
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
         tv_time_meeting_start.text = DAO.currentMeeting!!.data!!.start_dateTime
         tv_time_meeting_end.text = DAO.currentMeeting!!.data!!.end_dateTime
 
-        btn_check_out = findViewById(R.id.btn_check_out)
-        btn_check_out.setOnClickListener {
-            initReviewDialog()
+        btn_extend = findViewById(R.id.btn_extend)
+        btn_extend.setOnClickListener {
+            //show dialog
+            initExtendDialog()
+//            initReviewDialog()
+//            extendCurrentMeeting()
         }
 
 //        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
 //        tv_time_meeting_range.text = "${DAO.currentMeeting!!.data!![0]!!.booking_time_start} - ${DAO.currentMeeting!!.data!![0]!!.booking_time_end}"
+    }
+
+    private fun extendCurrentMeeting( newTime : Int ){
+        val date = Date()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+        val timeFormat = SimpleDateFormat("HH:mm")
+        val timeEndOld = DAO.currentMeeting?.data?.end_dateTime
+        val timeConv = timeFormat.parse(timeEndOld)
+        val subs = ( timeConv.time + (15*60*1000) )
+        val timeEndNew = timeFormat.format(subs)+":00"
+
+        var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
+        var newEndDate = RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date) )
+        var newEndTime = RequestBody.create(MediaType.parse("text/plain"), timeEndNew)
+
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["id"] = id
+        requestBodyMap["new_end_date"] = newEndDate
+        requestBodyMap["new_end_time"] = newEndTime
+
+        apiService!!.googleExtendEvent(requestBodyMap).enqueue(object : Callback<ResponseExtendEvent>{
+            override fun onFailure(call: Call<ResponseExtendEvent>?, t: Throwable?) {
+                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseExtendEvent>?,
+                response: Response<ResponseExtendEvent>?
+            ) {
+                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    loadingDialog?.dismiss()
+                    finish()
+                    startActivity(
+                        Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                }else{
+                    Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
+
+    private fun checkIfSurveyTimeToShow(){
+        var time = DAO.currentMeeting?.data?.end_dateTime
+        var dateFormat2 = SimpleDateFormat("HH:mm")
+
+        var date = dateFormat2.parse(time)
+        var subs = (date.time - ( DAO.configData!!.config_timestamp!!.toInt()*60*1000) )
+        val dateParam = Date(subs)
+
+        val showTime = dateFormat2.format(dateParam)
+
+        if( dateFormat2.format(Date()).equals(showTime) ){
+            initReviewDialog()
+        }else{
+            initReviewDialog()
+        }
     }
 
     private fun initNewsViewPager(){
@@ -361,10 +431,12 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initButtonListener() {
-        //sample only
-        tv_running_text.text = SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
-                SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT +
-                SAMPLE_LONG_TEXT + SAMPLE_LONG_TEXT
+
+        var runText = ""
+        for ( x in 0 until DAO.runningText!!.size ){
+            runText += DAO.runningText!![x].running_text
+        }
+        tv_running_text.text = runText
 
         tv_clock.setOnLongClickListener {
             val intent = Intent(this@MainActivity,
@@ -395,19 +467,6 @@ class MainActivity : AppCompatActivity(),
         }
 
     }
-
-/*    var cal = Calendar.getInstance()
-    var time = "17:30:00"
-    var dateFormat = SimpleDateFormat("HH:mm:ss")
-    var dateFormat2 = SimpleDateFormat("HH:mm")
-
-    var date = dateFormat.parse(time)
-    var subs = (date.time - ( 15*60*1000) )
-    val now = Date(subs)
-    val never = Date()
-    dateFormat2.format(now)
-
-    val comp = dateFormat2.format(now).equals("17:15")*/
 
     private fun getEventByDateNow(){
         val date = Date()
@@ -449,8 +508,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun initReviewDialog(){
-        dialogInflater = layoutInflater
-        val dialogView = dialogInflater.inflate(R.layout.review_room_dialog,null)
+        reviewDialogInflater = layoutInflater
+        val dialogView = reviewDialogInflater.inflate(R.layout.review_room_dialog,null)
         reviewDialogBuilder?.setView(dialogView)
         reviewDialogBuilder?.setCancelable(false)
 
@@ -460,17 +519,107 @@ class MainActivity : AppCompatActivity(),
 
         iv_review_sad.setOnClickListener {
             reviewDialog?.dismiss()
+            sendSurvey("BAD")
             Toast.makeText(this,"Review Sad", Toast.LENGTH_SHORT).show()
         }
         iv_review_neutral.setOnClickListener {
             reviewDialog?.dismiss()
+            sendSurvey("NEUTRAL")
             Toast.makeText(this,"Review Neutral", Toast.LENGTH_SHORT).show()
         }
         iv_review_happy.setOnClickListener {
             reviewDialog?.dismiss()
+            sendSurvey("GOOD")
             Toast.makeText(this,"Review Happy", Toast.LENGTH_SHORT).show()
         }
         reviewDialog = reviewDialogBuilder?.show()
+    }
+
+    private fun sendSurvey(status : String){
+        var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
+        val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
+        val summary = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.summary)
+        val start_date = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.start_dateTime)
+        val end_date = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.end_dateTime)
+        val result = RequestBody.create(MediaType.parse("text/plain"), status)
+
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["id"] = id
+        requestBodyMap["summary"] = summary
+        requestBodyMap["location"] = location
+        requestBodyMap["start_dateTime"] = start_date
+        requestBodyMap["end_dateTime"] = end_date
+        requestBodyMap["survey_result"] = result
+
+        apiService!!.addSurvey(requestBodyMap).enqueue(object : Callback<ResponseSurvey>{
+            override fun onFailure(call: Call<ResponseSurvey>?, t: Throwable?) {
+                Toast.makeText(this@MainActivity,"Send Survey Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseSurvey>?,
+                response: Response<ResponseSurvey>?
+            ) {
+                Toast.makeText(this@MainActivity,"Send Survey Success", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    fun initExtendDialog(){
+        val extend_interval = DAO.configData?.config_timestamp
+        var extendTime = 0
+
+        extendDialogInflater = layoutInflater
+        val dialogView = extendDialogInflater.inflate(R.layout.extend_room_dialog,null)
+        extendDialogBuilder?.setView(dialogView)
+        extendDialogBuilder?.setCancelable(true)
+
+        val iv_minus_time = dialogView.findViewById<ImageView>(R.id.iv_minus_time)
+        val tv_time_extend = dialogView.findViewById<TextView>(R.id.tv_time_extend)
+        val iv_plus_time = dialogView.findViewById<ImageView>(R.id.iv_plus_time)
+        val btn_confirm = dialogView.findViewById<Button>(R.id.btn_confirm)
+
+        tv_time_extend.text = "$extendTime"
+
+        iv_minus_time.setOnClickListener {
+            try {
+                extendTime -= extend_interval!!.toInt()
+                if( extendTime < 0 ) {
+                    extendTime = 0
+                    runOnUiThread {
+                        tv_time_extend.text = "$extendTime"
+                    }
+                }else{
+                    runOnUiThread {
+                        tv_time_extend.text = "$extendTime"
+                    }
+                }
+            }catch (e: Exception){
+                Toast.makeText(this@MainActivity,"Add Time Failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+        iv_plus_time.setOnClickListener {
+            try {
+                extendTime += extend_interval!!.toInt()
+                runOnUiThread {
+                    tv_time_extend.text = "$extendTime"
+                }
+            }catch (e: Exception){
+                Toast.makeText(this@MainActivity,"Add Time Failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+        btn_confirm.setOnClickListener {
+            if(extendTime <= 0 ) {
+                extendDialog?.dismiss()
+            }else{
+                extendDialog?.dismiss()
+                loadingDialog?.show()
+                extendCurrentMeeting(extendTime)
+            }
+        }
+
+        extendDialog = extendDialogBuilder?.show()
     }
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -487,6 +636,7 @@ class MainActivity : AppCompatActivity(),
         Handler().postDelayed({
             Log.d("handler_testing", " GET IT ")
             refreshMeetingStatus()
+            checkIfSurveyTimeToShow()
         },60000)
     }
 
