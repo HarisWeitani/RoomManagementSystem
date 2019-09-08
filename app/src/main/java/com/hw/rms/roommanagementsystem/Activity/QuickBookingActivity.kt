@@ -38,20 +38,7 @@ class QuickBookingActivity : AppCompatActivity() {
 
     lateinit var btnBack : Button
 
-/*    lateinit var tvBookingDate : TextView
-    lateinit var tvBookingTimeStart : TextView
-
-    lateinit var etDuration : EditText
-    lateinit var etMeetingTitle : EditText
-    lateinit var etMemberName : EditText
-    lateinit var etTotalParticipant : EditText
-    lateinit var etRoomFacility : EditText
-    lateinit var etFoodSnack : EditText
-    lateinit var etAdditionalPackage : EditText
-    lateinit var etMeetingStatus : EditText
-    lateinit var etSpecialRequest : EditText*/
-
-    lateinit var et_location : EditText
+    lateinit var tvRoom : TextView
     lateinit var et_summary : EditText
     lateinit var tv_booking_date : TextView
     lateinit var tv_booking_time_start : TextView
@@ -99,7 +86,8 @@ class QuickBookingActivity : AppCompatActivity() {
 
         layout_attendees_email = findViewById(R.id.layout_attendees_email)
 
-        et_location = findViewById(R.id.et_location)
+        tvRoom = findViewById(R.id.tv_room)
+        tvRoom.text = DAO.settingsData?.room?.room_name
         et_summary = findViewById(R.id.et_summary)
 
         tv_booking_date = findViewById(R.id.tv_booking_date)
@@ -230,7 +218,7 @@ class QuickBookingActivity : AppCompatActivity() {
 
     private fun validateBookingData() : Boolean{
         var isValidToSubmit = false
-        isValidToSubmit = et_location.text.isNotEmpty()
+        isValidToSubmit = tvRoom.text.isNotEmpty()
         isValidToSubmit = et_summary.text.isNotEmpty()
         isValidToSubmit = !tv_booking_date.text.equals("Booking Date")
         isValidToSubmit = !tv_booking_time_start.text.equals("Booking Start")
@@ -242,14 +230,14 @@ class QuickBookingActivity : AppCompatActivity() {
     }
 
     private fun submitData(){
-        var location = RequestBody.create(MediaType.parse("text/plain"), et_location.text.toString())
-        var summary = RequestBody.create(MediaType.parse("text/plain"), et_summary.text.toString())
-        var description = RequestBody.create(MediaType.parse("text/plain"), et_description.text.toString())
-        var start_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
-        var end_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
-        var start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
-        var end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
-        var attendees_email = RequestBody.create(MediaType.parse("text/plain"), et_attendees_email.text.toString())
+        val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
+        val summary = RequestBody.create(MediaType.parse("text/plain"), et_summary.text.toString())
+        val description = RequestBody.create(MediaType.parse("text/plain"), et_description.text.toString())
+        val start_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
+        val end_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
+        val start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
+        val end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
+        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), et_attendees_email.text.toString())
 
         val requestBodyMap = HashMap<String, RequestBody>()
         requestBodyMap["location"] = location

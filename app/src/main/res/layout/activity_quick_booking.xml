@@ -83,21 +83,21 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/location"
+                        android:text="@string/room"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
                         android:layout_gravity="start"
                         />
-                <EditText
-                        android:id="@+id/et_location"
+                <TextView
+                        android:id="@+id/tv_room"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
-                        android:hint="@string/location"
+                        android:hint="@string/room"
                         android:fontFamily="@font/gotham_book"
                         />
             </LinearLayout>
