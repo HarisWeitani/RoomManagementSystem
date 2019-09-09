@@ -343,7 +343,7 @@ class MainActivity : AppCompatActivity(),
         if( dateFormat2.format(Date()).equals(showTime) ){
             initReviewDialog()
         }else{
-            initReviewDialog()
+//            initReviewDialog()
         }
     }
 
@@ -364,7 +364,12 @@ class MainActivity : AppCompatActivity(),
     private fun initBottomScheduleViewPager(){
         botSchedLeftV2.clear()
         botSchedRigtV2.clear()
-        val upcomingEventSize = DAO.nextMeeting!!.data!!.size
+        var upcomingEventSize = 0
+        try {
+            upcomingEventSize = DAO.nextMeeting!!.data!!.size
+        }catch (e : Exception ){
+            upcomingEventSize = 0
+        }
         if( upcomingEventSize > 0) {
             for (i in 0 until upcomingEventSize) {
                 if (i % 2 == 0) {
@@ -433,10 +438,14 @@ class MainActivity : AppCompatActivity(),
     private fun initButtonListener() {
 
         var runText = ""
-        for ( x in 0 until DAO.runningText!!.size ){
-            runText += DAO.runningText!![x].running_text
+        try {
+            for (x in 0 until DAO.runningText!!.size) {
+                runText += DAO.runningText!![x].running_text
+            }
+            tv_running_text.text = runText
+        }catch (e : Exception){
+            tv_running_text.text = ""
         }
-        tv_running_text.text = runText
 
         tv_clock.setOnLongClickListener {
             val intent = Intent(this@MainActivity,
