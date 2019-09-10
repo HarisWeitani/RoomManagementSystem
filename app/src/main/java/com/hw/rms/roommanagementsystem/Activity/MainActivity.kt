@@ -335,6 +335,7 @@ class MainActivity : AppCompatActivity(),
         var dateFormat2 = SimpleDateFormat("HH:mm")
 
         var date = dateFormat2.parse(time)
+        //crash
         var subs = (date.time - ( DAO.configData?.config_timestamp!!.toInt()*60*1000) )
         val dateParam = Date(subs)
 
@@ -396,7 +397,7 @@ class MainActivity : AppCompatActivity(),
     private fun initImageVideoPager(){
 
         val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
-
+        //crash
         val sliderSize = DAO.slideShowData!!.data!!.size
 
         for ( x in 0 until sliderSize ){

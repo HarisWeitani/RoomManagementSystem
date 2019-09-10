@@ -93,7 +93,7 @@ interface API {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl(serverUrl)!!
+                .baseUrl(serverUrl)!! //crash
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(ScalarsConverterFactory.create())
