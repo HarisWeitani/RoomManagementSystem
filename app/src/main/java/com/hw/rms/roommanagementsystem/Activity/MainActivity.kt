@@ -335,7 +335,7 @@ class MainActivity : AppCompatActivity(),
         var dateFormat2 = SimpleDateFormat("HH:mm")
 
         var date = dateFormat2.parse(time)
-        var subs = (date.time - ( DAO.configData!!.config_timestamp!!.toInt()*60*1000) )
+        var subs = (date.time - ( DAO.configData?.config_timestamp!!.toInt()*60*1000) )
         val dateParam = Date(subs)
 
         val showTime = dateFormat2.format(dateParam)
@@ -343,12 +343,13 @@ class MainActivity : AppCompatActivity(),
         if( dateFormat2.format(Date()).equals(showTime) ){
             initReviewDialog()
         }else{
-//            initReviewDialog()
+
         }
     }
 
     private fun initNewsViewPager(){
         //news
+        //sering crash disini
         for ( i in 0 until DAO.newsFeed!!.data!!.size){
             if( i % 2 == 0){
                 newsListLeft.add(DAO.newsFeed!!.data!![i]!!)

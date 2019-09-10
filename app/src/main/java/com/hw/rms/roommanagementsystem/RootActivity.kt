@@ -41,6 +41,7 @@ class RootActivity : AppCompatActivity() {
     lateinit var progressBar : ProgressBar
     var downloadCtr = 0
     var isPermitted: Boolean = false
+    var isGetConfig: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,11 +135,28 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun startActivity(){
-
         Handler().postDelayed({
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            else startActivity(Intent(this@RootActivity,MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        },500)
+            if (firstInstall) startActivity(
+                Intent(
+                    this@RootActivity,
+                    AdminLoginActivity::class.java
+                ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            )
+            else {
+                if( isGetConfig ) {
+                    startActivity(
+                        Intent(this@RootActivity, MainActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        )
+                    )
+                }else{
+                    Handler().postDelayed({
+                        startActivity()
+                    },5000)
+                }
+            }
+        }, 500)
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -169,12 +187,13 @@ class RootActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun getConfig(){
 
         apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
             override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG,t.toString())
-
+                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_SHORT).show()
             }
             override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
                 Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
@@ -182,6 +201,7 @@ class RootActivity : AppCompatActivity() {
                 if( response.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
+                    isGetConfig = DAO.configData != null
                 }else{
 
                 }
@@ -202,6 +222,7 @@ class RootActivity : AppCompatActivity() {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.runningText = response.body()
+
                 }else{
                     Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
                 }
@@ -229,6 +250,7 @@ class RootActivity : AppCompatActivity() {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
+
                 }else{
                     Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
                 }
@@ -254,6 +276,7 @@ class RootActivity : AppCompatActivity() {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.currentMeeting = response.body()
+
                 }else{
                     Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
                 }
