@@ -22,4 +22,16 @@
             android:progress="1"
     />
 
+    <TextView
+        android:id="@+id/tv_error_api"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Error Occured Please Contact Admin"
+        android:textSize="50sp"
+        android:textColor="@color/white"
+
+        android:fontFamily="@font/gotham_book"
+        android:visibility="gone"
+        />
+
 </LinearLayout>

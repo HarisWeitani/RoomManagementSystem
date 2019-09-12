@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
+import com.crashlytics.android.Crashlytics
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.RootActivity
@@ -93,6 +94,8 @@ class MainActivity : AppCompatActivity(),
     var booking_status = "available"
 
     var apiService : API? = null
+    var isGetNextMeeting: Boolean = false
+    var isGetCurrentMeeting: Boolean = false
     var loadingDialog : Dialog? = null
 
     var reviewDialogBuilder : AlertDialog.Builder? = null
@@ -308,7 +311,7 @@ class MainActivity : AppCompatActivity(),
         apiService!!.googleExtendEvent(requestBodyMap).enqueue(object : Callback<ResponseExtendEvent>{
             override fun onFailure(call: Call<ResponseExtendEvent>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -323,7 +326,7 @@ class MainActivity : AppCompatActivity(),
                         Intent(this@MainActivity, RootActivity::class.java).setFlags(
                             Intent.FLAG_ACTIVITY_SINGLE_TOP))
                 }else{
-                    Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -335,23 +338,31 @@ class MainActivity : AppCompatActivity(),
         var dateFormat2 = SimpleDateFormat("HH:mm")
 
         var date = dateFormat2.parse(time)
-        //crash
-        var subs = (date.time - ( DAO.configData?.config_timestamp!!.toInt()*60*1000) )
+
+        var timeIterval = 15
+        try{
+            timeIterval = DAO.configData?.config_timestamp!!.toInt()
+        }catch (e : Exception){
+            Crashlytics.logException(e)
+        }
+        var subs = (date.time - ( timeIterval*60*1000) )
         val dateParam = Date(subs)
 
         val showTime = dateFormat2.format(dateParam)
 
         if( dateFormat2.format(Date()).equals(showTime) ){
             initReviewDialog()
-        }else{
-
         }
     }
 
     private fun initNewsViewPager(){
-        //news
-        //sering crash disini
-        for ( i in 0 until DAO.newsFeed!!.data!!.size){
+        var newsSize = 0
+        try{
+            newsSize = DAO.newsFeed?.data!!.size
+        }catch (e : Exception){
+            Crashlytics.logException(e)
+        }
+        for ( i in 0 until newsSize){
             if( i % 2 == 0){
                 newsListLeft.add(DAO.newsFeed!!.data!![i]!!)
             }else{
@@ -397,9 +408,14 @@ class MainActivity : AppCompatActivity(),
     private fun initImageVideoPager(){
 
         val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
-        //crash here
-        val sliderSize = DAO.slideShowData!!.data!!.size
-
+        var sliderSize = 0
+        try{
+            sliderSize = DAO.slideShowData?.data!!.size
+        }catch (e : Exception){
+            Crashlytics.logException(e)
+        }
+        //testing purpose
+        sliderSize = 1
         for ( x in 0 until sliderSize ){
             val dataTemp = DAO.slideShowData!!.data!![x]
             if( dataTemp!!.slideshow_type.equals("1") ){
@@ -411,11 +427,6 @@ class MainActivity : AppCompatActivity(),
                 if(checkIfFileExist(filename))imageVideoList.add(ImageVideo("","",filename,filePath))
             }
         }
-
-//        imageVideoList.add(ImageVideo("tes.jpg",filePath,"",""))
-//        imageVideoList.add(ImageVideo("","","pidio.mp4",filePath))
-//        imageVideoList.add(ImageVideo("imageview_logo.png",filePath,"",""))
-//        imageVideoList.add(ImageVideo("","","tensecvideo.mp4",filePath))
 
         ivAdapter = ImageVideoAdapter( supportFragmentManager, filePath, imageVideoList )
         vPager = findViewById(R.id.view_pager_iv_vv)
@@ -474,6 +485,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         btnBookNow.setOnClickListener {
+            finish()
             startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java))
         }
 
@@ -491,7 +503,7 @@ class MainActivity : AppCompatActivity(),
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 loadingDialog?.dismiss()
-                Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -505,7 +517,7 @@ class MainActivity : AppCompatActivity(),
                     loadingDialog?.dismiss()
                 }else{
                     loadingDialog?.dismiss()
-                    Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -564,7 +576,7 @@ class MainActivity : AppCompatActivity(),
 
         apiService!!.addSurvey(requestBodyMap).enqueue(object : Callback<ResponseSurvey>{
             override fun onFailure(call: Call<ResponseSurvey>?, t: Throwable?) {
-                Toast.makeText(this@MainActivity,"Send Survey Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"Send Survey Failed", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -607,7 +619,7 @@ class MainActivity : AppCompatActivity(),
                     }
                 }
             }catch (e: Exception){
-                Toast.makeText(this@MainActivity,"Add Time Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"Add Time Failed", Toast.LENGTH_LONG).show()
             }
         }
         iv_plus_time.setOnClickListener {
@@ -617,7 +629,7 @@ class MainActivity : AppCompatActivity(),
                     tv_time_extend.text = "$extendTime"
                 }
             }catch (e: Exception){
-                Toast.makeText(this@MainActivity,"Add Time Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,"Add Time Failed", Toast.LENGTH_LONG).show()
             }
         }
         btn_confirm.setOnClickListener {
@@ -642,12 +654,12 @@ class MainActivity : AppCompatActivity(),
      */
 
     private fun refreshMeetingStatus(){
-        getNextMeeting()
-        getCurrentMeeting()
         Handler().postDelayed({
             Log.d("handler_testing", " GET IT ")
+            getNextMeeting()
+            getCurrentMeeting()
+            if( isGetCurrentMeeting ) checkIfSurveyTimeToShow()
             refreshMeetingStatus()
-            checkIfSurveyTimeToShow()
         },60000)
     }
 
@@ -659,20 +671,22 @@ class MainActivity : AppCompatActivity(),
 
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getNextMeeting",t.toString())
+                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
+                isGetNextMeeting = false
             }
 
             override fun onResponse(
                 call: Call<ResponseGetNextMeeting>?,
                 response: Response<ResponseGetNextMeeting>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("onResponse getNextMeeting",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
-                    initBottomScheduleViewPager()
+                    isGetNextMeeting = DAO.nextMeeting != null
                 }else{
-
+                    isGetNextMeeting = false
+                    Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -685,17 +699,17 @@ class MainActivity : AppCompatActivity(),
 
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getCurrentMeeting",t.toString())
+                Toast.makeText(this@MainActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
+                isGetCurrentMeeting = false
             }
-
             override fun onResponse(
                 call: Call<ResponseGetCurrentMeeting>?,
                 response: Response<ResponseGetCurrentMeeting>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("onResponse getCurrentMeeting",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
-
+                    isGetCurrentMeeting = response.body().data != null
                     if( DAO.currentMeeting != response.body()){
                         DAO.currentMeeting = response.body()
                         finish()
@@ -705,7 +719,8 @@ class MainActivity : AppCompatActivity(),
 
                     }
                 }else{
-
+                    isGetCurrentMeeting = false
+                    Toast.makeText(this@MainActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
                 }
             }
         })

@@ -266,7 +266,7 @@ class AdminSettingActivity : AppCompatActivity() {
             if( etChangeAdminPin.text.toString().length == 4 ){
                 pin = etChangeAdminPin.text.toString()
             }else if ( etChangeAdminPin.text.toString().isNotEmpty() ){
-                Toast.makeText(this@AdminSettingActivity," Pin Not Accepted ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AdminSettingActivity," Pin Not Accepted ", Toast.LENGTH_LONG).show()
             }
 
             DAO.settingsData =
@@ -318,8 +318,7 @@ class AdminSettingActivity : AppCompatActivity() {
         apiService = API.networkApi()
         apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
             override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG,t.toString())
-
+                GlobalVal.networkLogging("connectServer onFailure",t.toString())
                 runOnUiThread {
                     btn_try_serverconn.text = getString(R.string.failed)
                     btn_try_serverconn.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.status_red))
@@ -328,9 +327,8 @@ class AdminSettingActivity : AppCompatActivity() {
                 serverConnected = false
             }
             override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-
-                if( response.code() == 200 && response.body() != null ){
+                GlobalVal.networkLogging("connectServer onResponse",response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
                     getBuildingList()
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
@@ -347,16 +345,20 @@ class AdminSettingActivity : AppCompatActivity() {
 
         apiService!!.getAllBuildings().enqueue(object : Callback<ResponseGetAllBuildings>{
             override fun onFailure(call: Call<ResponseGetAllBuildings>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG,t.toString())
+                GlobalVal.networkLogging("getBuildingList onFailure",t.toString())
             }
 
             override fun onResponse(
                 call: Call<ResponseGetAllBuildings>?,
                 response: Response<ResponseGetAllBuildings>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-                DAO.buildingList = response.body()
-                getRoomListData()
+                GlobalVal.networkLogging("connectServer onResponse",response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
+                    DAO.buildingList = response.body()
+                    getRoomListData()
+                }else{
+
+                }
             }
 
         })
@@ -368,7 +370,7 @@ class AdminSettingActivity : AppCompatActivity() {
 
         apiService!!.getRoomList(requestBodyMap).enqueue(object : Callback<ResponseGetAllRooms>{
             override fun onFailure(call: Call<ResponseGetAllRooms>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG,t.toString())
+                GlobalVal.networkLogging("getRoomListData onFailure",t.toString())
 
                 runOnUiThread {
                     btn_save_and_exit.text = getString(R.string.try_connection_server)
@@ -379,9 +381,9 @@ class AdminSettingActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<ResponseGetAllRooms>?, response: Response<ResponseGetAllRooms>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
+                GlobalVal.networkLogging("getRoomListData onResponse",response?.body().toString())
 
-                if( response.code() == 200 && response.body() != null ){
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.roomList = response.body()
                     serverConnected = true
                     serverConnected()

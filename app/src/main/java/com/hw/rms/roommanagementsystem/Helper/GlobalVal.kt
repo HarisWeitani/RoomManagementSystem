@@ -1,5 +1,7 @@
 package com.hw.rms.roommanagementsystem.Helper
 
+import android.util.Log
+
 class GlobalVal {
     companion object{
         /**
@@ -24,5 +26,10 @@ class GlobalVal {
          */
         var isNetworkConnected : Boolean = false
         var isSocketConnected : Boolean = false
+
+
+        fun networkLogging(tag : String, result : String){
+            Log.d(NETWORK_TAG, "$tag = $result")
+        }
     }
 }

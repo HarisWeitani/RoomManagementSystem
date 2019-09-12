@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,9 +40,20 @@ class RootActivity : AppCompatActivity() {
     var INTERNET_REQUEST = 1
     var READ_PHONE_STATE = 2
     lateinit var progressBar : ProgressBar
+    lateinit var tv_error_api : TextView
     var downloadCtr = 0
     var isPermitted: Boolean = false
+
     var isGetConfig: Boolean = false
+    var isGetRunningText: Boolean = false
+    var isGetNextMeeting: Boolean = false
+    var isGetCurrentMeeting: Boolean = false
+    var isGetNewsData: Boolean = false
+    var isGetSlideShowData: Boolean = false
+
+    var isMainActivityStarted: Boolean = false
+
+    var isAPIError: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,20 +65,19 @@ class RootActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_horizontal)
         progressBar.visibility = View.GONE
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        isMainActivityStarted = false
 
+        tv_error_api = findViewById(R.id.tv_error_api)
+        tv_error_api.visibility = View.GONE
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ) {
+            checkPermission()
+        }else{
+            startActivity()
+        }
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ) {
-            checkPermission()
-        }else{
-            if( firstInstall ) startActivity(Intent(this@RootActivity,AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            else checkConnection()
-        }
     }
 
     private fun checkPermission() {
@@ -130,33 +141,48 @@ class RootActivity : AppCompatActivity() {
             getSlideShowData()
             getNewsData()
         }else{
-            if(isPermitted) startActivity()
+            if(isPermitted){
+                firstInstall = true
+                startActivity()
+            }
         }
     }
 
     private fun startActivity(){
         Handler().postDelayed({
-            if (firstInstall) startActivity(
-                Intent(
-                    this@RootActivity,
-                    AdminLoginActivity::class.java
-                ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            )
+            if (firstInstall) {
+                isMainActivityStarted = true
+                startActivity(Intent(this@RootActivity, AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            }
             else {
-                if( isGetConfig ) {
-                    startActivity(
-                        Intent(this@RootActivity, MainActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        )
-                    )
-                }else{
-                    Handler().postDelayed({
-                        startActivity()
-                    },5000)
-                }
+                checkMandatoryData()
             }
         }, 500)
+    }
 
+    private fun checkMandatoryData(){
+        if( isGetConfig &&
+                isGetRunningText &&
+                isGetNextMeeting &&
+                isGetCurrentMeeting &&
+                isGetNewsData &&
+                isGetSlideShowData ){
+            if( isAPIError ){
+                tv_error_api.visibility = View.VISIBLE
+            }else {
+                isMainActivityStarted = true
+                startActivity(
+                    Intent(
+                        this@RootActivity,
+                        MainActivity::class.java
+                    ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
+            }
+        }else{
+            Handler().postDelayed({
+                if(!isMainActivityStarted) checkMandatoryData()
+            },5000)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -192,18 +218,19 @@ class RootActivity : AppCompatActivity() {
 
         apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
             override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG,t.toString())
-                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getConfig",t.toString())
+                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
+                isGetConfig = false
             }
             override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response!!.body().toString())
-
-                if( response.code() == 200 && response.body() != null ){
+                GlobalVal.networkLogging("onResponse getConfig",response?.body().toString())
+                if( response?.code() == 200 && response.body() != null ){
                     DAO.configData = response.body()
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
                     isGetConfig = DAO.configData != null
                 }else{
-
+                    isGetConfig = false
+                    Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -211,20 +238,22 @@ class RootActivity : AppCompatActivity() {
     private fun getRunningText(){
         apiService!!.getRunningText().enqueue(object : Callback<List<ResponseGetRunningText>>{
             override fun onFailure(call: Call<List<ResponseGetRunningText>>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getRunningText",t.toString())
+                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
+                isGetRunningText = false
             }
 
             override fun onResponse(
                 call: Call<List<ResponseGetRunningText>>?,
                 response: Response<List<ResponseGetRunningText>>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("onResponse getRunningText",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.runningText = response.body()
-
+                    isGetRunningText = DAO.runningText != null
                 }else{
-                    Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                    isGetRunningText = false
+                    Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -239,20 +268,22 @@ class RootActivity : AppCompatActivity() {
 
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getNextMeeting",t.toString())
+                Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
+                isGetNextMeeting = false
             }
 
             override fun onResponse(
                 call: Call<ResponseGetNextMeeting>?,
                 response: Response<ResponseGetNextMeeting>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("onResponse getNextMeeting",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
-
+                    isGetNextMeeting = DAO.nextMeeting != null
                 }else{
-                    Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_SHORT).show()
+                    isGetNextMeeting = false
+                    Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -265,20 +296,22 @@ class RootActivity : AppCompatActivity() {
 
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getCurrentMeeting",t.toString())
+                Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
+                isGetCurrentMeeting = false
             }
 
             override fun onResponse(
                 call: Call<ResponseGetCurrentMeeting>?,
                 response: Response<ResponseGetCurrentMeeting>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("onResponse getCurrentMeeting",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.currentMeeting = response.body()
-
+                    isGetCurrentMeeting = DAO.currentMeeting != null
                 }else{
-                    Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_SHORT).show()
+                    isGetCurrentMeeting = false
+                    Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -289,20 +322,22 @@ class RootActivity : AppCompatActivity() {
 //        apiService = API.networkApi()
         apiService!!.getNews().enqueue(object : Callback<ResponseNews> {
             override fun onFailure(call: Call<ResponseNews>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_SHORT).show()
+                GlobalVal.networkLogging("onFailure getNewsData",t.toString())
+                Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_LONG).show()
+                isGetNewsData = false
             }
 
             override fun onResponse(
                 call: Call<ResponseNews>?,
                 response: Response<ResponseNews>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-
+                GlobalVal.networkLogging("onResponse getNewsData",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.newsFeed = response.body()
+                    isGetNewsData = DAO.newsFeed != null
                 }else{
-                    Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_LONG).show()
+                    isGetNewsData = false
                 }
             }
         })
@@ -313,16 +348,16 @@ class RootActivity : AppCompatActivity() {
         var isDownload = false
         apiService!!.getSlideShowData().enqueue(object : Callback<ResponseSlideShowData>{
             override fun onFailure(call: Call<ResponseSlideShowData>?, t: Throwable?) {
-
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_SHORT).show()
-
+                GlobalVal.networkLogging("onFailure getSlideShowData",t.toString())
+                Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_LONG).show()
+                isGetSlideShowData = false
             }
             override fun onResponse(call: Call<ResponseSlideShowData>?, response: Response<ResponseSlideShowData>?) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("onResponse getSlideShowData",response?.body().toString())
 
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.slideShowData = response.body()
+                    isGetSlideShowData = DAO.slideShowData != null
                     //compare ke DB dlu
                     if( DAO.slideShowData!!.data!!.isNotEmpty() ) {
                         for (x in 0 until DAO.slideShowData!!.data!!.size){
@@ -343,13 +378,12 @@ class RootActivity : AppCompatActivity() {
                                     fileDownloader(dataTemp.slideshow!!,filename)
                                 }
                             }
-
                         }
                         if( !isDownload ) startActivity()
-                        Log.d(GlobalVal.NETWORK_TAG,"No File Downloaded")
                     }
                 }else{
-                    Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_SHORT).show()
+                    isGetSlideShowData = false
+                    Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -371,7 +405,7 @@ class RootActivity : AppCompatActivity() {
         PRDownloader.download(url, dirPath, fileName)
             .build()
             .setOnStartOrResumeListener {
-                Log.d(GlobalVal.NETWORK_TAG,"fileDownloader Start $fileName ")
+                GlobalVal.networkLogging("setOnStartOrResumeListener fileDownloader","$fileName")
             }
             .setOnProgressListener {
                 var current = it.currentBytes
@@ -388,12 +422,12 @@ class RootActivity : AppCompatActivity() {
                         GlobalVal.isNetworkConnected = false
                         waitingForNetwork()
                     }
-                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader on Error ${error?.responseCode} $url $fileName ")
+                    GlobalVal.networkLogging("onError fileDownloader","${error?.responseCode} $url $fileName")
                     downloadFinish()
                 }
 
                 override fun onDownloadComplete() {
-                    Log.d(GlobalVal.NETWORK_TAG,"fileDownloader complete $url $fileName")
+                    GlobalVal.networkLogging("onDownloadComplete fileDownloader","$url $fileName")
                     downloadFinish()
                 }
             })

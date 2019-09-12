@@ -156,7 +156,7 @@ class ScheduleCalendarActivity : AppCompatActivity() {
             Callback<ResponseScheduleByDate> {
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@ScheduleCalendarActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ScheduleCalendarActivity,"Get Event Failed", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -169,7 +169,7 @@ class ScheduleCalendarActivity : AppCompatActivity() {
                     refreshCalendarData()
                     dialog?.dismiss()
                 }else{
-                    Toast.makeText(this@ScheduleCalendarActivity,"Get Event Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ScheduleCalendarActivity,"Get Event Failed", Toast.LENGTH_LONG).show()
                 }
             }
 

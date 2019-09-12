@@ -258,7 +258,7 @@ class QuickBookingActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseAddEvent>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 dialog?.dismiss()
-                Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -274,7 +274,7 @@ class QuickBookingActivity : AppCompatActivity() {
                             Intent.FLAG_ACTIVITY_SINGLE_TOP))
                 }else{
                     dialog?.dismiss()
-                    Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_LONG).show()
                 }
             }
         })
