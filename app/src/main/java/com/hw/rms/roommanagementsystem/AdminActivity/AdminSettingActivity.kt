@@ -15,6 +15,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.crashlytics.android.Crashlytics
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
@@ -74,6 +75,7 @@ class AdminSettingActivity : AppCompatActivity() {
     lateinit var linearlay_other_settings : LinearLayout
     var serverConnected : Boolean = false
     var socketConnected : Boolean = false
+    var isFirstInitSpinner: Boolean = true
 
     var serverProtocol : String? = null
     var socketProtocol : String? = null
@@ -216,20 +218,43 @@ class AdminSettingActivity : AppCompatActivity() {
             }
         }
 
-        val aaBuildingName = SpinnerBuildingAdapter(this, android.R.layout.simple_spinner_item,
-            DAO.buildingList?.data as List<DataGetAllBuildings>
-        )
-        aaBuildingName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_building_name.adapter = aaBuildingName
-        sp_building_name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        if( isFirstInitSpinner ) {
+            isFirstInitSpinner = false
+            val aaBuildingName = SpinnerBuildingAdapter(
+                this, android.R.layout.simple_spinner_item,
+                DAO.buildingList?.data as List<DataGetAllBuildings>
+            )
+            aaBuildingName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            sp_building_name.adapter = aaBuildingName
+            sp_building_name.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (selectedBuilding != null && selectedBuilding != parent!!.selectedItem as DataGetAllBuildings?) {
+                        selectedBuilding = parent!!.selectedItem as DataGetAllBuildings?
+                        try {
+                            getRoomListData(selectedBuilding?.building_id!!)
+                        } catch (e: Exception) {
+                            Crashlytics.logException(e)
+                            Toast.makeText(
+                                this@AdminSettingActivity,
+                                "Get Room List Fail Please Restart App",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else if (selectedBuilding == null) {
+                        selectedBuilding = parent!!.selectedItem as DataGetAllBuildings?
+                    }
+                }
 
             }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedBuilding = parent!!.selectedItem as DataGetAllBuildings?
-            }
-
         }
     }
 
@@ -261,30 +286,48 @@ class AdminSettingActivity : AppCompatActivity() {
         }
 
         btn_save_and_exit.setOnClickListener {
-
-            var pin = DAO.settingsData?.admin_pin
-            if( etChangeAdminPin.text.toString().length == 4 ){
-                pin = etChangeAdminPin.text.toString()
-            }else if ( etChangeAdminPin.text.toString().isNotEmpty() ){
-                Toast.makeText(this@AdminSettingActivity," Pin Not Accepted ", Toast.LENGTH_LONG).show()
+            var roomListSize = 0
+            try {
+                roomListSize = DAO.roomList?.data!!.size
+            }catch (e : Exception){
+                Crashlytics.logException(e)
             }
+            if( roomListSize > 0 ) {
+                var pin = DAO.settingsData?.admin_pin
+                if (etChangeAdminPin.text.toString().length == 4) {
+                    pin = etChangeAdminPin.text.toString()
+                } else if (etChangeAdminPin.text.toString().isNotEmpty()) {
+                    Toast.makeText(
+                        this@AdminSettingActivity,
+                        " Pin Not Accepted ",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
-            DAO.settingsData =
-                SettingsData(
-                    server_full_url = API.serverUrl,
-                    socket_full_url = API.socketUrl,
-                    server_url = serverUrl,
-                    socket_url = socketUrl,
-                    isScreenAlwaysOn = screenOnSwitch.isChecked,
-                    admin_pin = pin,
-                    room = selectedRoom,
-                    building = selectedBuilding)
-            val settingDataJson = Gson().toJson(DAO.settingsData)
+                DAO.settingsData =
+                    SettingsData(
+                        server_full_url = API.serverUrl,
+                        socket_full_url = API.socketUrl,
+                        server_url = serverUrl,
+                        socket_url = socketUrl,
+                        isScreenAlwaysOn = screenOnSwitch.isChecked,
+                        admin_pin = pin,
+                        room = selectedRoom,
+                        building = selectedBuilding
+                    )
+                val settingDataJson = Gson().toJson(DAO.settingsData)
 
-            sharePref!!.save(GlobalVal.FRESH_INSTALL_KEY,false)
-            sharePref!!.save(GlobalVal.SETTINGS_DATA_KEY,settingDataJson)
+                sharePref!!.save(GlobalVal.FRESH_INSTALL_KEY, false)
+                sharePref!!.save(GlobalVal.SETTINGS_DATA_KEY, settingDataJson)
 
-            startActivity(Intent(this@AdminSettingActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                startActivity(
+                    Intent(this@AdminSettingActivity, RootActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    )
+                )
+            }else{
+                Toast.makeText(this@AdminSettingActivity,"Please Choose A Room", Toast.LENGTH_LONG).show()
+            }
         }
 
         btn_try_serverconn.setOnClickListener {
@@ -339,10 +382,6 @@ class AdminSettingActivity : AppCompatActivity() {
         })
     }
     private fun getBuildingList(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), "1")
-        val requestBodyMap = HashMap<String, RequestBody>()
-        requestBodyMap["building_id"] = body
-
         apiService!!.getAllBuildings().enqueue(object : Callback<ResponseGetAllBuildings>{
             override fun onFailure(call: Call<ResponseGetAllBuildings>?, t: Throwable?) {
                 GlobalVal.networkLogging("getBuildingList onFailure",t.toString())
@@ -355,7 +394,7 @@ class AdminSettingActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("connectServer onResponse",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.buildingList = response.body()
-                    getRoomListData()
+                    getRoomListData(DAO.buildingList?.data?.get(0)?.building_id!!)
                 }else{
 
                 }
@@ -363,8 +402,11 @@ class AdminSettingActivity : AppCompatActivity() {
 
         })
     }
-    private fun getRoomListData(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), "1")
+    private fun refreshRoomList(){
+
+    }
+    private fun getRoomListData(buildingId : String){
+        var body = RequestBody.create(MediaType.parse("text/plain"), buildingId)
         val requestBodyMap = HashMap<String, RequestBody>()
         requestBodyMap["building_id"] = body
 
@@ -385,8 +427,10 @@ class AdminSettingActivity : AppCompatActivity() {
 
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.roomList = response.body()
-                    serverConnected = true
-                    serverConnected()
+                    if(!serverConnected) {
+                        serverConnected = true
+                        serverConnected()
+                    }
                     initSpinner()
                 }else{
                     serverConnected = false
