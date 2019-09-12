@@ -250,6 +250,35 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="@dimen/marginTextQuickBooking"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/host"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/gotham_bold"
+                    android:textSize="24sp"
+                    android:layout_gravity="start"
+                    />
+                <EditText
+                    android:id="@+id/et_host"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/edit_text_box"
+
+                    android:textColor="@color/white"
+                    android:hint="@string/host"
+                    android:fontFamily="@font/gotham_book"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"

@@ -18,6 +18,7 @@
     <string name="booking_start">Booking Start</string>
     <string name="booking_end">Booking End</string>
     <string name="booking_date">Booking Date</string>
+    <string name="host">Host</string>
 
 
 </resources>

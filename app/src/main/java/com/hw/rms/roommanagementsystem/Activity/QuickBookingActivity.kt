@@ -44,6 +44,7 @@ class QuickBookingActivity : AppCompatActivity() {
     lateinit var tv_booking_time_start : TextView
     lateinit var tv_booking_time_end : TextView
     lateinit var et_description : EditText
+    lateinit var et_host : EditText
     lateinit var et_attendees_email : EditText
     lateinit var add_more_attendees : ImageView
     lateinit var remove_attendees : ImageView
@@ -156,6 +157,7 @@ class QuickBookingActivity : AppCompatActivity() {
         }
 
         et_description = findViewById(R.id.et_description)
+        et_host = findViewById(R.id.et_host)
         et_attendees_email = findViewById(R.id.et_attendees_email)
 
         btnSubmit = findViewById(R.id.btn_submit)
@@ -224,6 +226,7 @@ class QuickBookingActivity : AppCompatActivity() {
         isValidToSubmit = !tv_booking_time_start.text.equals("Booking Start")
         isValidToSubmit = !tv_booking_time_end.text.equals("Booking End")
         isValidToSubmit = et_description.text.isNotEmpty()
+        isValidToSubmit = et_host.text.isNotEmpty()
         isValidToSubmit = et_attendees_email.text.isNotEmpty()
 
         return isValidToSubmit
@@ -233,6 +236,7 @@ class QuickBookingActivity : AppCompatActivity() {
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), et_summary.text.toString())
         val description = RequestBody.create(MediaType.parse("text/plain"), et_description.text.toString())
+        val host = RequestBody.create(MediaType.parse("text/plain"), et_host.text.toString())
         val start_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
         val end_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
         val start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
@@ -256,7 +260,7 @@ class QuickBookingActivity : AppCompatActivity() {
 
         apiService!!.googleAddEvent(requestBodyMap).enqueue(object : Callback<ResponseAddEvent> {
             override fun onFailure(call: Call<ResponseAddEvent>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
+                GlobalVal.networkLogging("submitData onFailure",t.toString())
                 dialog?.dismiss()
                 Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_LONG).show()
             }
@@ -265,7 +269,7 @@ class QuickBookingActivity : AppCompatActivity() {
                 call: Call<ResponseAddEvent>?,
                 response: Response<ResponseAddEvent>?
             ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                GlobalVal.networkLogging("submitData onResponse",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     dialog?.dismiss()
                     finish()

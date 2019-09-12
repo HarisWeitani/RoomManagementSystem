@@ -34,7 +34,6 @@ import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,6 +89,7 @@ class MainActivity : AppCompatActivity(),
     lateinit var btnBookNow : Button
     lateinit var btn_schedule : Button
     lateinit var btn_extend : Button
+    lateinit var btn_check_out : Button
 
     var booking_status = "available"
 
@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity(),
     var reviewDialogBuilder : AlertDialog.Builder? = null
     var reviewDialog : AlertDialog? = null
     lateinit var reviewDialogInflater : LayoutInflater
+    var reviewDialogViewed: Boolean = false
 
     var extendDialogBuilder : AlertDialog.Builder? = null
     var extendDialog : AlertDialog? = null
@@ -127,8 +128,8 @@ class MainActivity : AppCompatActivity(),
 ////            initWaitingView()
 //        }
         else if( booking_status == "confirmed" ){
-//            setContentView(R.layout.activity_occupied)
-            setContentView(R.layout.activity_occupied_v2)
+            setContentView(R.layout.activity_occupied)
+//            setContentView(R.layout.activity_occupied_v2)
             initOccupiedView()
         }
         actionBar?.hide()
@@ -277,6 +278,11 @@ class MainActivity : AppCompatActivity(),
         tv_time_meeting_start.text = DAO.currentMeeting!!.data!!.start_dateTime
         tv_time_meeting_end.text = DAO.currentMeeting!!.data!!.end_dateTime
 
+        btn_check_out = findViewById(R.id.btn_check_out)
+        btn_check_out.setOnClickListener {
+
+        }
+
         btn_extend = findViewById(R.id.btn_extend)
         btn_extend.setOnClickListener {
             //show dialog
@@ -335,9 +341,9 @@ class MainActivity : AppCompatActivity(),
 
     private fun checkIfSurveyTimeToShow(){
         var time = DAO.currentMeeting?.data?.end_dateTime
-        var dateFormat2 = SimpleDateFormat("HH:mm")
+        var dateFormat = SimpleDateFormat("HH:mm")
 
-        var date = dateFormat2.parse(time)
+        var endTime = dateFormat.parse(time)
 
         var timeIterval = 15
         try{
@@ -345,12 +351,11 @@ class MainActivity : AppCompatActivity(),
         }catch (e : Exception){
             Crashlytics.logException(e)
         }
-        var subs = (date.time - ( timeIterval*60*1000) )
-        val dateParam = Date(subs)
+        var showTime = (endTime.time - ( timeIterval*60*1000) )
 
-        val showTime = dateFormat2.format(dateParam)
+        var nowTime = dateFormat.parse(dateFormat.format(Date()))
 
-        if( dateFormat2.format(Date()).equals(showTime) ){
+        if( nowTime.time > showTime ){
             initReviewDialog()
         }
     }
@@ -583,7 +588,11 @@ class MainActivity : AppCompatActivity(),
                 call: Call<ResponseSurvey>?,
                 response: Response<ResponseSurvey>?
             ) {
-                Toast.makeText(this@MainActivity,"Send Survey Success", Toast.LENGTH_SHORT).show()
+                if( response?.code() == 200 ) {
+                    reviewDialogViewed = true
+                    Toast.makeText(this@MainActivity, "Send Survey Success", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
         })
