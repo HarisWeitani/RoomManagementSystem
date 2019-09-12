@@ -397,7 +397,7 @@ class MainActivity : AppCompatActivity(),
     private fun initImageVideoPager(){
 
         val filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath
-        //crash
+        //crash here
         val sliderSize = DAO.slideShowData!!.data!!.size
 
         for ( x in 0 until sliderSize ){
