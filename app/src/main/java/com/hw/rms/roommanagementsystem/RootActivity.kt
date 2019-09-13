@@ -65,7 +65,6 @@ class RootActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_horizontal)
         progressBar.visibility = View.GONE
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        isMainActivityStarted = false
 
         tv_error_api = findViewById(R.id.tv_error_api)
         tv_error_api.visibility = View.GONE
@@ -160,6 +159,12 @@ class RootActivity : AppCompatActivity() {
         }, 500)
     }
 
+    override fun onResume() {
+        super.onResume()
+        isMainActivityStarted = false
+        startActivity()
+    }
+
     private fun checkMandatoryData(){
         if( isGetConfig &&
                 isGetRunningText &&
@@ -170,13 +175,15 @@ class RootActivity : AppCompatActivity() {
             if( isAPIError ){
                 tv_error_api.visibility = View.VISIBLE
             }else {
-                isMainActivityStarted = true
-                startActivity(
-                    Intent(
-                        this@RootActivity,
-                        MainActivity::class.java
-                    ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                )
+                if( !isMainActivityStarted ) {
+                    isMainActivityStarted = true
+                    startActivity(
+                        Intent(
+                            this@RootActivity,
+                            MainActivity::class.java
+                        ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    )
+                }
             }
         }else{
             Handler().postDelayed({
