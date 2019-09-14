@@ -50,6 +50,9 @@
         <activity
                 android:name=".Activity.ScheduleCalendarActivity"
                 android:screenOrientation="landscape" />
+        <activity
+                android:name=".Activity.ScheduleDayViewActivity"
+                android:screenOrientation="landscape" />
         <activity android:name=".Activity.QuickBookingActivity"
                 android:windowSoftInputMode="stateAlwaysHidden"
                 android:screenOrientation="landscape" />

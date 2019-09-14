@@ -355,7 +355,7 @@ class MainActivity : AppCompatActivity(),
 
         var nowTime = dateFormat.parse(dateFormat.format(Date()))
 
-        if( nowTime.time > showTime ){
+        if( nowTime.time > showTime && !reviewDialogViewed){
             initReviewDialog()
         }
     }
@@ -518,7 +518,8 @@ class MainActivity : AppCompatActivity(),
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.scheduleEventByDate = response.body()
-                    startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                    startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                    startActivity(Intent(this@MainActivity,ScheduleDayViewActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     loadingDialog?.dismiss()
                 }else{
                     loadingDialog?.dismiss()
@@ -560,7 +561,9 @@ class MainActivity : AppCompatActivity(),
             sendSurvey("GOOD")
             Toast.makeText(this,"Review Happy", Toast.LENGTH_SHORT).show()
         }
-        reviewDialog = reviewDialogBuilder?.show()
+        try {
+            reviewDialog = reviewDialogBuilder?.show()
+        }catch (e:Exception){}
     }
 
     private fun sendSurvey(status : String){
@@ -693,6 +696,7 @@ class MainActivity : AppCompatActivity(),
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
                     isGetNextMeeting = DAO.nextMeeting != null
+                    initBottomScheduleViewPager()
                 }else{
                     isGetNextMeeting = false
                     Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
@@ -721,6 +725,7 @@ class MainActivity : AppCompatActivity(),
                     isGetCurrentMeeting = response.body().data != null
                     if( DAO.currentMeeting != response.body()){
                         DAO.currentMeeting = response.body()
+                        reviewDialogViewed = false
                         finish()
                         startActivity(
                             Intent(this@MainActivity, RootActivity::class.java).setFlags(

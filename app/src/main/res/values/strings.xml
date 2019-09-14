@@ -20,5 +20,29 @@
     <string name="booking_date">Booking Date</string>
     <string name="host">Host</string>
 
-
+    <string name="time_00">00</string>
+    <string name="time_01">01</string>
+    <string name="time_02">02</string>
+    <string name="time_03">03</string>
+    <string name="time_04">04</string>
+    <string name="time_05">05</string>
+    <string name="time_06">06</string>
+    <string name="time_07">07</string>
+    <string name="time_08">08</string>
+    <string name="time_09">09</string>
+    <string name="time_10">10</string>
+    <string name="time_11">11</string>
+    <string name="time_12">12</string>
+    <string name="time_13">13</string>
+    <string name="time_14">14</string>
+    <string name="time_15">15</string>
+    <string name="time_16">16</string>
+    <string name="time_17">17</string>
+    <string name="time_18">18</string>
+    <string name="time_19">19</string>
+    <string name="time_20">20</string>
+    <string name="time_21">21</string>
+    <string name="time_22">22</string>
+    <string name="time_23">23</string>
+    <string name="time_24">24</string>
 </resources>

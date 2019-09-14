@@ -16,8 +16,8 @@ android {
         //min sdk version 23 sebelumnya 20
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 12
-        versionName "0.12"
+        versionCode 13
+        versionName "0.13"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -63,6 +63,5 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
-
 }
 apply plugin: 'com.google.gms.google-services'

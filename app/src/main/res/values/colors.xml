@@ -20,4 +20,8 @@
     <color name="calendar_header_bg">#208dbf</color>
     <color name="calendar_page_number_unselected">#95c7e6</color>
     <color name="calendar_page_number_selected_bg">#175f80</color>
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorDivider">#aaaaaa</color>
 </resources>
