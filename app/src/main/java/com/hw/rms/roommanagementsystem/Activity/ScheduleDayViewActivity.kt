@@ -13,6 +13,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import com.applandeo.materialcalendarview.CalendarView
 import com.crashlytics.android.Crashlytics
 import com.hw.rms.roommanagementsystem.R
@@ -80,7 +81,6 @@ class ScheduleDayViewActivity : AppCompatActivity() {
         tv_no_meeting = findViewById(R.id.tv_no_meeting)
 
         dayViewLayout = findViewById(R.id.left_event_column)
-        eventIndex = dayViewLayout.childCount
         displayDailyEvents()
         calendarTitle = calendar_title
 //        calendarContent = calendar_content
@@ -100,9 +100,8 @@ class ScheduleDayViewActivity : AppCompatActivity() {
         }catch (e: Exception){
             Crashlytics.logException(e)
         }
-        if( dayViewLayout != null ){
-//            dayViewLayout.clear
-        }
+
+        restartEventIndex()
 
         if( size > 0 ) {
             val sdf = SimpleDateFormat("HH:mm:ss")
@@ -119,6 +118,14 @@ class ScheduleDayViewActivity : AppCompatActivity() {
                 displayEventSection(sdf.parse(startDateTime),eventBlockHeight, meetingSummary)
             }
         }
+    }
+    private fun restartEventIndex(){
+        for( x in 0 until eventIndex ){
+            dayViewLayout.removeViewAt((dayViewLayout.size-1))
+        }
+        eventIndex = 0
+        prevMeetingTotalFrame = 0
+        isPrevMeetingClash = false
     }
     private fun getEventTimeFrame(start : Date, end : Date): Int{
         var timeDifference = end.time - start.time
@@ -170,6 +177,7 @@ class ScheduleDayViewActivity : AppCompatActivity() {
 //        mEventView.setBackgroundColor(Color.parseColor("#249dd5"))
         mEventView.background = ContextCompat.getDrawable(this,R.drawable.text_view_box)
         dayViewLayout.addView(mEventView)
+        eventIndex++
 
     }
 
@@ -241,7 +249,7 @@ class ScheduleDayViewActivity : AppCompatActivity() {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.scheduleEventByDate = response.body()
-                    refreshCalendarData()
+//                    refreshCalendarData()
                     displayDailyEvents()
                     dialog?.dismiss()
                 }else{
