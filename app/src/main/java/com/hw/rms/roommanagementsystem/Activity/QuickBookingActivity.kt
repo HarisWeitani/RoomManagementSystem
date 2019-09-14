@@ -271,11 +271,14 @@ class QuickBookingActivity : AppCompatActivity() {
             ) {
                 GlobalVal.networkLogging("submitData onResponse",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
-                    dialog?.dismiss()
-                    finish()
-                    startActivity(
-                        Intent(this@QuickBookingActivity, RootActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                    Handler().postDelayed({
+                        dialog?.dismiss()
+                        Toast.makeText(this@QuickBookingActivity,"Booking Success", Toast.LENGTH_LONG).show()
+                        finish()
+                        startActivity(
+                            Intent(this@QuickBookingActivity, RootActivity::class.java).setFlags(
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                    },1000)
                 }else{
                     dialog?.dismiss()
                     Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_LONG).show()

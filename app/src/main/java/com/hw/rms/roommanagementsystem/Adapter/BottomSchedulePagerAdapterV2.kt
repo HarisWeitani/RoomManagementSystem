@@ -49,7 +49,8 @@ class BottomSchedulePagerAdapterV2(internal var botSchedLeft: List<DataGetNextMe
 
         tv_bottom_schedule_title_left.text =
             "Next Meeting $leftStartTime - $leftEndTime"
-        tv_bottom_schedule_content_left.text = botSchedLeft[position].summary
+        tv_bottom_schedule_content_left.text =
+            "${botSchedLeft[position].summary} By ${botSchedLeft[position].creator}"
 
         var rightStartTime = botSchedRight[position].start_dateTime
         var rightEndTime = botSchedRight[position].end_dateTime
@@ -61,7 +62,8 @@ class BottomSchedulePagerAdapterV2(internal var botSchedLeft: List<DataGetNextMe
 
         tv_bottom_schedule_title_right.text =
             "Next Meeting $rightStartTime - $rightEndTime"
-        tv_bottom_schedule_content_right.text = botSchedRight[position].summary
+        tv_bottom_schedule_content_right.text =
+            "${botSchedRight[position].summary} By ${botSchedRight[position].creator}"
 
         container.addView(itemView)
 

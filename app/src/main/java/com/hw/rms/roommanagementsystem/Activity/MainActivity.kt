@@ -271,7 +271,7 @@ class MainActivity : AppCompatActivity(),
     private fun initOccupiedView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
 //        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting?.data?.summary}"
+        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting?.data?.summary} By ${DAO.currentMeeting?.data?.creator}"
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
