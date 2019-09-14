@@ -14,7 +14,7 @@
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="1500dp"
+                android:layout_height="3000dp"
                 android:layout_weight="2">
                 <TextView
                     android:layout_width="wrap_content"
@@ -22,20 +22,7 @@
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:text="@string/time_00"
-                    android:paddingTop="20dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="60dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_01"
-                    android:paddingTop="80dp"
+                    android:paddingTop="40dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -47,21 +34,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_02"
-                    android:paddingTop="140dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="180dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_03"
-                    android:paddingTop="200dp"
+                    android:text="@string/time_01"
+                    android:paddingTop="160dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -73,21 +47,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_04"
-                    android:paddingTop="260dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="300dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_05"
-                    android:paddingTop="320dp"
+                    android:text="@string/time_02"
+                    android:paddingTop="280dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -99,21 +60,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_06"
-                    android:paddingTop="380dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="420dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_07"
-                    android:paddingTop="440dp"
+                    android:text="@string/time_03"
+                    android:paddingTop="400dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -125,21 +73,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_08"
-                    android:paddingTop="500dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="540dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_09"
-                    android:paddingTop="560dp"
+                    android:text="@string/time_04"
+                    android:paddingTop="520dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -151,21 +86,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_10"
-                    android:paddingTop="620dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="660dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_11"
-                    android:paddingTop="680dp"
+                    android:text="@string/time_05"
+                    android:paddingTop="640dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -177,21 +99,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_12"
-                    android:paddingTop="740dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="780dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_13"
-                    android:paddingTop="800dp"
+                    android:text="@string/time_06"
+                    android:paddingTop="760dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -203,21 +112,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_14"
-                    android:paddingTop="860dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="900dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_15"
-                    android:paddingTop="920dp"
+                    android:text="@string/time_07"
+                    android:paddingTop="880dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -229,21 +125,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_16"
-                    android:paddingTop="980dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="1020dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_17"
-                    android:paddingTop="1040dp"
+                    android:text="@string/time_08"
+                    android:paddingTop="1000dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -255,21 +138,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_18"
-                    android:paddingTop="1100dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="1140dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_19"
-                    android:paddingTop="1160dp"
+                    android:text="@string/time_09"
+                    android:paddingTop="1120dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -281,21 +151,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_20"
-                    android:paddingTop="1220dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="1260dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_21"
-                    android:paddingTop="1280dp"
+                    android:text="@string/time_10"
+                    android:paddingTop="1240dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -307,21 +164,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_22"
-                    android:paddingTop="1340dp"
-                    android:layout_centerHorizontal="true"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="1380dp"
-                    android:background="@color/colorDivider" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="@string/time_23"
-                    android:paddingTop="1400dp"
+                    android:text="@string/time_11"
+                    android:paddingTop="1360dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
@@ -333,13 +177,169 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textStyle="bold"
-                    android:text="@string/time_24"
-                    android:paddingTop="1460dp"
+                    android:text="@string/time_12"
+                    android:paddingTop="1480dp"
                     android:layout_centerHorizontal="true"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="1500dp"
+                    android:layout_marginTop="1560dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_13"
+                    android:paddingTop="1600dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1680dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_14"
+                    android:paddingTop="1720dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1800dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_15"
+                    android:paddingTop="1880dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1920dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_16"
+                    android:paddingTop="1960dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2040dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_17"
+                    android:paddingTop="2080dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2160dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_18"
+                    android:paddingTop="2200dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2280dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_19"
+                    android:paddingTop="2320dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2400dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_20"
+                    android:paddingTop="2440dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2520dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_21"
+                    android:paddingTop="2560dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2640dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_22"
+                    android:paddingTop="2680dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2760dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_23"
+                    android:paddingTop="2800dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2880dp"
+                    android:background="@color/colorDivider" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/time_24"
+                    android:paddingTop="2920dp"
+                    android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="3000dp"
                     android:background="@color/colorDivider" />
             </RelativeLayout>
             <View
@@ -349,7 +349,7 @@
             <RelativeLayout
                 android:id="@+id/left_event_column"
                 android:layout_width="0dp"
-                android:layout_height="1500dp"
+                android:layout_height="3000dp"
                 android:layout_weight="8">
                 <View
                     android:layout_width="match_parent"
@@ -475,6 +475,131 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="1500dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1560dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1620dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1680dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1740dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1800dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1860dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1920dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="1980dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2040dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2100dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2160dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2220dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2280dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2340dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2400dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2460dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2520dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2580dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2640dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2700dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2760dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2820dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2880dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2940dp"
+                    android:background="@color/colorDivider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="3000dp"
                     android:background="@color/colorDivider" />
             </RelativeLayout>
         </LinearLayout>

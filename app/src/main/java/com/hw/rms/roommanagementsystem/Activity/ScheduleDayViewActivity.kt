@@ -52,6 +52,7 @@ class ScheduleDayViewActivity : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat")
     val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    val timeFormat = SimpleDateFormat("HH:mm")
     lateinit var calendarTitle : TextView
 //    lateinit var calendarContent : RecyclerView
     var eventIndex = 0
@@ -109,13 +110,18 @@ class ScheduleDayViewActivity : AppCompatActivity() {
                 var startDateTime = DAO.scheduleEventByDate?.data?.get(x)?.start_dateTime
                 var endDateTime = DAO.scheduleEventByDate?.data?.get(x)?.end_dateTime
                 var eventBlockHeight = getEventTimeFrame(sdf.parse(startDateTime),sdf.parse(endDateTime))
-                var meetingSummary = "Meeting"
+                var meetingMsg = "Meeting"
                 try{
-                    meetingSummary = DAO.scheduleEventByDate?.data?.get(x)?.summary!!
+                    val summary = DAO.scheduleEventByDate?.data?.get(x)?.summary!!
+                    val startTime = DAO.scheduleEventByDate?.data?.get(x)?.start_dateTime!!.substring(0,5)
+                    val endTime = DAO.scheduleEventByDate?.data?.get(x)?.end_dateTime!!.substring(0,5)
+                    val creator = DAO.scheduleEventByDate?.data?.get(x)?.creator!!
+                    meetingMsg = "$summary \n$startTime - $endTime \n$creator"
                 }catch (e:Exception){
                     Crashlytics.logException(e)
+                    Crashlytics.log("Non Fatal")
                 }
-                displayEventSection(sdf.parse(startDateTime),eventBlockHeight, meetingSummary)
+                displayEventSection(sdf.parse(startDateTime),eventBlockHeight, meetingMsg)
             }
         }
     }
@@ -153,12 +159,12 @@ class ScheduleDayViewActivity : AppCompatActivity() {
     private fun createEventView(topMargin : Int, height : Int, message : String, isMeetingClash : Boolean){
 
         var mEventView = TextView(this)
-        var lParam = RelativeLayout.LayoutParams(180, LinearLayout.LayoutParams.WRAP_CONTENT)
+        var lParam = RelativeLayout.LayoutParams(200, LinearLayout.LayoutParams.WRAP_CONTENT)
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-        lParam.topMargin = topMargin
+        lParam.topMargin = topMargin * 2
         if( isMeetingClash && !isPrevMeetingClash){
             isPrevMeetingClash = true
-            lParam.leftMargin = 220
+            lParam.leftMargin = 240
         }else if ( isMeetingClash && isPrevMeetingClash){
             isPrevMeetingClash = false
             lParam.leftMargin = 24
@@ -166,15 +172,11 @@ class ScheduleDayViewActivity : AppCompatActivity() {
         else{
             lParam.leftMargin = 24
         }
-
-        lParam.rightMargin = 24
         mEventView.layoutParams = lParam
         mEventView.setPadding(12, 0, 12, 0)
-        mEventView.height = height
-//        mEventView.gravity = 0x11
+        mEventView.height = height * 2
         mEventView.setTextColor(Color.parseColor("#ffffff"))
         mEventView.text = message
-//        mEventView.setBackgroundColor(Color.parseColor("#249dd5"))
         mEventView.background = ContextCompat.getDrawable(this,R.drawable.text_view_box)
         dayViewLayout.addView(mEventView)
         eventIndex++
