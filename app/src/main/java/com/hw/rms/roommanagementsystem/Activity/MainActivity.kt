@@ -280,14 +280,15 @@ class MainActivity : AppCompatActivity(),
 
         btn_check_out = findViewById(R.id.btn_check_out)
         btn_check_out.setOnClickListener {
-
+            if( !reviewDialogViewed ) initSurveyDialog()
+            //hit API
         }
 
         btn_extend = findViewById(R.id.btn_extend)
         btn_extend.setOnClickListener {
             //show dialog
             initExtendDialog()
-//            initReviewDialog()
+//            initSurveyDialog()
 //            extendCurrentMeeting()
         }
 
@@ -356,7 +357,7 @@ class MainActivity : AppCompatActivity(),
         var nowTime = dateFormat.parse(dateFormat.format(Date()))
 
         if( nowTime.time > showTime && !reviewDialogViewed){
-            initReviewDialog()
+            initSurveyDialog()
         }
     }
 
@@ -501,8 +502,10 @@ class MainActivity : AppCompatActivity(),
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         val currentDate = RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date))
+        val location = RequestBody.create(MediaType.parse("text/plain"),  DAO.settingsData!!.room!!.room_code.toString())
         val requestBodyMap = HashMap<String, RequestBody>()
         requestBodyMap["date"] = currentDate
+        requestBodyMap["location"] = location
 
         apiService!!.getEventByDate(requestBodyMap).enqueue(object : Callback<ResponseScheduleByDate>{
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
@@ -536,30 +539,42 @@ class MainActivity : AppCompatActivity(),
         loadingDialog?.setContentView(R.layout.loading_dialog)
     }
 
-    fun initReviewDialog(){
+    fun initSurveyDialog(){
         reviewDialogInflater = layoutInflater
         val dialogView = reviewDialogInflater.inflate(R.layout.review_room_dialog,null)
         reviewDialogBuilder?.setView(dialogView)
         reviewDialogBuilder?.setCancelable(false)
 
-        val iv_review_sad = dialogView.findViewById<ImageView>(R.id.iv_review_sad)
-        val iv_review_neutral = dialogView.findViewById<ImageView>(R.id.iv_review_neutral)
-        val iv_review_happy = dialogView.findViewById<ImageView>(R.id.iv_review_happy)
+        val iv_survey_poor = dialogView.findViewById<ImageView>(R.id.iv_survey_poor)
+        val iv_survey_bad = dialogView.findViewById<ImageView>(R.id.iv_survey_bad)
+        val iv_survey_okay = dialogView.findViewById<ImageView>(R.id.iv_survey_okay)
+        val iv_survey_good = dialogView.findViewById<ImageView>(R.id.iv_survey_good)
+        val iv_survey_excellent = dialogView.findViewById<ImageView>(R.id.iv_survey_excellent)
 
-        iv_review_sad.setOnClickListener {
+        iv_survey_poor.setOnClickListener {
+            reviewDialog?.dismiss()
+            sendSurvey("POOR")
+            Toast.makeText(this,"Survey POOR", Toast.LENGTH_SHORT).show()
+        }
+        iv_survey_bad.setOnClickListener {
             reviewDialog?.dismiss()
             sendSurvey("BAD")
-            Toast.makeText(this,"Review Sad", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Survey BAD", Toast.LENGTH_SHORT).show()
         }
-        iv_review_neutral.setOnClickListener {
+        iv_survey_okay.setOnClickListener {
             reviewDialog?.dismiss()
-            sendSurvey("NEUTRAL")
-            Toast.makeText(this,"Review Neutral", Toast.LENGTH_SHORT).show()
+            sendSurvey("OKAY")
+            Toast.makeText(this,"Survey OKAY", Toast.LENGTH_SHORT).show()
         }
-        iv_review_happy.setOnClickListener {
+        iv_survey_good.setOnClickListener {
             reviewDialog?.dismiss()
             sendSurvey("GOOD")
-            Toast.makeText(this,"Review Happy", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Survey GOOD", Toast.LENGTH_SHORT).show()
+        }
+        iv_survey_excellent.setOnClickListener {
+            reviewDialog?.dismiss()
+            sendSurvey("EXCELLENT")
+            Toast.makeText(this,"Survey EXCELLENT", Toast.LENGTH_SHORT).show()
         }
         try {
             reviewDialog = reviewDialogBuilder?.show()
@@ -677,9 +692,9 @@ class MainActivity : AppCompatActivity(),
 
     private fun getNextMeeting(){
 
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code.toString())
         val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["room_id"] = body
+        requestBodyMap["location"] = body
 
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
@@ -706,9 +721,9 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun getCurrentMeeting(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code.toString())
         val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["room_id"] = body
+        requestBodyMap["location"] = body
 
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
@@ -725,7 +740,6 @@ class MainActivity : AppCompatActivity(),
                     isGetCurrentMeeting = response.body().data != null
                     if( DAO.currentMeeting != response.body()){
                         DAO.currentMeeting = response.body()
-                        reviewDialogViewed = false
                         finish()
                         startActivity(
                             Intent(this@MainActivity, RootActivity::class.java).setFlags(

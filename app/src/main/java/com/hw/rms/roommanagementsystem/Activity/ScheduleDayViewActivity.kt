@@ -234,8 +234,10 @@ class ScheduleDayViewActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         val currentDate = RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date))
+        val location = RequestBody.create(MediaType.parse("text/plain"),  DAO.settingsData!!.room!!.room_code.toString())
         val requestBodyMap = HashMap<String, RequestBody>()
         requestBodyMap["date"] = currentDate
+        requestBodyMap["location"] = location
 
         apiService!!.getEventByDate(requestBodyMap).enqueue(object :
             Callback<ResponseScheduleByDate> {

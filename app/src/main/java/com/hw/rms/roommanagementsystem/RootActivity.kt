@@ -269,9 +269,9 @@ class RootActivity : AppCompatActivity() {
 
     private fun getNextMeeting(){
 
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code.toString())
         val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["room_id"] = body
+        requestBodyMap["location"] = body
 
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
@@ -297,9 +297,9 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun getCurrentMeeting(){
-        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_id.toString())
+        var body = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code.toString())
         val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["room_id"] = body
+        requestBodyMap["location"] = body
 
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {

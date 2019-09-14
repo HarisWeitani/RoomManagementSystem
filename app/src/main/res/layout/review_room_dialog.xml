@@ -20,9 +20,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Review"
+            android:text="Review Ruangan : "
 
-            android:textSize="40sp"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/gotham_bold"
+            android:layout_marginBottom="16dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_room_name_survey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Ruangan"
+
+            android:textSize="35sp"
             android:textColor="@color/white"
             android:fontFamily="@font/gotham_bold"
             android:layout_marginBottom="16dp"
@@ -39,19 +51,43 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:orientation="vertical"
                 android:gravity="center"
                 >
                 <ImageView
-                    android:id="@+id/iv_review_sad"
+                    android:id="@+id/iv_survey_poor"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:src="@drawable/sad"
+                    android:src="@drawable/survey_bad"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sad"
+                    android:text="Poor"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+
+                    android:fontFamily="@font/gotham_bold"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginStart="64dp"
+                >
+                <ImageView
+                    android:id="@+id/iv_survey_bad"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/survey_netral_bad"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bad"
                     android:textColor="@color/white"
                     android:textSize="30sp"
 
@@ -67,15 +103,15 @@
 
                 >
                 <ImageView
-                    android:id="@+id/iv_review_neutral"
+                    android:id="@+id/iv_survey_okay"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:src="@drawable/netral"
+                    android:src="@drawable/survey_netral"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Neutral"
+                    android:text="Okay"
                     android:textColor="@color/white"
                     android:textSize="30sp"
 
@@ -85,23 +121,48 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginStart="64dp"
+
+                >
+                <ImageView
+                    android:id="@+id/iv_survey_good"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/survey_netral_good"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Good"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+
+                    android:fontFamily="@font/gotham_bold"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="64dp"
 
                 android:orientation="vertical"
                 android:gravity="center"
                 >
                 <ImageView
-                    android:id="@+id/iv_review_happy"
+                    android:id="@+id/iv_survey_excellent"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:src="@drawable/happy"
+                    android:src="@drawable/survey_good"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Happy"
+                    android:text="Excellent"
                     android:textColor="@color/white"
                     android:textSize="30sp"
+                    android:maxLines="1"
 
                     android:fontFamily="@font/gotham_bold"
                     />
