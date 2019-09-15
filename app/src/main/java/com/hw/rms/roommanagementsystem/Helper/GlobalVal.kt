@@ -27,6 +27,7 @@ class GlobalVal {
         var isNetworkConnected : Boolean = false
         var isSocketConnected : Boolean = false
         var isMainActivityStarted : Boolean = false
+        var isSurveyShowed: Boolean = false
 
 
         fun networkLogging(tag : String, result : String){

@@ -207,6 +207,7 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
         Handler().removeCallbacksAndMessages(null)
         GlobalVal.isMainActivityStarted = true
+        GlobalVal.isSurveyShowed = false
     }
 
     private fun initDateTime(){
@@ -279,7 +280,7 @@ class MainActivity : AppCompatActivity(),
     private fun initOccupiedView(){
         tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
 //        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting?.data?.summary} By ${DAO.currentMeeting?.data?.creator}"
+        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting?.data?.summary}, Hosted By ${DAO.currentMeeting?.data?.creator}"
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
@@ -288,18 +289,8 @@ class MainActivity : AppCompatActivity(),
 
         btn_check_out = findViewById(R.id.btn_check_out)
         btn_check_out.setOnClickListener {
-            if( !surveyDialogViewed ) {
-                try {
-                    runOnUiThread {
-                        showDialogSurvey()
-                    }
-                }catch (e : Exception){
-                    Crashlytics.logException(e)
-                }
-            }else{
-                Toast.makeText(this,"Survey Already Filled", Toast.LENGTH_LONG).show()
-            }
-            //hit API
+            GlobalVal.isSurveyShowed = true
+            checkOut()
         }
 
         btn_extend = findViewById(R.id.btn_extend)
@@ -360,7 +351,7 @@ class MainActivity : AppCompatActivity(),
 
         var timeIterval = 15
         try{
-            timeIterval = DAO.configData?.config_timestamp!!.toInt()
+            timeIterval = DAO.configData?.config_show_survey_before!!.toInt()
         }catch (e : Exception){
             Crashlytics.logException(e)
         }
@@ -368,11 +359,49 @@ class MainActivity : AppCompatActivity(),
 
         var nowTime = dateFormat.parse(dateFormat.format(Date()))
 
-        if( nowTime.time > showTime && !surveyDialogViewed && !surveyDialogShowed){
+        if( nowTime.time > showTime ){
             runOnUiThread {
+                GlobalVal.isSurveyShowed = true
                 showDialogSurvey()
+                Log.d("timeStampSurvey","Start ${timeIterval*60*1000}")
+                Handler().postDelayed({
+                    Log.d("timeStampSurvey","End")
+                    autoCheckOut()
+                }, (timeIterval*60*1000).toLong())
             }
         }
+    }
+
+    fun autoCheckOut(){
+        loadingDialog?.show()
+
+        var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["id"] = id
+
+        apiService!!.autoCheckOut(requestBodyMap).enqueue(object : Callback<ResponseCheckOut>{
+            override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
+                Toast.makeText(this@MainActivity,"Checkout Failed", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseCheckOut>?,
+                response: Response<ResponseCheckOut>?
+            ) {
+                if( response?.code() == 200 ) {
+                    surveyDialogViewed = true
+                    surveyDialogShowed = false
+                    loadingDialog?.dismiss()
+                    Toast.makeText(this@MainActivity, "Checkout Success", Toast.LENGTH_SHORT)
+                        .show()
+                    finish()
+                    startActivity(
+                        Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                }
+            }
+
+        })
     }
 
     private fun initNewsViewPager(){
@@ -435,7 +464,7 @@ class MainActivity : AppCompatActivity(),
             Crashlytics.logException(e)
         }
         //testing purpose
-//        sliderSize = 1
+        sliderSize = 1
         for ( x in 0 until sliderSize ){
             val dataTemp = DAO.slideShowData!!.data!![x]
             if( dataTemp!!.slideshow_type.equals("1") ){
@@ -554,7 +583,7 @@ class MainActivity : AppCompatActivity(),
         loadingDialog?.setContentView(R.layout.loading_dialog)
     }
 
-    fun initSurveyDialog(){
+  /*  fun initSurveyDialog(){
         reviewDialogInflater = layoutInflater
         val dialogView = reviewDialogInflater.inflate(R.layout.review_room_dialog,null)
         reviewDialogBuilder?.setView(dialogView)
@@ -595,13 +624,16 @@ class MainActivity : AppCompatActivity(),
             reviewDialog = reviewDialogBuilder?.show()
             reviewDialogBuilder?.show()
         }catch (e:Exception){}
-    }
+    }*/
 
     fun showDialogSurvey(){
         val surveyDialog = Dialog(this)
         surveyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         surveyDialog.setContentView(R.layout.review_room_dialog)
         surveyDialog.setCancelable(false)
+
+        val tv_room_name_survey = surveyDialog.findViewById<TextView>(R.id.tv_room_name_survey)
+        tv_room_name_survey.text = ""
 
         val iv_survey_poor = surveyDialog.findViewById<ImageView>(R.id.iv_survey_poor)
         val iv_survey_bad = surveyDialog.findViewById<ImageView>(R.id.iv_survey_bad)
@@ -634,12 +666,16 @@ class MainActivity : AppCompatActivity(),
             sendSurvey("EXCELLENT")
             Toast.makeText(this,"Survey EXCELLENT", Toast.LENGTH_SHORT).show()
         }
+        try{
+            tv_room_name_survey.text = DAO.settingsData?.room?.room_name
+        }catch (e : Exception){ Crashlytics.logException(e) }
+
         surveyDialogShowed = true
         surveyDialog.show()
     }
 
-
     fun sendSurvey(status : String){
+        loadingDialog?.show()
         var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.summary)
@@ -667,8 +703,53 @@ class MainActivity : AppCompatActivity(),
                 if( response?.code() == 200 ) {
                     surveyDialogViewed = true
                     surveyDialogShowed = false
-                    Toast.makeText(this@MainActivity, "Send Survey Success", Toast.LENGTH_SHORT)
+                    loadingDialog?.dismiss()
+                    Toast.makeText(this@MainActivity, "Thank you for rating this room", Toast.LENGTH_SHORT)
                         .show()
+                    showDialogSurvey()
+                }
+            }
+
+        })
+    }
+
+    fun checkOut(){
+        loadingDialog?.show()
+
+        var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
+        val requestBodyMap = HashMap<String,RequestBody>()
+        requestBodyMap["id"] = id
+
+        apiService!!.manualCheckOut(requestBodyMap).enqueue(object : Callback<ResponseCheckOut>{
+            override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
+                Toast.makeText(this@MainActivity,"Checkout Failed", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(
+                call: Call<ResponseCheckOut>?,
+                response: Response<ResponseCheckOut>?
+            ) {
+                if( response?.code() == 200 ) {
+                    surveyDialogViewed = true
+                    surveyDialogShowed = false
+                    loadingDialog?.dismiss()
+                    Toast.makeText(this@MainActivity, "Checkout Success", Toast.LENGTH_SHORT)
+                        .show()
+                    showDialogSurvey()
+                    var timeIterval = 15
+                    try{
+                        timeIterval = DAO.configData?.config_show_survey_before!!.toInt()
+                    }catch (e : Exception){
+                        Crashlytics.logException(e)
+                    }
+                    Log.d("timeStampSurvey","Start ${timeIterval*60*1000}")
+                    Handler().postDelayed({
+                        Log.d("timeStampSurvey","End")
+                        finish()
+                        startActivity(
+                            Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                    }, (timeIterval*60*1000).toLong())
                 }
             }
 
@@ -742,14 +823,18 @@ class MainActivity : AppCompatActivity(),
     private fun refreshMeetingStatus(){
         Handler().postDelayed({
             Log.d("handler_testing", " GET IT ")
-            getNextMeeting()
-            getCurrentMeeting()
-            if( isGetCurrentMeeting && GlobalVal.isMainActivityStarted ) {
-                try {
-                    checkIfSurveyTimeToShow()
-                }catch (e : Exception){ Crashlytics.logException(e) }
+            if( !GlobalVal.isSurveyShowed ) {
+                getNextMeeting()
+                getCurrentMeeting()
+                if (isGetCurrentMeeting && GlobalVal.isMainActivityStarted) {
+                    try {
+                        checkIfSurveyTimeToShow()
+                    } catch (e: Exception) {
+                        Crashlytics.logException(e)
+                    }
+                }
+                refreshMeetingStatus()
             }
-            refreshMeetingStatus()
         },60000)
     }
 
@@ -803,11 +888,15 @@ class MainActivity : AppCompatActivity(),
                     isGetCurrentMeeting = response.body().data != null
                     if( DAO.currentMeeting != response.body()){
                         DAO.currentMeeting = response.body()
-                        finish()
-                        startActivity(
-                            Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                                Intent.FLAG_ACTIVITY_SINGLE_TOP))
-
+                        if(!GlobalVal.isSurveyShowed) {
+                            GlobalVal.isSurveyShowed = false
+                            finish()
+                            startActivity(
+                                Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                )
+                            )
+                        }
                     }
                 }else{
                     isGetCurrentMeeting = false

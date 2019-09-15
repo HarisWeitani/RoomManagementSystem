@@ -9,7 +9,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
@@ -93,7 +92,11 @@ class QuickBookingActivity : AppCompatActivity() {
 
         tv_booking_date = findViewById(R.id.tv_booking_date)
         tv_booking_date.setOnClickListener {
-            DatePickerDialog(this,OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            val limit = Calendar.getInstance()
+            val now = Calendar.getInstance()
+            limit.add(Calendar.DAY_OF_MONTH,31)
+
+            val date = DatePickerDialog(this,0,OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -103,7 +106,10 @@ class QuickBookingActivity : AppCompatActivity() {
 
             },  cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH))
+            date.datePicker.minDate = now.timeInMillis
+            date.datePicker.maxDate = limit.timeInMillis
+            date.show()
         }
 
         tv_booking_time_start = findViewById(R.id.tv_booking_time_start)
@@ -248,6 +254,7 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["location"] = location
         requestBodyMap["summary"] = summary
         requestBodyMap["description"] = description
+        requestBodyMap["host"] = host
         requestBodyMap["start_date"] = start_date
         requestBodyMap["end_date"] = end_date
         requestBodyMap["start_time"] = start_time

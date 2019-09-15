@@ -68,8 +68,16 @@ interface API {
     fun getRoomList(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseGetAllRooms>
 
     @Multipart
-    @POST("api/survey/add_survey")
+    @POST("google/survey/add_survey")
     fun addSurvey(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseSurvey>
+
+    @Multipart
+    @POST("google/booking/check_out")
+    fun manualCheckOut(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseCheckOut>
+
+    @Multipart
+    @POST("google/booking/auto_check_out")
+    fun autoCheckOut(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseCheckOut>
 
     companion object Factory{
 

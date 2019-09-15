@@ -46,7 +46,7 @@ class BottomSchedulePagerAdapterV2(internal var botSchedLeft: List<DataGetNextMe
         if( leftStartTime!!.length > 5 && leftEndTime!!.length > 5 ){
             leftStartTime = leftStartTime.substring(0,5)
             leftEndTime = leftEndTime.substring(0,5)
-            leftContent = "${botSchedLeft[position].summary} By ${botSchedLeft[position].creator}"
+            leftContent = "${botSchedLeft[position].summary}, Hosted By ${botSchedLeft[position].creator}"
         }
 
         tv_bottom_schedule_title_left.text =
@@ -60,7 +60,7 @@ class BottomSchedulePagerAdapterV2(internal var botSchedLeft: List<DataGetNextMe
         if( rightStartTime!!.length > 5 && rightEndTime!!.length > 5 ){
             rightStartTime = rightStartTime.substring(0,5)
             rightEndTime = rightEndTime.substring(0,5)
-            rightContent = "${botSchedRight[position].summary} By ${botSchedRight[position].creator}"
+            rightContent = "${botSchedRight[position].summary}, Hosted By ${botSchedRight[position].creator}"
         }
 
         tv_bottom_schedule_title_right.text =
