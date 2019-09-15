@@ -211,6 +211,7 @@ class QuickBookingActivity : AppCompatActivity() {
 
     private fun submitQuickBooking(){
         if( validateBookingData() ){
+            dialog?.show()
             getAllAttendees()
             submitData()
         }else{

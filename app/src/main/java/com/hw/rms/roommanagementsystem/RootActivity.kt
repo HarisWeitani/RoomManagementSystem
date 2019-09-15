@@ -51,8 +51,6 @@ class RootActivity : AppCompatActivity() {
     var isGetNewsData: Boolean = false
     var isGetSlideShowData: Boolean = false
 
-    var isMainActivityStarted: Boolean = false
-
     var isAPIError: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,7 +148,6 @@ class RootActivity : AppCompatActivity() {
     private fun startActivity(){
         Handler().postDelayed({
             if (firstInstall) {
-                isMainActivityStarted = true
                 startActivity(Intent(this@RootActivity, AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
             }
             else {
@@ -161,8 +158,19 @@ class RootActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        isMainActivityStarted = false
-        startActivity()
+        Handler().removeCallbacksAndMessages(null)
+        initApp()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Handler().removeCallbacksAndMessages(null)
+        isGetConfig = false
+        isGetRunningText = false
+        isGetNextMeeting = false
+        isGetCurrentMeeting = false
+        isGetNewsData = false
+        isGetSlideShowData = false
     }
 
     private fun checkMandatoryData(){
@@ -175,8 +183,7 @@ class RootActivity : AppCompatActivity() {
             if( isAPIError ){
                 tv_error_api.visibility = View.VISIBLE
             }else {
-                if( !isMainActivityStarted ) {
-                    isMainActivityStarted = true
+                if( !GlobalVal.isMainActivityStarted ) {
                     startActivity(
                         Intent(
                             this@RootActivity,
@@ -187,7 +194,9 @@ class RootActivity : AppCompatActivity() {
             }
         }else{
             Handler().postDelayed({
-                if(!isMainActivityStarted) checkMandatoryData()
+                if(!GlobalVal.isMainActivityStarted) {
+                    checkMandatoryData()
+                }
             },5000)
         }
     }

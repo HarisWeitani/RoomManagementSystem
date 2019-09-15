@@ -101,7 +101,8 @@ class MainActivity : AppCompatActivity(),
     var reviewDialogBuilder : AlertDialog.Builder? = null
     var reviewDialog : AlertDialog? = null
     lateinit var reviewDialogInflater : LayoutInflater
-    var reviewDialogViewed: Boolean = false
+    var surveyDialogViewed: Boolean = false
+    var surveyDialogShowed: Boolean = false
 
     var extendDialogBuilder : AlertDialog.Builder? = null
     var extendDialog : AlertDialog? = null
@@ -198,7 +199,14 @@ class MainActivity : AppCompatActivity(),
 
     override fun onPause() {
         super.onPause()
-        Log.d("ASD","asdasdasd")
+        Handler().removeCallbacksAndMessages(null)
+        GlobalVal.isMainActivityStarted = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Handler().removeCallbacksAndMessages(null)
+        GlobalVal.isMainActivityStarted = true
     }
 
     private fun initDateTime(){
@@ -280,20 +288,24 @@ class MainActivity : AppCompatActivity(),
 
         btn_check_out = findViewById(R.id.btn_check_out)
         btn_check_out.setOnClickListener {
-            if( !reviewDialogViewed ) initSurveyDialog()
+            if( !surveyDialogViewed ) {
+                try {
+                    runOnUiThread {
+                        showDialogSurvey()
+                    }
+                }catch (e : Exception){
+                    Crashlytics.logException(e)
+                }
+            }else{
+                Toast.makeText(this,"Survey Already Filled", Toast.LENGTH_LONG).show()
+            }
             //hit API
         }
 
         btn_extend = findViewById(R.id.btn_extend)
         btn_extend.setOnClickListener {
-            //show dialog
             initExtendDialog()
-//            initSurveyDialog()
-//            extendCurrentMeeting()
         }
-
-//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-//        tv_time_meeting_range.text = "${DAO.currentMeeting!!.data!![0]!!.booking_time_start} - ${DAO.currentMeeting!!.data!![0]!!.booking_time_end}"
     }
 
     private fun extendCurrentMeeting( newTime : Int ){
@@ -356,8 +368,10 @@ class MainActivity : AppCompatActivity(),
 
         var nowTime = dateFormat.parse(dateFormat.format(Date()))
 
-        if( nowTime.time > showTime && !reviewDialogViewed){
-            initSurveyDialog()
+        if( nowTime.time > showTime && !surveyDialogViewed && !surveyDialogShowed){
+            runOnUiThread {
+                showDialogSurvey()
+            }
         }
     }
 
@@ -421,7 +435,7 @@ class MainActivity : AppCompatActivity(),
             Crashlytics.logException(e)
         }
         //testing purpose
-        sliderSize = 1
+//        sliderSize = 1
         for ( x in 0 until sliderSize ){
             val dataTemp = DAO.slideShowData!!.data!![x]
             if( dataTemp!!.slideshow_type.equals("1") ){
@@ -521,6 +535,7 @@ class MainActivity : AppCompatActivity(),
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.scheduleEventByDate = response.body()
+                    finish()
 //                    startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     startActivity(Intent(this@MainActivity,ScheduleDayViewActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     loadingDialog?.dismiss()
@@ -578,10 +593,53 @@ class MainActivity : AppCompatActivity(),
         }
         try {
             reviewDialog = reviewDialogBuilder?.show()
+            reviewDialogBuilder?.show()
         }catch (e:Exception){}
     }
 
-    private fun sendSurvey(status : String){
+    fun showDialogSurvey(){
+        val surveyDialog = Dialog(this)
+        surveyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        surveyDialog.setContentView(R.layout.review_room_dialog)
+        surveyDialog.setCancelable(false)
+
+        val iv_survey_poor = surveyDialog.findViewById<ImageView>(R.id.iv_survey_poor)
+        val iv_survey_bad = surveyDialog.findViewById<ImageView>(R.id.iv_survey_bad)
+        val iv_survey_okay = surveyDialog.findViewById<ImageView>(R.id.iv_survey_okay)
+        val iv_survey_good = surveyDialog.findViewById<ImageView>(R.id.iv_survey_good)
+        val iv_survey_excellent = surveyDialog.findViewById<ImageView>(R.id.iv_survey_excellent)
+
+        iv_survey_poor.setOnClickListener {
+            surveyDialog.dismiss()
+            sendSurvey("POOR")
+            Toast.makeText(this,"Survey POOR", Toast.LENGTH_SHORT).show()
+        }
+        iv_survey_bad.setOnClickListener {
+            surveyDialog.dismiss()
+            sendSurvey("BAD")
+            Toast.makeText(this,"Survey BAD", Toast.LENGTH_SHORT).show()
+        }
+        iv_survey_okay.setOnClickListener {
+            surveyDialog.dismiss()
+            sendSurvey("OKAY")
+            Toast.makeText(this,"Survey OKAY", Toast.LENGTH_SHORT).show()
+        }
+        iv_survey_good.setOnClickListener {
+            surveyDialog.dismiss()
+            sendSurvey("GOOD")
+            Toast.makeText(this,"Survey GOOD", Toast.LENGTH_SHORT).show()
+        }
+        iv_survey_excellent.setOnClickListener {
+            surveyDialog.dismiss()
+            sendSurvey("EXCELLENT")
+            Toast.makeText(this,"Survey EXCELLENT", Toast.LENGTH_SHORT).show()
+        }
+        surveyDialogShowed = true
+        surveyDialog.show()
+    }
+
+
+    fun sendSurvey(status : String){
         var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.summary)
@@ -607,7 +665,8 @@ class MainActivity : AppCompatActivity(),
                 response: Response<ResponseSurvey>?
             ) {
                 if( response?.code() == 200 ) {
-                    reviewDialogViewed = true
+                    surveyDialogViewed = true
+                    surveyDialogShowed = false
                     Toast.makeText(this@MainActivity, "Send Survey Success", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -685,7 +744,11 @@ class MainActivity : AppCompatActivity(),
             Log.d("handler_testing", " GET IT ")
             getNextMeeting()
             getCurrentMeeting()
-            if( isGetCurrentMeeting ) checkIfSurveyTimeToShow()
+            if( isGetCurrentMeeting && GlobalVal.isMainActivityStarted ) {
+                try {
+                    checkIfSurveyTimeToShow()
+                }catch (e : Exception){ Crashlytics.logException(e) }
+            }
             refreshMeetingStatus()
         },60000)
     }
@@ -753,4 +816,6 @@ class MainActivity : AppCompatActivity(),
             }
         })
     }
+
+
 }
