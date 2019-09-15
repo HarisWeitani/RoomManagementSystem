@@ -472,7 +472,7 @@ class MainActivity : AppCompatActivity(),
             Crashlytics.logException(e)
         }
         //testing purpose
-        sliderSize = 1
+//        sliderSize = 1
         for ( x in 0 until sliderSize ){
             val dataTemp = DAO.slideShowData!!.data!![x]
             if( dataTemp!!.slideshow_type.equals("1") ){
