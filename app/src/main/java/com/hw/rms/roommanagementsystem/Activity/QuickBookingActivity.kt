@@ -154,7 +154,9 @@ class QuickBookingActivity : AppCompatActivity() {
 
         add_more_attendees = findViewById(R.id.add_more_attendees)
         add_more_attendees.setOnClickListener {
-            addAttendeesLine()
+            if(etIdDynamic <2 ) {
+                addAttendeesLine()
+            }
         }
 
         remove_attendees = findViewById(R.id.remove_attendees)
@@ -206,6 +208,9 @@ class QuickBookingActivity : AppCompatActivity() {
 
     private fun getAllAttendees(){
 //        attendeesEmailETList!!.size
+        try {
+            emailList?.clear()
+        }catch (e : Exception){}
         val size = (layout_attendees_email.size)
 
         for (x in 1 until size ){
@@ -248,7 +253,7 @@ class QuickBookingActivity : AppCompatActivity() {
         val end_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
         val start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
         val end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
-        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), et_attendees_email.text.toString())
+        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), et_attendees_email.text.toString().trim())
 
         val requestBodyMap = HashMap<String, RequestBody>()
         requestBodyMap["location"] = location
@@ -262,7 +267,7 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["attendees_email[0]"] = attendees_email
         val size = emailList!!.size
         for( x in 0 until size ){
-            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![0])
+            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![0].trim())
             requestBodyMap["attendees_email[${x+1}]"] = attendees_emails
         }
 
@@ -279,14 +284,28 @@ class QuickBookingActivity : AppCompatActivity() {
             ) {
                 GlobalVal.networkLogging("submitData onResponse",response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
-                    Handler().postDelayed({
+                    if( response.body().data != null || response.body().ok == 1) {
+                        Handler().postDelayed({
+                            dialog?.dismiss()
+                            Toast.makeText(
+                                this@QuickBookingActivity,
+                                "Booking Success",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            finish()
+                            startActivity(
+                                Intent(
+                                    this@QuickBookingActivity,
+                                    RootActivity::class.java
+                                ).setFlags(
+                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                )
+                            )
+                        }, 1000)
+                    }else if( response.body().data == null || response.body().ok == 0){
                         dialog?.dismiss()
-                        Toast.makeText(this@QuickBookingActivity,"Booking Success", Toast.LENGTH_LONG).show()
-                        finish()
-                        startActivity(
-                            Intent(this@QuickBookingActivity, RootActivity::class.java).setFlags(
-                                Intent.FLAG_ACTIVITY_SINGLE_TOP))
-                    },1000)
+                        Toast.makeText(this@QuickBookingActivity,"Booking Failed, Please choose another time", Toast.LENGTH_LONG).show()
+                    }
                 }else{
                     dialog?.dismiss()
                     Toast.makeText(this@QuickBookingActivity,"Booking Failed", Toast.LENGTH_LONG).show()

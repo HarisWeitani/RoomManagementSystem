@@ -199,13 +199,11 @@ class MainActivity : AppCompatActivity(),
 
     override fun onPause() {
         super.onPause()
-        Handler().removeCallbacksAndMessages(null)
         GlobalVal.isMainActivityStarted = false
     }
 
     override fun onResume() {
         super.onResume()
-        Handler().removeCallbacksAndMessages(null)
         GlobalVal.isMainActivityStarted = true
         GlobalVal.isSurveyShowed = false
     }
@@ -306,7 +304,7 @@ class MainActivity : AppCompatActivity(),
         val timeFormat = SimpleDateFormat("HH:mm")
         val timeEndOld = DAO.currentMeeting?.data?.end_dateTime
         val timeConv = timeFormat.parse(timeEndOld)
-        val subs = ( timeConv.time + (15*60*1000) )
+        val subs = ( timeConv.time + (newTime*60*1000) )
         val timeEndNew = timeFormat.format(subs)+":00"
 
         var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
@@ -321,7 +319,8 @@ class MainActivity : AppCompatActivity(),
         apiService!!.googleExtendEvent(requestBodyMap).enqueue(object : Callback<ResponseExtendEvent>{
             override fun onFailure(call: Call<ResponseExtendEvent>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_LONG).show()
+                loadingDialog?.dismiss()
+                Toast.makeText(this@MainActivity,"Extend Time Failed, Format Data", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -330,13 +329,20 @@ class MainActivity : AppCompatActivity(),
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 && response.body() != null ){
-                    loadingDialog?.dismiss()
-                    finish()
-                    startActivity(
-                        Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                    if(response.body().ok == 1) {
+                        loadingDialog?.dismiss()
+                        finish()
+                        startActivity(
+                            Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            )
+                        )
+                    }else{
+                        loadingDialog?.dismiss()
+                        Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_LONG).show()
+                    }
                 }else{
-                    Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity,"Extend Time Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -363,10 +369,12 @@ class MainActivity : AppCompatActivity(),
             runOnUiThread {
                 GlobalVal.isSurveyShowed = true
                 showDialogSurvey()
-                Log.d("timeStampSurvey","Start ${timeIterval*60*1000}")
+                Log.d("timeStampSurvey","Start ${(timeIterval-1)*60*1000}")
                 Handler().postDelayed({
                     Log.d("timeStampSurvey","End")
-                    autoCheckOut()
+                    try {
+                        autoCheckOut()
+                    }catch (e:Exception){Crashlytics.logException(e)}
                 }, (timeIterval*60*1000).toLong())
             }
         }
@@ -381,7 +389,7 @@ class MainActivity : AppCompatActivity(),
 
         apiService!!.autoCheckOut(requestBodyMap).enqueue(object : Callback<ResponseCheckOut>{
             override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
-                Toast.makeText(this@MainActivity,"Checkout Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,"Checkout Failed, Format Data", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -392,7 +400,7 @@ class MainActivity : AppCompatActivity(),
                     surveyDialogViewed = true
                     surveyDialogShowed = false
                     loadingDialog?.dismiss()
-                    Toast.makeText(this@MainActivity, "Checkout Success", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@MainActivity, "Checkout Success, Response Null", Toast.LENGTH_SHORT)
                         .show()
                     finish()
                     startActivity(
@@ -554,7 +562,7 @@ class MainActivity : AppCompatActivity(),
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 loadingDialog?.dismiss()
-                Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,"Get Event Failed, Format Data", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -570,7 +578,7 @@ class MainActivity : AppCompatActivity(),
                     loadingDialog?.dismiss()
                 }else{
                     loadingDialog?.dismiss()
-                    Toast.makeText(this@MainActivity,"Get Event Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity,"Get Event Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -693,7 +701,7 @@ class MainActivity : AppCompatActivity(),
 
         apiService!!.addSurvey(requestBodyMap).enqueue(object : Callback<ResponseSurvey>{
             override fun onFailure(call: Call<ResponseSurvey>?, t: Throwable?) {
-                Toast.makeText(this@MainActivity,"Send Survey Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,"Send Survey Failed, Format Data", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -722,7 +730,7 @@ class MainActivity : AppCompatActivity(),
 
         apiService!!.manualCheckOut(requestBodyMap).enqueue(object : Callback<ResponseCheckOut>{
             override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
-                Toast.makeText(this@MainActivity,"Checkout Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,"Checkout Failed, Format Data", Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
@@ -823,18 +831,17 @@ class MainActivity : AppCompatActivity(),
     private fun refreshMeetingStatus(){
         Handler().postDelayed({
             Log.d("handler_testing", " GET IT ")
-            if( !GlobalVal.isSurveyShowed ) {
-                getNextMeeting()
-                getCurrentMeeting()
-                if (isGetCurrentMeeting && GlobalVal.isMainActivityStarted) {
-                    try {
-                        checkIfSurveyTimeToShow()
-                    } catch (e: Exception) {
-                        Crashlytics.logException(e)
-                    }
+
+            getNextMeeting()
+            getCurrentMeeting()
+            if (isGetCurrentMeeting && GlobalVal.isMainActivityStarted) {
+                try {
+                    checkIfSurveyTimeToShow()
+                } catch (e: Exception) {
+                    Crashlytics.logException(e)
                 }
-                refreshMeetingStatus()
             }
+            refreshMeetingStatus()
         },60000)
     }
 
@@ -847,7 +854,7 @@ class MainActivity : AppCompatActivity(),
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getNextMeeting",t.toString())
-                Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,"get Next Meeting Failed, Format Data", Toast.LENGTH_LONG).show()
                 isGetNextMeeting = false
             }
 
@@ -862,7 +869,7 @@ class MainActivity : AppCompatActivity(),
                     initBottomScheduleViewPager()
                 }else{
                     isGetNextMeeting = false
-                    Toast.makeText(this@MainActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity,"get Next Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -876,7 +883,7 @@ class MainActivity : AppCompatActivity(),
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getCurrentMeeting",t.toString())
-                Toast.makeText(this@MainActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,"get On Meeting Failed, Format Data", Toast.LENGTH_LONG).show()
                 isGetCurrentMeeting = false
             }
             override fun onResponse(
@@ -900,11 +907,13 @@ class MainActivity : AppCompatActivity(),
                     }
                 }else{
                     isGetCurrentMeeting = false
-                    Toast.makeText(this@MainActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity,"get On Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
         })
     }
 
+    override fun onBackPressed() {
 
+    }
 }

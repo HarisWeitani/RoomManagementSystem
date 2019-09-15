@@ -158,13 +158,11 @@ class RootActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Handler().removeCallbacksAndMessages(null)
         initApp()
     }
 
     override fun onPause() {
         super.onPause()
-        Handler().removeCallbacksAndMessages(null)
         isGetConfig = false
         isGetRunningText = false
         isGetNextMeeting = false
@@ -235,7 +233,8 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
             override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getConfig",t.toString())
-                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Running Text Failed, Format Data", Toast.LENGTH_LONG).show()
+                getConfig()
                 isGetConfig = false
             }
             override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
@@ -246,7 +245,7 @@ class RootActivity : AppCompatActivity() {
                     isGetConfig = DAO.configData != null
                 }else{
                     isGetConfig = false
-                    Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RootActivity,"get Running Text Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -255,7 +254,8 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getRunningText().enqueue(object : Callback<List<ResponseGetRunningText>>{
             override fun onFailure(call: Call<List<ResponseGetRunningText>>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getRunningText",t.toString())
-                Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Running Text Failed, Format Data", Toast.LENGTH_LONG).show()
+                getRunningText()
                 isGetRunningText = false
             }
 
@@ -269,7 +269,7 @@ class RootActivity : AppCompatActivity() {
                     isGetRunningText = DAO.runningText != null
                 }else{
                     isGetRunningText = false
-                    Toast.makeText(this@RootActivity,"get Running Text Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RootActivity,"get Running Text Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -285,7 +285,8 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getNextMeeting",t.toString())
-                Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Next Meeting Failed, Format Data", Toast.LENGTH_LONG).show()
+                getNextMeeting()
                 isGetNextMeeting = false
             }
 
@@ -299,7 +300,7 @@ class RootActivity : AppCompatActivity() {
                     isGetNextMeeting = DAO.nextMeeting != null
                 }else{
                     isGetNextMeeting = false
-                    Toast.makeText(this@RootActivity,"get Next Meeting Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RootActivity,"get Next Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -313,7 +314,8 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getCurrentMeeting",t.toString())
-                Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get On Meeting Failed, Format data", Toast.LENGTH_LONG).show()
+                getCurrentMeeting()
                 isGetCurrentMeeting = false
             }
 
@@ -327,7 +329,7 @@ class RootActivity : AppCompatActivity() {
                     isGetCurrentMeeting = DAO.currentMeeting != null
                 }else{
                     isGetCurrentMeeting = false
-                    Toast.makeText(this@RootActivity,"get On Meeting Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RootActivity,"get On Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -339,7 +341,8 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getNews().enqueue(object : Callback<ResponseNews> {
             override fun onFailure(call: Call<ResponseNews>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getNewsData",t.toString())
-                Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get News Failed, Format Data", Toast.LENGTH_LONG).show()
+                getNewsData()
                 isGetNewsData = false
             }
 
@@ -352,7 +355,7 @@ class RootActivity : AppCompatActivity() {
                     DAO.newsFeed = response.body()
                     isGetNewsData = DAO.newsFeed != null
                 }else{
-                    Toast.makeText(this@RootActivity,"get News Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RootActivity,"get News Failed, Response Null", Toast.LENGTH_LONG).show()
                     isGetNewsData = false
                 }
             }
@@ -365,7 +368,8 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getSlideShowData().enqueue(object : Callback<ResponseSlideShowData>{
             override fun onFailure(call: Call<ResponseSlideShowData>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getSlideShowData",t.toString())
-                Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Slide Show Failed, Format Data", Toast.LENGTH_LONG).show()
+                getSlideShowData()
                 isGetSlideShowData = false
             }
             override fun onResponse(call: Call<ResponseSlideShowData>?, response: Response<ResponseSlideShowData>?) {
@@ -399,7 +403,7 @@ class RootActivity : AppCompatActivity() {
                     }
                 }else{
                     isGetSlideShowData = false
-                    Toast.makeText(this@RootActivity,"get Slide Show Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RootActivity,"get Slide Show Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -457,4 +461,7 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+
+    }
 }
