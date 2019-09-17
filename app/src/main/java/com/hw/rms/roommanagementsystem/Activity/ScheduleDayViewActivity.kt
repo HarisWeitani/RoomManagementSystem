@@ -191,10 +191,11 @@ class ScheduleDayViewActivity : AppCompatActivity() {
 
     private fun initDateTime(){
         val date = Date()
+        val df = SimpleDateFormat("dd MMMM yyyy")
         val clockFormat = SimpleDateFormat("HH:mm")
         runOnUiThread{
-            tv_date.text = dateFormat.format(date)
-            calendarTitle.text = dateFormat.format(date)
+            tv_date.text = df.format(date)
+            calendarTitle.text = df.format(date)
             tv_clock.text = clockFormat.format(date)
         }
         Handler().postDelayed({
