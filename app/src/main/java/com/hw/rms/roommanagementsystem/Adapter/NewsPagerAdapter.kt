@@ -54,9 +54,9 @@ class NewsPagerAdapter(internal var newsListLeft: List<DataNews>, internal var n
         tv_news_title_right.text = newsListRight[position].newsfeed_title
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tv_news_content_left.text = Html.fromHtml(newsListRight[position].newsfeed_content, Html.FROM_HTML_MODE_COMPACT)
+            tv_news_content_right.text = Html.fromHtml(newsListRight[position].newsfeed_content, Html.FROM_HTML_MODE_COMPACT)
         } else {
-            tv_news_content_left.text = Html.fromHtml(newsListRight[position].newsfeed_content)
+            tv_news_content_right.text = Html.fromHtml(newsListRight[position].newsfeed_content)
         }
 
         container.addView(itemView)

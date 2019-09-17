@@ -111,7 +111,7 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkConnection(){
+/*    private fun checkConnection(){
         NetworkConnection(this).execute()
         Handler().postDelayed({
             if( GlobalVal.isNetworkConnected ){
@@ -121,7 +121,7 @@ class RootActivity : AppCompatActivity() {
                 waitingForNetwork()
             }
         },500)
-    }
+    }*/
 
     private fun waitingForNetwork(){
         startActivity(Intent(this@RootActivity,NoConnectionActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))

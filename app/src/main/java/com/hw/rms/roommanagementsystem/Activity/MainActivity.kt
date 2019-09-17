@@ -419,12 +419,22 @@ class MainActivity : AppCompatActivity(),
         }catch (e : Exception){
             Crashlytics.logException(e)
         }
-        for ( i in 0 until newsSize){
-            if( i % 2 == 0){
-                newsListLeft.add(DAO.newsFeed!!.data!![i]!!)
-            }else{
-                newsListRight.add(DAO.newsFeed!!.data!![i]!!)
+        if( newsSize > 0 ) {
+            for (i in 0 until newsSize) {
+                if (i % 2 == 0) {
+                    newsListLeft.add(DAO.newsFeed!!.data!![i]!!)
+                } else {
+                    newsListRight.add(DAO.newsFeed!!.data!![i]!!)
+                }
             }
+
+            val isRightNewsNull = newsSize % 2 != 0
+            if( isRightNewsNull ){
+                newsListRight.add(DataNews())
+            }
+        }else{
+            newsListLeft.add(DataNews())
+            newsListRight.add(DataNews())
         }
 
         newsPagerAdapter = NewsPagerAdapter( newsListLeft, newsListRight,this )
@@ -547,7 +557,7 @@ class MainActivity : AppCompatActivity(),
 
         btnBookNow.setOnClickListener {
             finish()
-            startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java))
+            startActivity(Intent(this@MainActivity,QuickBookingActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
         }
 
     }

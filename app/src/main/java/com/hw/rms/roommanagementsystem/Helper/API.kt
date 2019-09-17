@@ -99,7 +99,7 @@ interface API {
             val client = OkHttpClient.Builder().addInterceptor(interceptor)
                 .connectTimeout(60,TimeUnit.SECONDS)
                 .build()
-
+            //try catch ini
             val retrofit = Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .client(client)

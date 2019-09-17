@@ -33,6 +33,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
+import kotlin.math.roundToInt
 
 
 class ScheduleDayViewActivity : AppCompatActivity() {
@@ -63,6 +64,8 @@ class ScheduleDayViewActivity : AppCompatActivity() {
     var prevMeetingTotalFrame : Int = 0
     var isPrevMeetingClash : Boolean = false
 
+    var screenScale : Float = 1.0f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_day_view)
@@ -80,9 +83,12 @@ class ScheduleDayViewActivity : AppCompatActivity() {
         tv_clock = findViewById(R.id.tv_clock)
         tv_date = findViewById(R.id.tv_date)
         tv_no_meeting = findViewById(R.id.tv_no_meeting)
-
+        try {
+            screenScale = resources.displayMetrics.density
+        }catch (e : Exception){Crashlytics.logException(e)}
         dayViewLayout = findViewById(R.id.left_event_column)
         displayDailyEvents()
+
         calendarTitle = calendar_title
 //        calendarContent = calendar_content
         apiService = API.networkApi()
@@ -161,20 +167,20 @@ class ScheduleDayViewActivity : AppCompatActivity() {
         var mEventView = TextView(this)
         var lParam = RelativeLayout.LayoutParams(200, LinearLayout.LayoutParams.WRAP_CONTENT)
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-        lParam.topMargin = topMargin * 2
+        lParam.topMargin = ((topMargin * 2) * screenScale).roundToInt()
         if( isMeetingClash && !isPrevMeetingClash){
             isPrevMeetingClash = true
-            lParam.leftMargin = 240
+            lParam.leftMargin = (240 * screenScale).roundToInt()
         }else if ( isMeetingClash && isPrevMeetingClash){
             isPrevMeetingClash = false
-            lParam.leftMargin = 24
+            lParam.leftMargin = (24 * screenScale).roundToInt()
         }
         else{
-            lParam.leftMargin = 24
+            lParam.leftMargin = (24 * screenScale).roundToInt()
         }
         mEventView.layoutParams = lParam
         mEventView.setPadding(12, 0, 12, 0)
-        mEventView.height = height * 2
+        mEventView.height = ((height * 2) * screenScale).roundToInt()
         mEventView.setTextColor(Color.parseColor("#ffffff"))
         mEventView.text = message
         mEventView.background = ContextCompat.getDrawable(this,R.drawable.text_view_box)
