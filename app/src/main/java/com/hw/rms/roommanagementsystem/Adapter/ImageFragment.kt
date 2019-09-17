@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.hw.rms.roommanagementsystem.Activity.MainActivity
 import com.hw.rms.roommanagementsystem.Helper.DAO
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 
 import com.hw.rms.roommanagementsystem.R
 import java.lang.Exception
@@ -27,8 +28,11 @@ class ImageFragment : Fragment() {
     private var mListener: OnFragmentInteractionListener? = null
 
     lateinit var image_view : ImageView
+    var isStarted = false
+    var isViewVisible = false
+    var runnable : Runnable? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+        override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
             imageName = arguments!!.getString(ARG_PARAM1)
@@ -76,17 +80,45 @@ class ImageFragment : Fragment() {
         mListener = null
     }
 
+    override fun onStart() {
+        super.onStart()
+        isStarted = true
+
+        viewDidAppear()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isStarted = false
+
+        viewDidAppear()
+    }
+
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
+        runnable = Runnable {
+            MainActivity.instance.setNextImageVideoPager(
+                isVideoComplete = false,
+                isFromImage = true
+            )
+        }
         try {
             duration = DAO.slideShowData?.duration!!.toLong()
         }catch (e : Exception){}
-        if( isVisibleToUser ) {
-            Handler().postDelayed({
-                MainActivity.instance.setNextImageVideoPager()
-            }, duration)
-        }
+        isViewVisible = isVisibleToUser
+        viewDidAppear()
         Log.d("ahsiap", "Is Image Visible To User $isVisibleToUser")
+    }
+
+    fun viewDidAppear(){
+        if(isStarted && isViewVisible){
+            try {
+                GlobalVal.isVideoStarted = false
+                Handler().postDelayed(runnable, duration)
+            }catch (e : Exception){}
+        }else{
+            Handler().removeCallbacks(runnable)
+        }
     }
 
     interface OnFragmentInteractionListener {

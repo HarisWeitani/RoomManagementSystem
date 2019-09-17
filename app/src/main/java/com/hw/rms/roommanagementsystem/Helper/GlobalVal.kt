@@ -29,6 +29,8 @@ class GlobalVal {
         var isMainActivityStarted : Boolean = false
         var isSurveyShowed: Boolean = false
 
+        var isVideoStarted: Boolean = false
+
 
         fun networkLogging(tag : String, result : String){
             Log.d(NETWORK_TAG, "$tag = $result")

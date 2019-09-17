@@ -332,8 +332,8 @@ class AdminSettingActivity : AppCompatActivity() {
 
         btn_try_serverconn.setOnClickListener {
             if( et_server_url.text.length > 10 ){
-//                  "http://103.82.242.195/room_management_system/"
-                API.serverUrl = "$serverProtocol://${et_server_url.text}/room_management_system/"
+//                API.serverUrl = "$serverProtocol://${et_server_url.text}/room_management_system/"
+                API.serverUrl = "$serverProtocol://${et_server_url.text}/"
                 serverUrl = et_server_url.text.toString()
                 connectServer()
             }else{

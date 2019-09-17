@@ -158,7 +158,6 @@ class RootActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        initApp()
     }
 
     override fun onPause() {

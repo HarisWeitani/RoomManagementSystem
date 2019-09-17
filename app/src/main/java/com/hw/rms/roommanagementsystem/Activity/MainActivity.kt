@@ -497,11 +497,15 @@ class MainActivity : AppCompatActivity(),
         return f.exists()
     }
 
-    fun setNextImageVideoPager(){
-        if ( vPager.currentItem  < imageVideoList.size-1 ) {
-            vPager.currentItem++
-        }else{
-            vPager.currentItem = 0
+    fun setNextImageVideoPager(isVideoComplete : Boolean, isFromImage : Boolean){
+        if( GlobalVal.isVideoStarted && !isVideoComplete && isFromImage){
+
+        }else {
+            if (vPager.currentItem < imageVideoList.size - 1) {
+                vPager.currentItem++
+            } else {
+                vPager.currentItem = 0
+            }
         }
     }
 

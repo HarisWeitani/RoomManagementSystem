@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.VideoView
 import com.hw.rms.roommanagementsystem.Activity.MainActivity
+import com.hw.rms.roommanagementsystem.Helper.GlobalVal
 
 import com.hw.rms.roommanagementsystem.R
 import java.lang.Exception
@@ -22,6 +23,8 @@ class VideoFragment : Fragment() {
     private var mListener: OnFragmentInteractionListener? = null
 
     lateinit var video_view : VideoView
+    var isStarted = false
+    var isViewVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +41,11 @@ class VideoFragment : Fragment() {
         val v =inflater.inflate(R.layout.fragment_video, container, false)
         video_view = v.findViewById(R.id.video_view)
         video_view.setOnCompletionListener {
-            MainActivity.instance.setNextImageVideoPager()
+            GlobalVal.isVideoStarted = false
+            MainActivity.instance.setNextImageVideoPager(
+                isVideoComplete = true,
+                isFromImage = false
+            )
         }
         return v
     }
@@ -47,6 +54,17 @@ class VideoFragment : Fragment() {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(uri)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isStarted = true
+        viewDidAppear()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isStarted = false
     }
 
     override fun onAttach(context: Context?) {
@@ -66,15 +84,28 @@ class VideoFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if ( isVisibleToUser ) {
-            video_view.setVideoPath("$videoUrl/$videoName")
-            video_view.start()
+            isViewVisible = true
+            viewDidAppear()
         }
         else {
+            isViewVisible = false
             try {
                 video_view.stopPlayback()
             }catch ( e : Exception ){}
         }
         Log.d("ahsiap", "Is Video Visible To User $isVisibleToUser")
+    }
+
+    fun viewDidAppear(){
+        if(isStarted && isViewVisible){
+            try {
+                video_view.setVideoPath("$videoUrl/$videoName")
+                video_view.start()
+                GlobalVal.isVideoStarted = true
+            }catch (e : Exception){}
+        }else{
+            GlobalVal.isVideoStarted = false
+        }
     }
 
     interface OnFragmentInteractionListener {
