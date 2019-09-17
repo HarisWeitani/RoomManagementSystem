@@ -91,6 +91,10 @@ class QuickBookingActivity : AppCompatActivity() {
         et_summary = findViewById(R.id.et_summary)
 
         tv_booking_date = findViewById(R.id.tv_booking_date)
+        //default
+        tv_booking_date.text = dateFormat.format(cal.time)
+        tv_booking_date.setTextColor(Color.WHITE)
+
         tv_booking_date.setOnClickListener {
             val limit = Calendar.getInstance()
             val now = Calendar.getInstance()
@@ -134,8 +138,10 @@ class QuickBookingActivity : AppCompatActivity() {
 
         tv_booking_time_end = findViewById(R.id.tv_booking_time_end)
         tv_booking_time_end.setOnClickListener {
-            val hour = cal.get(Calendar.HOUR_OF_DAY)
-            val minute = cal.get(Calendar.MINUTE)
+            val timeEnd = Calendar.getInstance()
+            timeEnd.add(Calendar.MINUTE,30)
+            val hourEnd = timeEnd.get(Calendar.HOUR_OF_DAY)
+            val minuteEnd = timeEnd.get(Calendar.MINUTE)
             TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
 
                 tv_booking_time_end.setTextColor(Color.WHITE)
@@ -149,7 +155,7 @@ class QuickBookingActivity : AppCompatActivity() {
 
                 tv_booking_time_end.text = "$hour:$min"
 
-            },hour,minute,true).show()
+            },hourEnd,minuteEnd,true).show()
         }
 
         add_more_attendees = findViewById(R.id.add_more_attendees)
@@ -184,6 +190,38 @@ class QuickBookingActivity : AppCompatActivity() {
         tv_clock = findViewById(R.id.tv_clock)
         tv_date = findViewById(R.id.tv_date)
         initDateTime()
+
+        setDefaultTimeBooking()
+    }
+
+    fun setDefaultTimeBooking(){
+        val timeNow = Calendar.getInstance()
+        var hour = timeNow.get(Calendar.HOUR_OF_DAY)
+        var minute = timeNow.get(Calendar.MINUTE)
+
+        var hourString = ""
+        var minuteString = ""
+
+        if( hour < 10) hourString = "0$hour"
+        else hourString = "$hour"
+        if( minute < 10 ) minuteString = "0$minute"
+        else minuteString = "$minute"
+
+        tv_booking_time_start.setTextColor(Color.WHITE)
+        tv_booking_time_start.text = "$hourString:$minuteString"
+
+        val timeEnd = Calendar.getInstance()
+        timeEnd.add(Calendar.MINUTE,30)
+        val hourEnd = timeEnd.get(Calendar.HOUR_OF_DAY)
+        val minuteEnd = timeEnd.get(Calendar.MINUTE)
+
+        if( hourEnd < 10) hourString = "0$hourEnd"
+        else hourString = "$hourEnd"
+        if( minuteEnd < 10 ) minuteString = "0$minuteEnd"
+        else minuteString = "$minuteEnd"
+
+        tv_booking_time_end.setTextColor(Color.WHITE)
+        tv_booking_time_end.text = "$hourString:$minuteString"
     }
 
     private fun addAttendeesLine(){
@@ -267,7 +305,7 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["attendees_email[0]"] = attendees_email
         val size = emailList!!.size
         for( x in 0 until size ){
-            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![0].trim())
+            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![x].trim())
             requestBodyMap["attendees_email[${x+1}]"] = attendees_emails
         }
 

@@ -50,6 +50,7 @@ class RootActivity : AppCompatActivity() {
     var isGetCurrentMeeting: Boolean = false
     var isGetNewsData: Boolean = false
     var isGetSlideShowData: Boolean = false
+    var checkMandatoryCtr = 0
 
     var isAPIError: Boolean = false
 
@@ -168,6 +169,7 @@ class RootActivity : AppCompatActivity() {
         isGetCurrentMeeting = false
         isGetNewsData = false
         isGetSlideShowData = false
+        checkMandatoryCtr = 0
     }
 
     private fun checkMandatoryData(){
@@ -193,6 +195,7 @@ class RootActivity : AppCompatActivity() {
             Handler().postDelayed({
                 if(!GlobalVal.isMainActivityStarted) {
                     checkMandatoryData()
+                    checkMandatoryCtr++
                 }
             },5000)
         }
@@ -232,7 +235,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getConfigData().enqueue(object : Callback<ResponseConfig>{
             override fun onFailure(call: Call<ResponseConfig>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getConfig",t.toString())
-                Toast.makeText(this@RootActivity,"get Running Text Failed, Format Data", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Running Text Failed, Time Out", Toast.LENGTH_LONG).show()
                 getConfig()
                 isGetConfig = false
             }
@@ -253,7 +256,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getRunningText().enqueue(object : Callback<List<ResponseGetRunningText>>{
             override fun onFailure(call: Call<List<ResponseGetRunningText>>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getRunningText",t.toString())
-                Toast.makeText(this@RootActivity,"get Running Text Failed, Format Data", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Running Text Failed, Time Out", Toast.LENGTH_LONG).show()
                 getRunningText()
                 isGetRunningText = false
             }
@@ -284,7 +287,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getNextMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetNextMeeting>{
             override fun onFailure(call: Call<ResponseGetNextMeeting>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getNextMeeting",t.toString())
-                Toast.makeText(this@RootActivity,"get Next Meeting Failed, Format Data", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Next Meeting Failed, Time Out", Toast.LENGTH_LONG).show()
                 getNextMeeting()
                 isGetNextMeeting = false
             }
@@ -313,7 +316,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getCurrentMeeting(requestBodyMap).enqueue(object : Callback<ResponseGetCurrentMeeting>{
             override fun onFailure(call: Call<ResponseGetCurrentMeeting>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getCurrentMeeting",t.toString())
-                Toast.makeText(this@RootActivity,"get On Meeting Failed, Format data", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get On Meeting Failed, Time Out", Toast.LENGTH_LONG).show()
                 getCurrentMeeting()
                 isGetCurrentMeeting = false
             }
@@ -340,7 +343,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getNews().enqueue(object : Callback<ResponseNews> {
             override fun onFailure(call: Call<ResponseNews>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getNewsData",t.toString())
-                Toast.makeText(this@RootActivity,"get News Failed, Format Data", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get News Failed, Time Out", Toast.LENGTH_LONG).show()
                 getNewsData()
                 isGetNewsData = false
             }
@@ -367,7 +370,7 @@ class RootActivity : AppCompatActivity() {
         apiService!!.getSlideShowData().enqueue(object : Callback<ResponseSlideShowData>{
             override fun onFailure(call: Call<ResponseSlideShowData>?, t: Throwable?) {
                 GlobalVal.networkLogging("onFailure getSlideShowData",t.toString())
-                Toast.makeText(this@RootActivity,"get Slide Show Failed, Format Data", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@RootActivity,"get Slide Show Failed, Time Out", Toast.LENGTH_LONG).show()
                 getSlideShowData()
                 isGetSlideShowData = false
             }
@@ -437,10 +440,10 @@ class RootActivity : AppCompatActivity() {
             .start(object : OnDownloadListener {
                 override fun onError(error: Error?) {
                     //error 0 kalau ditengah jalan inet putus
-                    if( error?.responseCode == 0 ){
-                        GlobalVal.isNetworkConnected = false
-                        waitingForNetwork()
-                    }
+//                    if( error?.responseCode == 0 ){
+//                        GlobalVal.isNetworkConnected = false
+//                        waitingForNetwork()
+//                    }
                     GlobalVal.networkLogging("onError fileDownloader","${error?.responseCode} $url $fileName")
                     downloadFinish()
                 }
