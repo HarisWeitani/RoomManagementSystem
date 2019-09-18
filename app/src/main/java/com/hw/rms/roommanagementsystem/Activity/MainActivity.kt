@@ -360,7 +360,6 @@ class MainActivity : AppCompatActivity(),
         }catch (e : Exception){
             Crashlytics.logException(e)
         }
-        timeInterval = 2
         var showTime = (endTime.time - ( timeInterval*60*1000) )
 
         var nowTime = dateFormat.parse(dateFormat.format(Date()))
@@ -787,7 +786,6 @@ class MainActivity : AppCompatActivity(),
                     }catch (e : Exception){
                         Crashlytics.logException(e)
                     }
-                    timeInterval = 2
                     Log.d("timeStampSurvey","Start ${timeInterval*60*1000}")
                     Handler().postDelayed({
                         Log.d("timeStampSurvey","End")
