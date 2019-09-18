@@ -334,9 +334,7 @@ class MainActivity : AppCompatActivity(),
                         loadingDialog?.dismiss()
                         finish()
                         startActivity(
-                            Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                                Intent.FLAG_ACTIVITY_SINGLE_TOP
-                            )
+                            Intent(this@MainActivity, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
                     }else{
                         loadingDialog?.dismiss()
@@ -963,9 +961,7 @@ class MainActivity : AppCompatActivity(),
                             GlobalVal.isSurveyShowed = false
                             finish()
                             startActivity(
-                                Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                )
+                                Intent(this@MainActivity, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             )
                         }
                     }

@@ -71,11 +71,6 @@ class RootActivity : AppCompatActivity() {
         tv_error_api = findViewById(R.id.tv_error_api)
         tv_error_api.visibility = View.GONE
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ) {
-            checkPermission()
-        }else{
-            startActivity()
-        }
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
 
@@ -162,6 +157,11 @@ class RootActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ) {
+            checkPermission()
+        }else{
+            startActivity()
+        }
     }
 
     override fun onPause() {
@@ -192,7 +192,7 @@ class RootActivity : AppCompatActivity() {
                         Intent(
                             this@RootActivity,
                             MainActivity::class.java
-                        ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     )
                 }
             }
