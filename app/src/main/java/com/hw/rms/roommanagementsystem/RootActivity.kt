@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.crashlytics.android.Crashlytics
 import com.downloader.Error
 import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.MainActivity
@@ -31,6 +32,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.lang.Exception
 
 class RootActivity : AppCompatActivity() {
 
@@ -50,6 +52,7 @@ class RootActivity : AppCompatActivity() {
     var isGetCurrentMeeting: Boolean = false
     var isGetNewsData: Boolean = false
     var isGetSlideShowData: Boolean = false
+    var isDownloadFinish: Boolean = false
     var checkMandatoryCtr = 0
 
     var isAPIError: Boolean = false
@@ -178,7 +181,9 @@ class RootActivity : AppCompatActivity() {
                 isGetNextMeeting &&
                 isGetCurrentMeeting &&
                 isGetNewsData &&
-                isGetSlideShowData ){
+                isGetSlideShowData &&
+                isDownloadFinish
+        ){
             if( isAPIError ){
                 tv_error_api.visibility = View.VISIBLE
             }else {
@@ -382,6 +387,7 @@ class RootActivity : AppCompatActivity() {
                     isGetSlideShowData = DAO.slideShowData != null
                     //compare ke DB dlu
                     if( DAO.slideShowData!!.data!!.isNotEmpty() ) {
+
                         for (x in 0 until DAO.slideShowData!!.data!!.size){
 
                             val dataTemp = DAO.slideShowData!!.data!![x]
@@ -401,9 +407,12 @@ class RootActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        if( !isDownload ) startActivity()
+                        if( !isDownload ) {
+                            downloadFinish()
+                        }
                     }
                 }else{
+                    isDownloadFinish = true
                     isGetSlideShowData = false
                     Toast.makeText(this@RootActivity,"get Slide Show Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -420,13 +429,14 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun fileDownloader(url : String, fileName : String){
-        downloadCtr ++
+
         progressBar.visibility = View.VISIBLE
         val dirPath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath).toString()
         PRDownloader.initialize(applicationContext)
         PRDownloader.download(url, dirPath, fileName)
             .build()
             .setOnStartOrResumeListener {
+                downloadCtr++
                 GlobalVal.networkLogging("setOnStartOrResumeListener fileDownloader","$fileName")
             }
             .setOnProgressListener {
@@ -456,10 +466,9 @@ class RootActivity : AppCompatActivity() {
     }
     private fun downloadFinish(){
         downloadCtr --
-        if( downloadCtr == 0 ){
-            Handler().postDelayed({
-                startActivity()
-            },500)
+        if( downloadCtr <= 0 && isGetSlideShowData ){
+            isDownloadFinish = true
+            startActivity()
         }
     }
 

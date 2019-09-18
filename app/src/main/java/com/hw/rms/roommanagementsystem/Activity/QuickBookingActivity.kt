@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.size
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.hw.rms.roommanagementsystem.Data.ResponseAddEvent
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
@@ -25,6 +27,7 @@ import com.hw.rms.roommanagementsystem.R
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -335,9 +338,7 @@ class QuickBookingActivity : AppCompatActivity() {
                                 Intent(
                                     this@QuickBookingActivity,
                                     RootActivity::class.java
-                                ).setFlags(
-                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                )
+                                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             )
                         }, 1000)
                     }else if( response.body().data == null || response.body().ok == 0){

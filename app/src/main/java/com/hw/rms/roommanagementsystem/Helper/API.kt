@@ -5,19 +5,18 @@ import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import com.hw.rms.roommanagementsystem.Data.*
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.PartMap
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface API {
@@ -49,6 +48,9 @@ interface API {
     @Multipart
     @POST("google/booking/add_event")
     fun googleAddEvent(@PartMap params : Map<String, @JvmSuppressWildcards RequestBody>) : Call<ResponseAddEvent>
+
+/*    @POST("google/booking/add_event")
+    fun googleAddEvent(@Body data : JsonObject) : Call<ResponseBody>*/
 
     @Multipart
     @POST("google/booking/extend_event")

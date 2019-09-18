@@ -165,7 +165,7 @@ class ScheduleDayViewActivity : AppCompatActivity() {
     private fun createEventView(topMargin : Int, height : Int, message : String, isMeetingClash : Boolean){
 
         var mEventView = TextView(this)
-        var lParam = RelativeLayout.LayoutParams(200, LinearLayout.LayoutParams.WRAP_CONTENT)
+        var lParam = RelativeLayout.LayoutParams((200*screenScale).roundToInt(), LinearLayout.LayoutParams.WRAP_CONTENT)
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP)
         lParam.topMargin = ((topMargin * 2) * screenScale).roundToInt()
         if( isMeetingClash && !isPrevMeetingClash){
