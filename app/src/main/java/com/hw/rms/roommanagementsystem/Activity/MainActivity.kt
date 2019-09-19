@@ -155,6 +155,13 @@ class MainActivity : AppCompatActivity(),
         if( !GlobalVal.isRefreshMeetingStatus ) {
             Log.d("timeStampSurvey", "Start refreshMeetingStatus")
             refreshMeetingStatus()
+        }else{
+            Handler().postDelayed({
+                if( !GlobalVal.isRefreshMeetingStatus ) {
+                    Log.d("timeStampSurvey", "ReStart refreshMeetingStatus")
+                    refreshMeetingStatus()
+                }
+            },75000)
         }
     }
 
@@ -873,8 +880,8 @@ class MainActivity : AppCompatActivity(),
      */
 
     private fun refreshMeetingStatus(){
+        GlobalVal.isRefreshMeetingStatus = true
         Handler().postDelayed({
-            GlobalVal.isRefreshMeetingStatus = true
             getNextMeeting()
             getCurrentMeeting()
             Log.d("timeStampSurvey","refreshMeetingStatus $isGetCurrentMeeting | ${GlobalVal.isMainActivityStarted}")
