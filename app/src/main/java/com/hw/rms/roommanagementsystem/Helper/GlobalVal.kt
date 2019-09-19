@@ -30,6 +30,7 @@ class GlobalVal {
         var isSurveyShowed: Boolean = false
 
         var isVideoStarted: Boolean = false
+        var isRefreshMeetingStatus: Boolean = false
 
 
         fun networkLogging(tag : String, result : String){

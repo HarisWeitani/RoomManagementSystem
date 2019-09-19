@@ -151,7 +151,11 @@ class MainActivity : AppCompatActivity(),
         initButtonListener()
         initImageVideoPager()
         initLoadingDialog()
-        refreshMeetingStatus()
+
+        if( !GlobalVal.isRefreshMeetingStatus ) {
+            Log.d("timeStampSurvey", "Start refreshMeetingStatus")
+            refreshMeetingStatus()
+        }
     }
 
     private fun checkIfScreenAlwaysOn(){
@@ -352,36 +356,41 @@ class MainActivity : AppCompatActivity(),
         var time = DAO.currentMeeting?.data?.end_dateTime
         var dateFormat = SimpleDateFormat("HH:mm")
 
-        var endTime = dateFormat.parse(time)
+        if ( time!=null ) {
+            var endTime = dateFormat.parse(time)
 
-        var timeInterval = 15
-        try{
-            timeInterval = DAO.configData?.config_show_survey_before!!.toInt()
-        }catch (e : Exception){
-            Crashlytics.logException(e)
-        }
-        var showTime = (endTime.time - ( timeInterval*60*1000) )
-
-        var nowTime = dateFormat.parse(dateFormat.format(Date()))
-
-        Log.d("timeStampSurvey","Survey ${nowTime.time}| $showTime ")
-
-        if( nowTime.time >= showTime ){
-            GlobalVal.isSurveyShowed = true
-            runOnUiThread {
-                showDialogSurvey()
-            }
-            var currentMeetingId = ""
+            var timeInterval = 15
             try {
-                currentMeetingId = DAO.currentMeeting?.data?.id.toString()
-            }catch (e:Exception){}
-            Log.d("timeStampSurvey","Start ${(timeInterval)*60*1000}")
-            Handler().postDelayed({
-                Log.d("timeStampSurvey","End")
+                timeInterval = DAO.configData?.config_show_survey_before!!.toInt()
+            } catch (e: Exception) {
+                Crashlytics.logException(e)
+            }
+            var showTime = (endTime.time - (timeInterval * 60 * 1000))
+
+            var nowTime = dateFormat.parse(dateFormat.format(Date()))
+
+            Log.d("timeStampSurvey", "Survey ${nowTime.time}| $showTime ")
+
+            if (nowTime.time >= showTime) {
+                GlobalVal.isSurveyShowed = true
+                runOnUiThread {
+                    showDialogSurvey()
+                }
+                var currentMeetingId = ""
                 try {
-                    autoCheckOut(currentMeetingId)
-                }catch (e:Exception){Crashlytics.logException(e)}
-            }, (timeInterval*60*1000).toLong())
+                    currentMeetingId = DAO.currentMeeting?.data?.id.toString()
+                } catch (e: Exception) {
+                }
+                Log.d("timeStampSurvey", "Start ${(timeInterval) * 60 * 1000}")
+                Handler().postDelayed({
+                    Log.d("timeStampSurvey", "End")
+                    try {
+                        autoCheckOut(currentMeetingId)
+                    } catch (e: Exception) {
+                        Crashlytics.logException(e)
+                    }
+                }, (timeInterval * 60 * 1000).toLong())
+            }
         }
     }
 
@@ -865,7 +874,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun refreshMeetingStatus(){
         Handler().postDelayed({
-
+            GlobalVal.isRefreshMeetingStatus = true
             getNextMeeting()
             getCurrentMeeting()
             Log.d("timeStampSurvey","refreshMeetingStatus $isGetCurrentMeeting | ${GlobalVal.isMainActivityStarted}")
@@ -899,7 +908,7 @@ class MainActivity : AppCompatActivity(),
                     instance.checkIfSurveyTimeToShow()
                 }
             } catch (e: Exception) {
-                Log.d("timeStampSurvey","Exception")
+                Log.d("timeStampSurvey","Exception $e")
                 Crashlytics.logException(e)
             }
         }
