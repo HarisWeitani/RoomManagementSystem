@@ -31,6 +31,7 @@ class GlobalVal {
 
         var isVideoStarted: Boolean = false
         var isRefreshMeetingStatus: Boolean = false
+        var booking_status: String = "available"
 
 
         fun networkLogging(tag : String, result : String){

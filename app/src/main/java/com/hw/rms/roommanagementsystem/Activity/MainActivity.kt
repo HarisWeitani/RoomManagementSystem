@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(),
     lateinit var btn_extend : Button
     lateinit var btn_check_out : Button
 
-    var booking_status = "available"
+//    var booking_status = "available"
 
     var apiService : API? = null
     var isGetNextMeeting: Boolean = false
@@ -119,9 +119,12 @@ class MainActivity : AppCompatActivity(),
 
         if( DAO.currentMeeting?.ok == 1 ){
 //            booking_status =  DAO.currentMeeting!!.data!!.booking_status!!.toInt()
-            booking_status =  DAO.currentMeeting!!.data!!.status!!
+            GlobalVal.booking_status = DAO.currentMeeting!!.data!!.status!!
+        }else{
+            GlobalVal.booking_status = "available"
         }
-        if( booking_status == "available" ){
+
+        if( GlobalVal.booking_status == "available" ){
             setContentView(R.layout.activity_main_available)
             initAvailableView()
         }
@@ -129,7 +132,7 @@ class MainActivity : AppCompatActivity(),
 //            setContentView(R.layout.activity_waiting)
 ////            initWaitingView()
 //        }
-        else if( booking_status == "confirmed" ){
+        else if( GlobalVal.booking_status == "confirmed" ){
             setContentView(R.layout.activity_occupied)
 //            setContentView(R.layout.activity_occupied_v2)
             initOccupiedView()
@@ -345,7 +348,7 @@ class MainActivity : AppCompatActivity(),
                         loadingDialog?.dismiss()
                         finish()
                         startActivity(
-                            Intent(this@MainActivity, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
                     }else{
                         loadingDialog?.dismiss()
@@ -372,6 +375,7 @@ class MainActivity : AppCompatActivity(),
             } catch (e: Exception) {
                 Crashlytics.logException(e)
             }
+//            timeInterval = 5
             var showTime = (endTime.time - (timeInterval * 60 * 1000))
 
             var nowTime = dateFormat.parse(dateFormat.format(Date()))
@@ -428,7 +432,7 @@ class MainActivity : AppCompatActivity(),
                         .show()
                     finish()
                     startActivity(
-                        Intent(this@MainActivity, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 }
             }
 
@@ -802,12 +806,13 @@ class MainActivity : AppCompatActivity(),
                     }catch (e : Exception){
                         Crashlytics.logException(e)
                     }
+//                    timeInterval = 5
                     Log.d("timeStampSurvey","Start ${timeInterval*60*1000}")
                     Handler().postDelayed({
                         Log.d("timeStampSurvey","End")
                         finish()
                         startActivity(
-                            Intent(this@MainActivity, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                            Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                     }, (timeInterval*60*1000).toLong())
                 }
             }
@@ -971,12 +976,10 @@ class MainActivity : AppCompatActivity(),
                     isGetCurrentMeeting = response.body().data != null
                     if( DAO.currentMeeting != response.body()){
                         DAO.currentMeeting = response.body()
-                        if(!GlobalVal.isSurveyShowed) {
-                            GlobalVal.isSurveyShowed = false
-                            finish()
-                            startActivity(
-                                Intent(this@MainActivity, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            )
+                        startActivity().execute()
+                    }else if( GlobalVal.booking_status == "available" && isGetCurrentMeeting ) {
+                        if( response.body().data != null ){
+                            startActivity().execute()
                         }
                     }
                 }else{
@@ -985,6 +988,35 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         })
+    }
+
+    class startActivity() : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg params: Void?): String? {
+            return null
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            // ...
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            instance.startRootActivity()
+        }
+    }
+
+    fun startRootActivity(){
+        try {
+            if(!GlobalVal.isSurveyShowed) {
+                GlobalVal.isSurveyShowed = false
+                finish()
+                startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+        } catch (e: Exception) {
+            Log.d("timeStampSurvey","Exception $e")
+            Crashlytics.logException(e)
+        }
     }
 
     override fun onBackPressed() {
