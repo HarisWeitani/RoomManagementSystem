@@ -282,7 +282,13 @@ class QuickBookingActivity : AppCompatActivity() {
         isValidToSubmit = et_host.text.isNotEmpty()
 //        isValidToSubmit = et_attendees_email.text.isNotEmpty()
 
-        return isValidToSubmit
+        return tvRoom.text.isNotEmpty() &&
+                et_summary.text.isNotEmpty() &&
+                !tv_booking_date.text.equals("Booking Date") &&
+                !tv_booking_time_start.text.equals("Booking Start") &&
+                !tv_booking_time_end.text.equals("Booking End") &&
+                et_host.text.isNotEmpty()
+
     }
 
     private fun submitData(){
