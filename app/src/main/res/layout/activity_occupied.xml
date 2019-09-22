@@ -321,29 +321,33 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:orientation="horizontal"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
     >
-        <Button
-                android:id="@+id/btn_pref_schedule_meeting"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:background="@drawable/ic_baseline_navigate_before_24px_wht"
-        />
+        <!--        <Button-->
+        <!--                android:id="@+id/btn_pref_schedule_meeting"-->
+        <!--                android:layout_width="64dp"-->
+        <!--                android:layout_height="64dp"-->
+        <!--                android:background="@drawable/ic_baseline_navigate_before_24px_wht"-->
+
+        <!--                android:visibility="invisible"-->
+        <!--        />-->
         <androidx.viewpager.widget.ViewPager
-                android:id="@+id/view_pager_bottom_schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-        >
+            android:id="@+id/view_pager_bottom_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            >
         </androidx.viewpager.widget.ViewPager>
-        <Button
-                android:id="@+id/btn_next_schedule_meeting"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:background="@drawable/ic_baseline_navigate_next_24px_wht"
-        />
+        <!--        <Button-->
+        <!--                android:id="@+id/btn_next_schedule_meeting"-->
+        <!--                android:layout_width="64dp"-->
+        <!--                android:layout_height="64dp"-->
+        <!--                android:background="@drawable/ic_baseline_navigate_next_24px_wht"-->
+
+        <!--            android:visibility="invisible"-->
+        <!--        />-->
     </LinearLayout>
 
     <LinearLayout

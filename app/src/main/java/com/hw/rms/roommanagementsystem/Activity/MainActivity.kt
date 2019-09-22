@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity(),
     lateinit var tv_time_meeting_start : TextView
     lateinit var tv_time_meeting_end : TextView
 
-    lateinit var btn_pref_schedule_meeting : Button
-    lateinit var btn_next_schedule_meeting : Button
+//    lateinit var btn_pref_schedule_meeting : Button
+//    lateinit var btn_next_schedule_meeting : Button
 
     lateinit var tv_next_meeting_name : TextView
 
@@ -205,8 +205,8 @@ class MainActivity : AppCompatActivity(),
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
 
-        btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
-        btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
+//        btn_pref_schedule_meeting = findViewById(R.id.btn_pref_schedule_meeting)
+//        btn_next_schedule_meeting = findViewById(R.id.btn_next_schedule_meeting)
 
         btn_schedule = findViewById(R.id.btn_schedule)
 
@@ -565,17 +565,17 @@ class MainActivity : AppCompatActivity(),
             true
         }
 
-        btn_pref_schedule_meeting.setOnClickListener {
-            if( vpBottomSchedule.currentItem > 0 ){
-                vpBottomSchedule.currentItem --
-            }
-        }
-
-        btn_next_schedule_meeting.setOnClickListener {
-            if( vpBottomSchedule.currentItem < vpBottomSchedule.childCount ){
-                vpBottomSchedule.currentItem ++
-            }
-        }
+//        btn_pref_schedule_meeting.setOnClickListener {
+//            if( vpBottomSchedule.currentItem > 0 ){
+//                vpBottomSchedule.currentItem --
+//            }
+//        }
+//
+//        btn_next_schedule_meeting.setOnClickListener {
+//            if( vpBottomSchedule.currentItem < vpBottomSchedule.childCount ){
+//                vpBottomSchedule.currentItem ++
+//            }
+//        }
 
         btn_schedule.setOnClickListener {
             getEventByDateNow()

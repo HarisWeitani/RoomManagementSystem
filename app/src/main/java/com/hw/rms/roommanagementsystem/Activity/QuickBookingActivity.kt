@@ -267,7 +267,7 @@ class QuickBookingActivity : AppCompatActivity() {
             getAllAttendees()
             submitData()
         }else{
-            Toast.makeText(this@QuickBookingActivity,"All Fields Must Be Filled", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@QuickBookingActivity,"Mandatory Fields Must Be Filled", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -278,39 +278,80 @@ class QuickBookingActivity : AppCompatActivity() {
         isValidToSubmit = !tv_booking_date.text.equals("Booking Date")
         isValidToSubmit = !tv_booking_time_start.text.equals("Booking Start")
         isValidToSubmit = !tv_booking_time_end.text.equals("Booking End")
-        isValidToSubmit = et_description.text.isNotEmpty()
+//        isValidToSubmit = et_description.text.isNotEmpty()
         isValidToSubmit = et_host.text.isNotEmpty()
-        isValidToSubmit = et_attendees_email.text.isNotEmpty()
+//        isValidToSubmit = et_attendees_email.text.isNotEmpty()
 
         return isValidToSubmit
     }
 
     private fun submitData(){
+
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), et_summary.text.toString())
-        val description = RequestBody.create(MediaType.parse("text/plain"), et_description.text.toString())
+
+        var desc = ""
+        var isDescValid = false
+        if( et_description.text.toString().isNotEmpty() ) {
+            desc = et_description.text.toString().trim()
+            isDescValid = true
+        }
+        val description = RequestBody.create(MediaType.parse("text/plain"), desc)
+
         val host = RequestBody.create(MediaType.parse("text/plain"), et_host.text.toString())
         val start_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
         val end_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
         val start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
         val end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
-        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), et_attendees_email.text.toString().trim())
+
+        var email = ""
+        var isEmailValid = false
+        val size = emailList!!.size
+        if( et_attendees_email.text.toString().isNotEmpty() ) {
+            email = et_attendees_email.text.toString().trim()
+            isEmailValid = true
+        }
+//        if( size > 0 ){
+//            if( email.isNotEmpty() ){
+//                email += ",,,"
+//            }
+//
+//            for( x in 0 until size ){
+//                email += emailList!![x].trim()
+//                if(x < (size - 1) ){
+//                    email += ",,,"
+//                }
+//            }
+//
+//            isEmailValid = true
+//        }
+        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), email)
+
+
 
         val requestBodyMap = HashMap<String, RequestBody>()
         requestBodyMap["location"] = location
         requestBodyMap["summary"] = summary
-        requestBodyMap["description"] = description
+
+        if( isDescValid ) {
+            requestBodyMap["description"] = description
+        }
+
         requestBodyMap["host"] = host
         requestBodyMap["start_date"] = start_date
         requestBodyMap["end_date"] = end_date
         requestBodyMap["start_time"] = start_time
         requestBodyMap["end_time"] = end_time
-        requestBodyMap["attendees_email[0]"] = attendees_email
-        val size = emailList!!.size
-        for( x in 0 until size ){
-            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![x].trim())
-            requestBodyMap["attendees_email[${x+1}]"] = attendees_emails
+
+        if( isEmailValid ) {
+            requestBodyMap["attendees_email"] = attendees_email
         }
+
+//        val size = emailList!!.size
+//        for( x in 0 until size ){
+//            var attendees_emails = RequestBody.create(MediaType.parse("text/plain"), emailList!![x].trim())
+//            requestBodyMap["attendees_email[${x+1}]"] = attendees_emails
+//        }
 
         apiService!!.googleAddEvent(requestBodyMap).enqueue(object : Callback<ResponseAddEvent> {
             override fun onFailure(call: Call<ResponseAddEvent>?, t: Throwable?) {

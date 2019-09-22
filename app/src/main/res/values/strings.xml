@@ -12,7 +12,7 @@
     <string name="please_wait">Please Wait</string>
     <string name="no_meeting">No Meeting</string>
     <string name="room">Room</string>
-    <string name="summary">Summary</string>
+    <string name="book_title">Title</string>
     <string name="description">Description</string>
     <string name="attendees_email">Attendees Email</string>
     <string name="booking_start">Booking Start</string>

@@ -112,7 +112,7 @@
                         android:layout_width="@dimen/marginTextQuickBooking"
                         android:layout_height="wrap_content"
 
-                        android:text="@string/summary"
+                        android:text="@string/book_title"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_bold"
                         android:textSize="24sp"
@@ -126,7 +126,7 @@
                         android:background="@drawable/edit_text_box"
 
                         android:textColor="@color/white"
-                        android:hint="@string/summary"
+                        android:hint="@string/book_title"
                         android:fontFamily="@font/gotham_book"
                         />
             </LinearLayout>
@@ -321,7 +321,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        >
                         <ImageView
                             android:id="@+id/add_more_attendees"
                             android:layout_width="48dp"
