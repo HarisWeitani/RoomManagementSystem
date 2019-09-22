@@ -761,14 +761,20 @@ class MainActivity : AppCompatActivity(),
                 response: Response<ResponseSurvey>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-                if( response?.code() == 200 ) {
-                    surveyDialogViewed = true
-                    surveyDialogShowed = false
-                    loadingDialog?.dismiss()
-                    Toast.makeText(this@MainActivity, "Thank you for rating this room", Toast.LENGTH_SHORT)
-                        .show()
-                    showDialogSurvey()
-                }
+//                if( response?.code() == 200 ) {
+//                    surveyDialogViewed = true
+//                    surveyDialogShowed = false
+//                    loadingDialog?.dismiss()
+//                    Toast.makeText(this@MainActivity, "Thank you for rating this room", Toast.LENGTH_SHORT)
+//                        .show()
+//                    showDialogSurvey()
+//                }
+                surveyDialogViewed = true
+                surveyDialogShowed = false
+                loadingDialog?.dismiss()
+                Toast.makeText(this@MainActivity, "Thank you for rating this room", Toast.LENGTH_SHORT)
+                    .show()
+                showDialogSurvey()
             }
 
         })
