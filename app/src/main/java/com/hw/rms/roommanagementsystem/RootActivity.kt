@@ -71,6 +71,10 @@ class RootActivity : AppCompatActivity() {
         tv_error_api = findViewById(R.id.tv_error_api)
         tv_error_api.visibility = View.GONE
 
+        if( Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ) {
+            isPermitted = true
+        }
+
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
 
@@ -159,6 +163,8 @@ class RootActivity : AppCompatActivity() {
         super.onResume()
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ) {
             checkPermission()
+        }else if( Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ){
+            initApp()
         }else{
             startActivity()
         }
