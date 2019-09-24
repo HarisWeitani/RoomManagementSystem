@@ -108,7 +108,12 @@ class MainActivity : AppCompatActivity(),
 
     var extendDialogBuilder : AlertDialog.Builder? = null
     var extendDialog : AlertDialog? = null
+    var thankyouSurveyDialog : Dialog? = null
+    var thankyouDialogShowed : Boolean = false
     lateinit var extendDialogInflater : LayoutInflater
+
+    var thankyouHandler : Handler? = null
+    var thankyouRunnable : Runnable? = null
 
     companion object{
         @SuppressLint("StaticFieldLeak")
@@ -148,6 +153,7 @@ class MainActivity : AppCompatActivity(),
         loadingDialog = Dialog(this@MainActivity)
         reviewDialogBuilder = AlertDialog.Builder(this@MainActivity)
         extendDialogBuilder = AlertDialog.Builder(this@MainActivity)
+        thankyouSurveyDialog = Dialog(this@MainActivity)
 
         initView()
         initNewsViewPager()
@@ -155,6 +161,7 @@ class MainActivity : AppCompatActivity(),
         initButtonListener()
         initImageVideoPager()
         initLoadingDialog()
+        initThankYouForSurvey()
 
         if( !GlobalVal.isRefreshMeetingStatus ) {
             Log.d("timeStampSurvey", "Start refreshMeetingStatus")
@@ -726,6 +733,41 @@ class MainActivity : AppCompatActivity(),
         surveyDialog.show()
     }
 
+    fun initThankYouForSurvey(){
+
+        thankyouSurveyDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        thankyouSurveyDialog?.setCancelable(false)
+        thankyouSurveyDialog?.setContentView(R.layout.thankyou_survey_dialog)
+
+        val btn_dismiss_thankyou = thankyouSurveyDialog?.findViewById<Button>(R.id.btn_dismiss_thankyou)
+        btn_dismiss_thankyou?.setOnClickListener {
+            thankyouHandler?.removeCallbacks(thankyouRunnable)
+            autoDismissThankyouDialog()
+        }
+    }
+
+    fun thankyouDialog(){
+        thankyouDialogShowed = true
+        thankyouSurveyDialog?.show()
+        thankyouRunnable = Runnable {
+            autoDismissThankyouDialog()
+        }
+        thankyouHandler = Handler()
+        thankyouHandler?.postDelayed(thankyouRunnable,2000)
+
+    }
+
+    fun autoDismissThankyouDialog(){
+        try {
+            if( thankyouDialogShowed ) {
+                thankyouDialogShowed = false
+                thankyouSurveyDialog?.dismiss()
+                showDialogSurvey()
+            }
+        }catch (e:Exception){}
+
+    }
+
     fun filterSurvey(status : String){
         try {
             sendSurvey(status)
@@ -768,9 +810,12 @@ class MainActivity : AppCompatActivity(),
                     surveyDialogViewed = true
                     surveyDialogShowed = false
                     loadingDialog?.dismiss()
-                    Toast.makeText(this@MainActivity, "Thank you for rating this room", Toast.LENGTH_SHORT)
-                        .show()
-                    showDialogSurvey()
+                    thankyouDialog()
+                }else{
+                    surveyDialogViewed = true
+                    surveyDialogShowed = false
+                    loadingDialog?.dismiss()
+                    thankyouDialog()
                 }
             }
 
