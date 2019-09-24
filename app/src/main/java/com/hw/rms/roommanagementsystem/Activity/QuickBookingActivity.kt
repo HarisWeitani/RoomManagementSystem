@@ -272,6 +272,7 @@ class QuickBookingActivity : AppCompatActivity() {
     }
 
     private fun validateBookingData() : Boolean{
+/*
         var isValidToSubmit = false
         isValidToSubmit = tvRoom.text.isNotEmpty()
         isValidToSubmit = et_summary.text.isNotEmpty()
@@ -281,6 +282,7 @@ class QuickBookingActivity : AppCompatActivity() {
 //        isValidToSubmit = et_description.text.isNotEmpty()
         isValidToSubmit = et_host.text.isNotEmpty()
 //        isValidToSubmit = et_attendees_email.text.isNotEmpty()
+*/
 
         return tvRoom.text.isNotEmpty() &&
                 et_summary.text.isNotEmpty() &&
@@ -296,13 +298,13 @@ class QuickBookingActivity : AppCompatActivity() {
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), et_summary.text.toString())
 
-        var desc = ""
+/*        var desc = ""
         var isDescValid = false
         if( et_description.text.toString().isNotEmpty() ) {
             desc = et_description.text.toString().trim()
             isDescValid = true
         }
-        val description = RequestBody.create(MediaType.parse("text/plain"), desc)
+        val description = RequestBody.create(MediaType.parse("text/plain"), desc)*/
 
         val host = RequestBody.create(MediaType.parse("text/plain"), et_host.text.toString())
         val start_date = RequestBody.create(MediaType.parse("text/plain"), tv_booking_date.text.toString())
@@ -310,7 +312,7 @@ class QuickBookingActivity : AppCompatActivity() {
         val start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
         val end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
 
-        var email = ""
+/*        var email = ""
         var isEmailValid = false
         val size = emailList!!.size
         if( et_attendees_email.text.toString().isNotEmpty() ) {
@@ -331,7 +333,7 @@ class QuickBookingActivity : AppCompatActivity() {
 //
 //            isEmailValid = true
 //        }
-        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), email)
+        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), email)*/
 
 
 
@@ -339,9 +341,9 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["location"] = location
         requestBodyMap["summary"] = summary
 
-        if( isDescValid ) {
-            requestBodyMap["description"] = description
-        }
+//        if( isDescValid ) {
+//            requestBodyMap["description"] = description
+//        }
 
         requestBodyMap["host"] = host
         requestBodyMap["start_date"] = start_date
@@ -349,9 +351,9 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["start_time"] = start_time
         requestBodyMap["end_time"] = end_time
 
-        if( isEmailValid ) {
-            requestBodyMap["attendees_email"] = attendees_email
-        }
+//        if( isEmailValid ) {
+//            requestBodyMap["attendees_email"] = attendees_email
+//        }
 
 //        val size = emailList!!.size
 //        for( x in 0 until size ){

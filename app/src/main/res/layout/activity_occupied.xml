@@ -15,13 +15,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:orientation="horizontal"
-            android:layout_margin="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
     >
         <ImageView
                 android:id="@+id/iv_logo"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="24dp"
         />
 
         <TextView
@@ -71,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:textSize="50sp"
+                    android:textSize="60sp"
                     android:text="Ruang Sidang Menteri"
                     android:textColor="@color/white"
                     android:fontFamily="@font/gotham_light"
@@ -81,12 +84,12 @@
                     android:id="@+id/btn_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
 
                     android:clickable="false"
 
-                    android:padding="22dp"
+                    android:padding="18dp"
                     android:paddingStart="90dp"
                     android:paddingEnd="90dp"
                     android:text="Occupied"
@@ -139,7 +142,7 @@
             </LinearLayout>
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,23 +151,33 @@
                     android:layout_marginEnd="16dp"
                     >
                     <TextView
-                            android:id="@+id/tv_meeting_title_with_member_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                        android:id="@+id/tv_meeting_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
 
-                            android:text="Meeting vendor Website and Digital Marketing by sandy ricardo"
-                            android:textSize="30sp"
-                            android:textColor="@color/white"
-                            android:fontFamily="@font/gotham_light"
+                        android:text="Meeting vendor Website and Digital Marketing"
+                        android:textSize="40sp"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_light"
+                    />
+                    <TextView
+                        android:id="@+id/tv_meeting_host"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="Hosted by sandy ricardo"
+                        android:textSize="28sp"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/gotham_light"
                     />
                 </LinearLayout>
             </ScrollView>
 
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="32dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
             >
                 <LinearLayout
@@ -319,7 +332,7 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="116dp"
             android:orientation="horizontal"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
@@ -338,6 +351,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
+
             >
         </androidx.viewpager.widget.ViewPager>
         <!--        <Button-->

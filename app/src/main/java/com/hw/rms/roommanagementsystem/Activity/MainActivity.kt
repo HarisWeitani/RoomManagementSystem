@@ -85,7 +85,8 @@ class MainActivity : AppCompatActivity(),
     lateinit var vPager : ViewPager
     var imageVideoList : MutableList<ImageVideo> = mutableListOf()
 
-    lateinit var tv_meeting_title_with_member_name : TextView
+    lateinit var tv_meeting_title : TextView
+    lateinit var tv_meeting_host : TextView
 
     lateinit var btnBookNow : Button
     lateinit var btn_schedule : Button
@@ -243,8 +244,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     /*private fun initWaitingView(){
-        tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
-//        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
+        tv_meeting_title = findViewById(R.id.tv_meeting_title)
+//        tv_meeting_title.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
 
 //        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
@@ -265,8 +266,8 @@ class MainActivity : AppCompatActivity(),
 
     /*private fun waitingOccupied(){
 
-        tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
-        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
+        tv_meeting_title = findViewById(R.id.tv_meeting_title)
+        tv_meeting_title.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
 
         tv_next_meeting_name = findViewById(R.id.tv_next_meeting_name)
         tv_next_meeting_name.text = "${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
@@ -291,9 +292,11 @@ class MainActivity : AppCompatActivity(),
     }*/
 
     private fun initOccupiedView(){
-        tv_meeting_title_with_member_name = findViewById(R.id.tv_meeting_title_with_member_name)
-//        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-        tv_meeting_title_with_member_name.text = "${DAO.currentMeeting?.data?.summary}, Hosted By ${DAO.currentMeeting?.data?.creator}"
+        tv_meeting_title = findViewById(R.id.tv_meeting_title)
+        tv_meeting_host = findViewById(R.id.tv_meeting_host)
+
+        tv_meeting_title.text = "${DAO.currentMeeting?.data?.summary}"
+        tv_meeting_host.text = "Hosted by ${DAO.currentMeeting?.data?.creator}"
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)

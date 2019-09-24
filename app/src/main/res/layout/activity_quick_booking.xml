@@ -225,6 +225,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     >
                 <TextView
                         android:layout_width="@dimen/marginTextQuickBooking"
@@ -283,6 +284,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     >
                 <TextView
                         android:layout_width="@dimen/marginTextQuickBooking"
