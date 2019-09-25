@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:textSize="60sp"
+                    android:textSize="50sp"
                     android:text="Ruang Sidang Menteri"
                     android:textColor="@color/white"
                     android:fontFamily="@font/gotham_light"
@@ -150,24 +150,25 @@
                     android:orientation="vertical"
                     android:layout_marginEnd="16dp"
                     >
+
                     <TextView
                         android:id="@+id/tv_meeting_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
 
-                        android:text="Meeting vendor Website and Digital Marketing"
-                        android:textSize="40sp"
-                        android:textColor="@color/white"
                         android:fontFamily="@font/gotham_light"
-                    />
+                        android:text="Meeting vendor Website and Digital Marketing"
+                        android:textColor="@color/white"
+                        android:textSize="35sp" />
+
                     <TextView
                         android:id="@+id/tv_meeting_host"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
                         android:text="Hosted by sandy ricardo"
-                        android:textSize="35sp"
+                        android:textSize="28sp"
                         android:textColor="@color/white"
                         android:fontFamily="@font/gotham_light"
                     />
@@ -332,7 +333,7 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="116dp"
+            android:layout_height="110dp"
             android:orientation="horizontal"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"

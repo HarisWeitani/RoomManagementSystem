@@ -48,6 +48,7 @@
             android:padding="16dp"
 
             android:text="BACK"
+            android:textColor="@color/white"
             android:textSize="30sp"
             android:background="@drawable/transparent_bg_bordered"
             />
