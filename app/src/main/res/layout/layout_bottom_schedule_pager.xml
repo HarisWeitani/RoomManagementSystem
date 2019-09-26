@@ -40,7 +40,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:fontFamily="@font/gotham_light"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
             />
         </LinearLayout>
     </ScrollView>
@@ -77,7 +77,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:fontFamily="@font/gotham_light"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
             />
         </LinearLayout>
     </ScrollView>

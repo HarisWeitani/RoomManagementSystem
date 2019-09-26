@@ -16,8 +16,8 @@ android {
         //min sdk version 23 sebelumnya 20
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 30
-        versionName "0.25.5"
+        versionCode 34
+        versionName "0.25.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
