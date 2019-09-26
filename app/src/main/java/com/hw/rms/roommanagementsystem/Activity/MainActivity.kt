@@ -260,25 +260,27 @@ class MainActivity : AppCompatActivity(),
         tv_meeting_title.text = "${DAO.currentMeeting?.data?.summary}"
 //        tv_meeting_host.text = "Hosted by ${DAO.currentMeeting?.data?.creator}"
 
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            tv_meeting_host.text = Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>", Html.FROM_HTML_MODE_COMPACT)
-            tv_meeting_host.setText(Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>", Html.FROM_HTML_MODE_COMPACT),TextView.BufferType.SPANNABLE)
-        } else {
-//            tv_meeting_host.text = Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>")
-            tv_meeting_host.setText(Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>"),TextView.BufferType.SPANNABLE)
-        }*/
-        val fontGothamLight = Typeface.createFromAsset(assets,"fonts/gotham_light.ttf")
-        val fontGothamBold= Typeface.createFromAsset(assets,"fonts/gotham_bold.ttf")
-//        val myCustomizedString = SpannableStringBuilder()
-//            .append("Hosted by ")
-//            .bold{ append("${DAO.currentMeeting?.data?.creator}") }
-
         val hosted = "Hosted by ${DAO.currentMeeting?.data?.creator}"
-        val myCustomizedString = SpannableStringBuilder(hosted)
-        myCustomizedString.setSpan(CustomTypefaceSpan("",fontGothamLight),0,9,Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-        myCustomizedString.setSpan(CustomTypefaceSpan("",fontGothamBold),9,hosted.length,Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-        tv_meeting_host.text = myCustomizedString
-
+        try {
+            val fontGothamLight = Typeface.createFromAsset(assets,"fonts/gotham_light.ttf")
+            val fontGothamBold= Typeface.createFromAsset(assets,"fonts/gotham_bold.ttf")
+            val myCustomizedString = SpannableStringBuilder(hosted)
+            myCustomizedString.setSpan(
+                CustomTypefaceSpan("", fontGothamLight),
+                0,
+                9,
+                Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+            )
+            myCustomizedString.setSpan(
+                CustomTypefaceSpan("", fontGothamBold),
+                9,
+                hosted.length,
+                Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+            )
+            tv_meeting_host.text = myCustomizedString
+        }catch (e:Exception){
+            tv_meeting_host.text = hosted
+        }
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
