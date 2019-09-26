@@ -77,7 +77,7 @@
                     android:textSize="50sp"
                     android:text="Ruang Sidang Menteri"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/gotham_light"
+                    android:fontFamily="@font/gotham_bold"
             />
 
             <Button

@@ -5,11 +5,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Typeface
 import android.net.Uri
-import android.os.AsyncTask
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
+import android.os.*
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Window
@@ -29,9 +30,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.text.bold
 import com.crashlytics.android.Crashlytics
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
+import com.hw.rms.roommanagementsystem.Helper.CustomTypefaceSpan
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -250,60 +253,32 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    /*private fun initWaitingView(){
-        tv_meeting_title = findViewById(R.id.tv_meeting_title)
-//        tv_meeting_title.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-
-//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-        tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
-        tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
-        tv_time_meeting_start.text = DAO.currentMeeting!!.data!!.start_dateTime
-        tv_time_meeting_end.text = DAO.currentMeeting!!.data!!.end_dateTime
-
-        btn_check_in = findViewById(R.id.btn_check_in)
-        btn_check_in.setOnClickListener {
-            val i = Intent(this@MainActivity,MainActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            finish()
-            overridePendingTransition(0,0)
-            startActivity(i)
-            overridePendingTransition(0,0)
-        }
-    }*/
-
-    /*private fun waitingOccupied(){
-
-        tv_meeting_title = findViewById(R.id.tv_meeting_title)
-        tv_meeting_title.text = "${DAO.currentMeeting!!.data!![0]!!.meeting_title} by ${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-
-        tv_next_meeting_name = findViewById(R.id.tv_next_meeting_name)
-        tv_next_meeting_name.text = "${DAO.currentMeeting!!.data!![0]!!.member_first_name} ${DAO.currentMeeting!!.data!![0]!!.member_last_name}"
-
-//        tv_time_meeting_range = findViewById(R.id.tv_time_meeting_range)
-        tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
-        tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
-        tv_time_meeting_start.text = DAO.currentMeeting!!.data!![0]!!.booking_time_start
-        tv_time_meeting_end.text = DAO.currentMeeting!!.data!![0]!!.booking_time_end
-
-        btn_check_in = findViewById(R.id.btn_check_in)
-        btn_check_in.setOnClickListener {
-            DAO.currentMeeting!!.data!![0]!!.booking_status = "2"
-            val i = Intent(this@MainActivity,MainActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            finish()
-            overridePendingTransition(0,0)
-            startActivity(i)
-            overridePendingTransition(0,0)
-        }
-
-    }*/
-
     private fun initOccupiedView(){
         tv_meeting_title = findViewById(R.id.tv_meeting_title)
         tv_meeting_host = findViewById(R.id.tv_meeting_host)
 
         tv_meeting_title.text = "${DAO.currentMeeting?.data?.summary}"
-        tv_meeting_host.text = "Hosted by ${DAO.currentMeeting?.data?.creator}"
+//        tv_meeting_host.text = "Hosted by ${DAO.currentMeeting?.data?.creator}"
+
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            tv_meeting_host.text = Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>", Html.FROM_HTML_MODE_COMPACT)
+            tv_meeting_host.setText(Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>", Html.FROM_HTML_MODE_COMPACT),TextView.BufferType.SPANNABLE)
+        } else {
+//            tv_meeting_host.text = Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>")
+            tv_meeting_host.setText(Html.fromHtml("Hosted by <b>${DAO.currentMeeting?.data?.creator}</b>"),TextView.BufferType.SPANNABLE)
+        }*/
+        val fontGothamLight = Typeface.createFromAsset(assets,"fonts/gotham_light.ttf")
+        val fontGothamBold= Typeface.createFromAsset(assets,"fonts/gotham_bold.ttf")
+//        val myCustomizedString = SpannableStringBuilder()
+//            .append("Hosted by ")
+//            .bold{ append("${DAO.currentMeeting?.data?.creator}") }
+
+        val hosted = "Hosted by ${DAO.currentMeeting?.data?.creator}"
+        val myCustomizedString = SpannableStringBuilder(hosted)
+        myCustomizedString.setSpan(CustomTypefaceSpan("",fontGothamLight),0,9,Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+        myCustomizedString.setSpan(CustomTypefaceSpan("",fontGothamBold),9,hosted.length,Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+        tv_meeting_host.text = myCustomizedString
+
 
         tv_time_meeting_start = findViewById(R.id.tv_time_meeting_start)
         tv_time_meeting_end = findViewById(R.id.tv_time_meeting_end)
@@ -313,7 +288,7 @@ class MainActivity : AppCompatActivity(),
         btn_check_out = findViewById(R.id.btn_check_out)
         btn_check_out.setOnClickListener {
             GlobalVal.isSurveyShowed = true
-            checkOut()
+            checkOutManual()
         }
 
         btn_extend = findViewById(R.id.btn_extend)
@@ -379,13 +354,12 @@ class MainActivity : AppCompatActivity(),
         if ( time!=null ) {
             var endTime = dateFormat.parse(time)
 
-            var timeInterval = 15
+            var timeInterval = 5
             try {
                 timeInterval = DAO.configData?.config_show_survey_before!!.toInt()
             } catch (e: Exception) {
                 Crashlytics.logException(e)
             }
-//            timeInterval = 5
             var showTime = (endTime.time - (timeInterval * 60 * 1000))
 
             var nowTime = dateFormat.parse(dateFormat.format(Date()))
@@ -806,7 +780,7 @@ class MainActivity : AppCompatActivity(),
                 response: Response<ResponseSurvey>?
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-                if( response?.code() == 200 ) {
+/*                if( response?.code() == 200 ) {
                     surveyDialogViewed = true
                     surveyDialogShowed = false
                     loadingDialog?.dismiss()
@@ -816,13 +790,18 @@ class MainActivity : AppCompatActivity(),
                     surveyDialogShowed = false
                     loadingDialog?.dismiss()
                     thankyouDialog()
-                }
+                }*/
             }
 
         })
+
+        surveyDialogViewed = true
+        surveyDialogShowed = false
+        loadingDialog?.dismiss()
+        thankyouDialog()
     }
 
-    fun checkOut(){
+    fun checkOutManual(){
         loadingDialog?.show()
 
         var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
@@ -848,13 +827,13 @@ class MainActivity : AppCompatActivity(),
                     Toast.makeText(this@MainActivity, "Checkout Success", Toast.LENGTH_SHORT)
                         .show()
                     showDialogSurvey()
-                    var timeInterval = 15
+                    var timeInterval = 1
                     try{
-                        timeInterval = DAO.configData?.config_show_survey_before!!.toInt()
+                        timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
                     }catch (e : Exception){
                         Crashlytics.logException(e)
                     }
-//                    timeInterval = 5
+
                     Log.d("timeStampSurvey","Start ${timeInterval*60*1000}")
                     Handler().postDelayed({
                         Log.d("timeStampSurvey","End")

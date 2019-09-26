@@ -39,5 +39,7 @@ data class ResponseConfig(
     var config_send_reminder_after: String? = "",
     var config_show_waiting_time_after: String? = "",
     var config_timestamp: String? = "15", //For Extend Time
-    var config_show_survey_before: String? = ""
+    var config_show_survey_before: String? = "", //checkout otomatis
+    var config_google_calendar_id: String? = "",
+    var config_show_survey_check_out : String? = "1"//checkout manuual
 )
