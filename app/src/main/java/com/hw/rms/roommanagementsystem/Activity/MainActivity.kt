@@ -36,6 +36,7 @@ import com.hw.rms.roommanagementsystem.Helper.CustomTypefaceSpan
 import com.hw.rms.roommanagementsystem.RootActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -118,6 +119,9 @@ class MainActivity : AppCompatActivity(),
 
     var checkOutManualHandler : Handler? = null
     var checkOutManualRunnable : Runnable? = null
+
+    var checkOutAutoHandler : Handler? = null
+    var checkOutAutoRunnable : Runnable? = null
 
     companion object{
         @SuppressLint("StaticFieldLeak")
@@ -399,7 +403,12 @@ class MainActivity : AppCompatActivity(),
         val requestBodyMap = HashMap<String,RequestBody>()
         requestBodyMap["id"] = id
 
-        apiService!!.autoCheckOut(requestBodyMap).enqueue(object : Callback<ResponseCheckOut>{
+        val autoCheckout = apiService!!.autoCheckOut(requestBodyMap)
+        checkOutAutoHandler = Handler()
+        checkOutAutoRunnable = Runnable {1
+            autoCheckout.cancel()
+        }
+        autoCheckout.enqueue(object : Callback<ResponseCheckOut>{
             override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
@@ -425,8 +434,39 @@ class MainActivity : AppCompatActivity(),
                         Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 }
             }
-
         })
+
+        /***
+         * For Testing Purpose
+         */
+/*          val testService = API.testingAPI()
+          val testing = testService!!.testingAPI()
+          checkOutManualHandler = Handler()
+          checkOutManualRunnable = Runnable {
+              testing.cancel()
+          }
+          testing.enqueue(object : Callback<ResponseBody>{
+              override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                  Log.d(GlobalVal.NETWORK_TAG, t?.toString())
+                  Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
+                  loadingDialog?.dismiss()
+                  finish()
+                  startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+              }
+
+              override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                  Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+              }
+
+          })*/
+
+        var timeInterval = 1
+        try{
+            timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
+        }catch (e : Exception){
+            Crashlytics.logException(e)
+        }
+        checkOutAutoHandler!!.postDelayed(checkOutAutoRunnable,((timeInterval*60*1000).toLong()))
     }
 
     private fun initNewsViewPager(){
