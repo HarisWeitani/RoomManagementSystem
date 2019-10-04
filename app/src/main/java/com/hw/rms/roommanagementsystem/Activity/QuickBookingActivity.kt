@@ -487,7 +487,7 @@ class QuickBookingActivity : AppCompatActivity() {
             submitQuickBooking()
 
 //            Handler().postDelayed({
-//                startActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                StartActivity(Intent(this@QuickBookingActivity,RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
 //            },2000)
 
         }

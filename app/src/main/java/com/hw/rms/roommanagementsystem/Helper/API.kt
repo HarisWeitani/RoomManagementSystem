@@ -21,6 +21,12 @@ import java.util.concurrent.TimeUnit
 
 interface API {
     /***
+     * Testing Purspose
+     */
+    @GET("200?sleep=70000")
+    fun testingAPI() : Call<ResponseBody>
+
+    /***
      * Versi 1
      */
     @GET("api/newsfeed/get_data/")
@@ -113,7 +119,32 @@ interface API {
         }
 
         /***
-         * Unused
+         * For Testing Purpose
+         */
+        fun testingAPI() : API{
+            val gson = GsonBuilder()
+                .setLenient()
+                .create()
+
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+            val client = OkHttpClient.Builder().addInterceptor(interceptor)
+                .connectTimeout(60,TimeUnit.SECONDS)
+                .build()
+            //try catch ini
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://httpstat.us/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build()
+
+            return retrofit.create(API::class.java)
+        }
+
+        /***
+         * Unused but Pls dont delete
          */
         fun socketIO(){
             socket = IO.socket(socketUrl)

@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.*
-import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.util.Log
@@ -30,7 +29,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.text.bold
 import com.crashlytics.android.Crashlytics
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
@@ -117,6 +115,9 @@ class MainActivity : AppCompatActivity(),
 
     var thankyouHandler : Handler? = null
     var thankyouRunnable : Runnable? = null
+
+    var checkOutManualHandler : Handler? = null
+    var checkOutManualRunnable : Runnable? = null
 
     companion object{
         @SuppressLint("StaticFieldLeak")
@@ -403,6 +404,9 @@ class MainActivity : AppCompatActivity(),
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
                 loadingDialog?.dismiss()
+                finish()
+                startActivity(
+                    Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }
 
             override fun onResponse(
@@ -600,7 +604,7 @@ class MainActivity : AppCompatActivity(),
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.scheduleEventByDate = response.body()
                     finish()
-//                    startActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                    StartActivity(Intent(this@MainActivity,ScheduleCalendarActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     startActivity(Intent(this@MainActivity,ScheduleDayViewActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                     loadingDialog?.dismiss()
                 }else{
@@ -617,49 +621,6 @@ class MainActivity : AppCompatActivity(),
         loadingDialog?.setCancelable(false)
         loadingDialog?.setContentView(R.layout.loading_dialog)
     }
-
-  /*  fun initSurveyDialog(){
-        reviewDialogInflater = layoutInflater
-        val dialogView = reviewDialogInflater.inflate(R.layout.review_room_dialog,null)
-        reviewDialogBuilder?.setView(dialogView)
-        reviewDialogBuilder?.setCancelable(false)
-
-        val iv_survey_poor = dialogView.findViewById<ImageView>(R.id.iv_survey_poor)
-        val iv_survey_bad = dialogView.findViewById<ImageView>(R.id.iv_survey_bad)
-        val iv_survey_okay = dialogView.findViewById<ImageView>(R.id.iv_survey_okay)
-        val iv_survey_good = dialogView.findViewById<ImageView>(R.id.iv_survey_good)
-        val iv_survey_excellent = dialogView.findViewById<ImageView>(R.id.iv_survey_excellent)
-
-        iv_survey_poor.setOnClickListener {
-            reviewDialog?.dismiss()
-            sendSurvey("POOR")
-            Toast.makeText(this,"Survey POOR", Toast.LENGTH_SHORT).show()
-        }
-        iv_survey_bad.setOnClickListener {
-            reviewDialog?.dismiss()
-            sendSurvey("BAD")
-            Toast.makeText(this,"Survey BAD", Toast.LENGTH_SHORT).show()
-        }
-        iv_survey_okay.setOnClickListener {
-            reviewDialog?.dismiss()
-            sendSurvey("OKAY")
-            Toast.makeText(this,"Survey OKAY", Toast.LENGTH_SHORT).show()
-        }
-        iv_survey_good.setOnClickListener {
-            reviewDialog?.dismiss()
-            sendSurvey("GOOD")
-            Toast.makeText(this,"Survey GOOD", Toast.LENGTH_SHORT).show()
-        }
-        iv_survey_excellent.setOnClickListener {
-            reviewDialog?.dismiss()
-            sendSurvey("EXCELLENT")
-            Toast.makeText(this,"Survey EXCELLENT", Toast.LENGTH_SHORT).show()
-        }
-        try {
-            reviewDialog = reviewDialogBuilder?.show()
-            reviewDialogBuilder?.show()
-        }catch (e:Exception){}
-    }*/
 
     fun showDialogSurvey(){
         val surveyDialog = Dialog(this@MainActivity)
@@ -810,11 +771,22 @@ class MainActivity : AppCompatActivity(),
         val requestBodyMap = HashMap<String,RequestBody>()
         requestBodyMap["id"] = id
 
-        apiService!!.manualCheckOut(requestBodyMap).enqueue(object : Callback<ResponseCheckOut>{
+        val manualCheckout = apiService!!.manualCheckOut(requestBodyMap)
+        checkOutManualHandler = Handler()
+        checkOutManualRunnable = Runnable {
+            manualCheckout.cancel()
+        }
+        manualCheckout.enqueue(object : Callback<ResponseCheckOut>{
             override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t?.toString())
                 Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
                 loadingDialog?.dismiss()
+                finish()
+                startActivity(
+                    Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK
+                    )
+                )
             }
 
             override fun onResponse(
@@ -823,6 +795,7 @@ class MainActivity : AppCompatActivity(),
             ) {
                 Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
                 if( response?.code() == 200 ) {
+                    checkOutManualHandler!!.removeCallbacks(checkOutManualRunnable)
                     surveyDialogViewed = true
                     surveyDialogShowed = false
                     loadingDialog?.dismiss()
@@ -845,8 +818,44 @@ class MainActivity : AppCompatActivity(),
                     }, (timeInterval*60*1000).toLong())
                 }
             }
-
         })
+
+        /***
+         * For Testing Purpose
+         */
+        /*  val testService = API.testingAPI()
+          val testing = testService!!.testingAPI()
+          checkOutManualHandler = Handler()
+          checkOutManualRunnable = Runnable {
+              testing.cancel()
+          }
+          testing.enqueue(object : Callback<ResponseBody>{
+              override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                  Log.d(GlobalVal.NETWORK_TAG, t?.toString())
+                  Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
+                  loadingDialog?.dismiss()
+                  finish()
+                  StartActivity(
+                      Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                          Intent.FLAG_ACTIVITY_NEW_TASK
+                      )
+                  )
+              }
+
+              override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                  Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+              }
+
+          })*/
+
+        var timeInterval = 1
+        try{
+            timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
+        }catch (e : Exception){
+            Crashlytics.logException(e)
+        }
+        checkOutManualHandler!!.postDelayed(checkOutManualRunnable,((timeInterval*60*1000).toLong()))
+
     }
 
     fun initExtendDialog(){
@@ -1005,10 +1014,10 @@ class MainActivity : AppCompatActivity(),
                     isGetCurrentMeeting = response.body().data != null
                     if( DAO.currentMeeting != response.body()){
                         DAO.currentMeeting = response.body()
-                        startActivity().execute()
+                        StartActivity().execute()
                     }else if( GlobalVal.booking_status == "available" && isGetCurrentMeeting ) {
                         if( response.body().data != null ){
-                            startActivity().execute()
+                            StartActivity().execute()
                         }
                     }
                 }else{
@@ -1019,7 +1028,7 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
-    class startActivity() : AsyncTask<Void, Void, String>() {
+    class StartActivity() : AsyncTask<Void, Void, String>() {
         override fun doInBackground(vararg params: Void?): String? {
             return null
         }
