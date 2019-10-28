@@ -23,6 +23,7 @@ import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
 import com.hw.rms.roommanagementsystem.Adapter.SpinnerRoomAdapter
 import com.hw.rms.roommanagementsystem.Adapter.SpinnerBuildingAdapter
+import com.hw.rms.roommanagementsystem.BuildConfig
 import com.hw.rms.roommanagementsystem.Data.*
 import com.hw.rms.roommanagementsystem.Helper.API
 import com.hw.rms.roommanagementsystem.Helper.DAO
@@ -91,6 +92,8 @@ class AdminSettingActivity : AppCompatActivity() {
     lateinit var tv_clock : TextView
     lateinit var tv_date : TextView
 
+    lateinit var tv_version_name : TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_setting)
@@ -155,6 +158,9 @@ class AdminSettingActivity : AppCompatActivity() {
             }
 
         tvDeviceSerialNumber.text = imeiDevice
+
+        tv_version_name = findViewById(R.id.tv_version_name)
+        tv_version_name.text = "V ${BuildConfig.VERSION_NAME}"
 
         initDateTime()
         initButtonListener()
