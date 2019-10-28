@@ -40,7 +40,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity(),
@@ -305,53 +304,79 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun extendCurrentMeeting( newTime : Int ){
-        val date = Date()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        if( DAO.currentMeeting?.data?.id == null ){
+            loadingDialog?.dismiss()
+            finish()
+            startActivity(
+                Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
+            )
+        }else {
+            val date = Date()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-        val timeFormat = SimpleDateFormat("HH:mm")
-        val timeEndOld = DAO.currentMeeting?.data?.end_dateTime
-        val timeConv = timeFormat.parse(timeEndOld)
-        val subs = ( timeConv.time + (newTime*60*1000) )
-        val timeEndNew = timeFormat.format(subs)+":00"
+            val timeFormat = SimpleDateFormat("HH:mm")
+            val timeEndOld = DAO.currentMeeting?.data?.end_dateTime
+            val timeConv = timeFormat.parse(timeEndOld)
+            val subs = ( timeConv.time + (newTime*60*1000) )
+            val timeEndNew = timeFormat.format(subs)+":00"
 
-        var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
-        var newEndDate = RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date) )
-        var newEndTime = RequestBody.create(MediaType.parse("text/plain"), timeEndNew)
+            var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
+            var newEndDate =
+                RequestBody.create(MediaType.parse("text/plain"), dateFormat.format(date))
+            var newEndTime = RequestBody.create(MediaType.parse("text/plain"), timeEndNew)
 
-        val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["id"] = id
-        requestBodyMap["new_end_date"] = newEndDate
-        requestBodyMap["new_end_time"] = newEndTime
+            val requestBodyMap = HashMap<String, RequestBody>()
+            requestBodyMap["id"] = id
+            requestBodyMap["new_end_date"] = newEndDate
+            requestBodyMap["new_end_time"] = newEndTime
 
-        apiService!!.googleExtendEvent(requestBodyMap).enqueue(object : Callback<ResponseExtendEvent>{
-            override fun onFailure(call: Call<ResponseExtendEvent>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t.toString())
-                loadingDialog?.dismiss()
-                Toast.makeText(this@MainActivity,"Extend Time Failed, Time Out", Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(
-                call: Call<ResponseExtendEvent>?,
-                response: Response<ResponseExtendEvent>?
-            ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-                if( response?.code() == 200 && response.body() != null ){
-                    if(response.body().ok == 1) {
+            apiService!!.googleExtendEvent(requestBodyMap)
+                .enqueue(object : Callback<ResponseExtendEvent> {
+                    override fun onFailure(call: Call<ResponseExtendEvent>?, t: Throwable?) {
+                        Log.d(GlobalVal.NETWORK_TAG, t.toString())
                         loadingDialog?.dismiss()
-                        finish()
-                        startActivity(
-                            Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
-                    }else{
-                        loadingDialog?.dismiss()
-                        Toast.makeText(this@MainActivity,"Extend Time Failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Extend Time Failed, Time Out",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
-                }else{
-                    Toast.makeText(this@MainActivity,"Extend Time Failed, Response Null", Toast.LENGTH_LONG).show()
-                }
-            }
 
-        })
+                    override fun onResponse(
+                        call: Call<ResponseExtendEvent>?,
+                        response: Response<ResponseExtendEvent>?
+                    ) {
+                        Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                        if (response?.code() == 200 && response.body() != null) {
+                            if (response.body().ok == 1) {
+                                loadingDialog?.dismiss()
+                                finish()
+                                startActivity(
+                                    Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                                        Intent.FLAG_ACTIVITY_NEW_TASK
+                                    )
+                                )
+                            } else {
+                                loadingDialog?.dismiss()
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Extend Time Failed",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Extend Time Failed, Response Null",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                })
+        }
     }
 
     private fun checkIfSurveyTimeToShow(){
@@ -739,7 +764,9 @@ class MainActivity : AppCompatActivity(),
             if( thankyouDialogShowed ) {
                 thankyouDialogShowed = false
                 thankyouSurveyDialog?.dismiss()
-                showDialogSurvey()
+                runOnUiThread {
+                    showDialogSurvey()
+                }
             }
         }catch (e:Exception){}
 
@@ -755,7 +782,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun sendSurvey(status : String){
-        loadingDialog?.show()
+//        loadingDialog?.show()
         var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.summary)
@@ -800,70 +827,90 @@ class MainActivity : AppCompatActivity(),
 
         surveyDialogViewed = true
         surveyDialogShowed = false
-        loadingDialog?.dismiss()
+//        loadingDialog?.dismiss()
         thankyouDialog()
     }
 
     fun checkOutManual(){
         loadingDialog?.show()
 
-        var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
-        val requestBodyMap = HashMap<String,RequestBody>()
-        requestBodyMap["id"] = id
-
-        val manualCheckout = apiService!!.manualCheckOut(requestBodyMap)
-        checkOutManualHandler = Handler()
-        checkOutManualRunnable = Runnable {
-            manualCheckout.cancel()
-        }
-        manualCheckout.enqueue(object : Callback<ResponseCheckOut>{
-            override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
-                Log.d(GlobalVal.NETWORK_TAG, t?.toString())
-                Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
-                loadingDialog?.dismiss()
-                finish()
-                startActivity(
-                    Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK
-                    )
+        if( DAO.currentMeeting?.data?.id == null ){
+            loadingDialog?.dismiss()
+            finish()
+            startActivity(
+                Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
                 )
-            }
+            )
+        }else {
 
-            override fun onResponse(
-                call: Call<ResponseCheckOut>?,
-                response: Response<ResponseCheckOut>?
-            ) {
-                Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
-                if( response?.code() == 200 ) {
-                    checkOutManualHandler!!.removeCallbacks(checkOutManualRunnable)
-                    surveyDialogViewed = true
-                    surveyDialogShowed = false
+            var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
+            val requestBodyMap = HashMap<String, RequestBody>()
+            requestBodyMap["id"] = id
+
+            val manualCheckout = apiService!!.manualCheckOut(requestBodyMap)
+            checkOutManualHandler = Handler()
+            checkOutManualRunnable = Runnable {
+                manualCheckout.cancel()
+            }
+            manualCheckout.enqueue(object : Callback<ResponseCheckOut> {
+                override fun onFailure(call: Call<ResponseCheckOut>?, t: Throwable?) {
+                    Log.d(GlobalVal.NETWORK_TAG, t?.toString())
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Checkout Failed, Time Out",
+                        Toast.LENGTH_LONG
+                    ).show()
                     loadingDialog?.dismiss()
-                    Toast.makeText(this@MainActivity, "Checkout Success", Toast.LENGTH_SHORT)
-                        .show()
-                    showDialogSurvey()
-                    var timeInterval = 1
-                    try{
-                        timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
-                    }catch (e : Exception){
-                        Crashlytics.logException(e)
-                    }
-
-                    Log.d("timeStampSurvey","Start ${timeInterval*60*1000}")
-                    Handler().postDelayed({
-                        Log.d("timeStampSurvey","End")
-                        finish()
-                        startActivity(
-                            Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                    }, (timeInterval*60*1000).toLong())
+                    finish()
+                    startActivity(
+                        Intent(this@MainActivity, RootActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK
+                        )
+                    )
                 }
-            }
-        })
 
-        /***
-         * For Testing Purpose
-         */
-        /*  val testService = API.testingAPI()
+                override fun onResponse(
+                    call: Call<ResponseCheckOut>?,
+                    response: Response<ResponseCheckOut>?
+                ) {
+                    Log.d(GlobalVal.NETWORK_TAG, response?.body().toString())
+                    if (response?.code() == 200) {
+                        checkOutManualHandler!!.removeCallbacks(checkOutManualRunnable)
+                        surveyDialogViewed = true
+                        surveyDialogShowed = false
+                        loadingDialog?.dismiss()
+                        Toast.makeText(this@MainActivity, "Checkout Success", Toast.LENGTH_SHORT)
+                            .show()
+                        runOnUiThread {
+                            showDialogSurvey()
+                        }
+                        var timeInterval = 1
+                        try {
+                            timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
+                        } catch (e: Exception) {
+                            Crashlytics.logException(e)
+                        }
+
+                        Log.d("timeStampSurvey", "Start ${timeInterval * 60 * 1000}")
+                        Handler().postDelayed({
+                            Log.d("timeStampSurvey", "End")
+                            finish()
+                            startActivity(
+                                Intent(
+                                    this@MainActivity,
+                                    RootActivity::class.java
+                                ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            )
+                        }, (timeInterval * 60 * 1000).toLong())
+                    }
+                }
+            })
+
+            /***
+             * For Testing Purpose
+             */
+            /*  val testService = API.testingAPI()
           val testing = testService!!.testingAPI()
           checkOutManualHandler = Handler()
           checkOutManualRunnable = Runnable {
@@ -888,14 +935,17 @@ class MainActivity : AppCompatActivity(),
 
           })*/
 
-        var timeInterval = 1
-        try{
-            timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
-        }catch (e : Exception){
-            Crashlytics.logException(e)
+            var timeInterval = 1
+            try {
+                timeInterval = DAO.configData?.config_show_survey_check_out!!.toInt()
+            } catch (e: Exception) {
+                Crashlytics.logException(e)
+            }
+            checkOutManualHandler!!.postDelayed(
+                checkOutManualRunnable,
+                ((timeInterval * 60 * 1000).toLong())
+            )
         }
-        checkOutManualHandler!!.postDelayed(checkOutManualRunnable,((timeInterval*60*1000).toLong()))
-
     }
 
     fun initExtendDialog(){
