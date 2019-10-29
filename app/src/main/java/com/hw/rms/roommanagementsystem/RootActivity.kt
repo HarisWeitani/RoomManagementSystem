@@ -208,7 +208,6 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }else{
-            errorDialog?.show()
             Handler().postDelayed({
                 if(!GlobalVal.isMainActivityStarted) {
                     checkMandatoryData()
@@ -254,6 +253,7 @@ class RootActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("onFailure getConfig",t.toString())
                 Toast.makeText(this@RootActivity,"get Running Text Failed, Time Out", Toast.LENGTH_LONG).show()
                 getConfig()
+                errorDialog?.show()
                 isGetConfig = false
             }
             override fun onResponse(call: Call<ResponseConfig>?, response: Response<ResponseConfig>?) {
@@ -264,6 +264,7 @@ class RootActivity : AppCompatActivity() {
                     isGetConfig = DAO.configData != null
                 }else{
                     getConfig()
+                    errorDialog?.show()
                     isGetConfig = false
                     Toast.makeText(this@RootActivity,"get Running Text Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -276,6 +277,7 @@ class RootActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("onFailure getRunningText",t.toString())
                 Toast.makeText(this@RootActivity,"get Running Text Failed, Time Out", Toast.LENGTH_LONG).show()
                 getRunningText()
+                errorDialog?.show()
                 isGetRunningText = false
             }
 
@@ -289,6 +291,7 @@ class RootActivity : AppCompatActivity() {
                     isGetRunningText = DAO.runningText != null
                 }else{
                     getRunningText()
+                    errorDialog?.show()
                     isGetRunningText = false
                     Toast.makeText(this@RootActivity,"get Running Text Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -308,6 +311,7 @@ class RootActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("onFailure getNextMeeting",t.toString())
                 Toast.makeText(this@RootActivity,"get Next Meeting Failed, Time Out", Toast.LENGTH_LONG).show()
                 getNextMeeting()
+                errorDialog?.show()
                 isGetNextMeeting = false
             }
 
@@ -321,6 +325,7 @@ class RootActivity : AppCompatActivity() {
                     isGetNextMeeting = DAO.nextMeeting != null
                 }else{
                     getNextMeeting()
+                    errorDialog?.show()
                     isGetNextMeeting = false
                     Toast.makeText(this@RootActivity,"get Next Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -338,6 +343,7 @@ class RootActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("onFailure getCurrentMeeting",t.toString())
                 Toast.makeText(this@RootActivity,"get On Meeting Failed, Time Out", Toast.LENGTH_LONG).show()
                 getCurrentMeeting()
+                errorDialog?.show()
                 isGetCurrentMeeting = false
             }
 
@@ -351,6 +357,7 @@ class RootActivity : AppCompatActivity() {
                     isGetCurrentMeeting = DAO.currentMeeting != null
                 }else{
                     getCurrentMeeting()
+                    errorDialog?.show()
                     isGetCurrentMeeting = false
                     Toast.makeText(this@RootActivity,"get On Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -366,6 +373,7 @@ class RootActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("onFailure getNewsData",t.toString())
                 Toast.makeText(this@RootActivity,"get News Failed, Time Out", Toast.LENGTH_LONG).show()
                 getNewsData()
+                errorDialog?.show()
                 isGetNewsData = false
             }
 
@@ -379,6 +387,7 @@ class RootActivity : AppCompatActivity() {
                     isGetNewsData = DAO.newsFeed != null
                 }else{
                     getNewsData()
+                    errorDialog?.show()
                     Toast.makeText(this@RootActivity,"get News Failed, Response Null", Toast.LENGTH_LONG).show()
                     isGetNewsData = false
                 }
