@@ -403,6 +403,7 @@ class RootActivity : AppCompatActivity() {
                 GlobalVal.networkLogging("onFailure getSlideShowData",t.toString())
                 Toast.makeText(this@RootActivity,"get Slide Show Failed, Time Out", Toast.LENGTH_LONG).show()
                 getSlideShowData()
+                errorDialog?.show()
                 isGetSlideShowData = false
             }
             override fun onResponse(call: Call<ResponseSlideShowData>?, response: Response<ResponseSlideShowData>?) {
@@ -438,8 +439,9 @@ class RootActivity : AppCompatActivity() {
                         }
                     }
                 }else{
+                    //Dibuat gini karena ini tidak mandatory
                     isDownloadFinish = true
-                    isGetSlideShowData = false
+                    isGetSlideShowData = true
                     Toast.makeText(this@RootActivity,"get Slide Show Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
             }
