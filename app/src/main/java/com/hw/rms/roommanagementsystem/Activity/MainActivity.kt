@@ -658,6 +658,7 @@ class MainActivity : AppCompatActivity(),
             override fun onFailure(call: Call<ResponseScheduleByDate>?, t: Throwable?) {
                 Log.d(GlobalVal.NETWORK_TAG, t.toString())
                 loadingDialog?.dismiss()
+                startRootActivity()
                 Toast.makeText(this@MainActivity,"Get Event Failed, Time Out", Toast.LENGTH_LONG).show()
             }
 
@@ -675,6 +676,7 @@ class MainActivity : AppCompatActivity(),
                 }else{
                     loadingDialog?.dismiss()
                     Toast.makeText(this@MainActivity,"Get Event Failed, Response Null", Toast.LENGTH_LONG).show()
+                    startRootActivity()
                 }
             }
 
