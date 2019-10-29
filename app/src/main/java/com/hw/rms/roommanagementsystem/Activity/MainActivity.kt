@@ -474,7 +474,7 @@ class MainActivity : AppCompatActivity(),
               override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                   Log.d(GlobalVal.NETWORK_TAG, t?.toString())
                   Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
-                  loadingDialog?.dismiss()
+                  errorDialog?.dismiss()
                   finish()
                   startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
               }
@@ -782,7 +782,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun sendSurvey(status : String){
-//        loadingDialog?.show()
+//        errorDialog?.show()
         var id = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.id)
         val location = RequestBody.create(MediaType.parse("text/plain"), DAO.settingsData!!.room!!.room_code )
         val summary = RequestBody.create(MediaType.parse("text/plain"), DAO.currentMeeting?.data?.summary)
@@ -813,12 +813,12 @@ class MainActivity : AppCompatActivity(),
 /*                if( response?.code() == 200 ) {
                     surveyDialogViewed = true
                     surveyDialogShowed = false
-                    loadingDialog?.dismiss()
+                    errorDialog?.dismiss()
                     thankyouDialog()
                 }else{
                     surveyDialogViewed = true
                     surveyDialogShowed = false
-                    loadingDialog?.dismiss()
+                    errorDialog?.dismiss()
                     thankyouDialog()
                 }*/
             }
@@ -827,7 +827,7 @@ class MainActivity : AppCompatActivity(),
 
         surveyDialogViewed = true
         surveyDialogShowed = false
-//        loadingDialog?.dismiss()
+//        errorDialog?.dismiss()
         thankyouDialog()
     }
 
@@ -920,7 +920,7 @@ class MainActivity : AppCompatActivity(),
               override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                   Log.d(GlobalVal.NETWORK_TAG, t?.toString())
                   Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
-                  loadingDialog?.dismiss()
+                  errorDialog?.dismiss()
                   finish()
                   StartActivity(
                       Intent(this@MainActivity, RootActivity::class.java).setFlags(

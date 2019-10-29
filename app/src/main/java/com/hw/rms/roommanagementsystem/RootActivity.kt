@@ -1,6 +1,7 @@
 package com.hw.rms.roommanagementsystem
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,15 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.util.Log
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.crashlytics.android.Crashlytics
 import com.downloader.Error
 import com.downloader.PRDownloader
 import com.hw.rms.roommanagementsystem.Activity.MainActivity
@@ -32,7 +32,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.lang.Exception
 
 class RootActivity : AppCompatActivity() {
 
@@ -56,6 +55,7 @@ class RootActivity : AppCompatActivity() {
     var checkMandatoryCtr = 0
 
     var isAPIError: Boolean = false
+    var errorDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +74,10 @@ class RootActivity : AppCompatActivity() {
         if( Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ) {
             isPermitted = true
         }
+
+        errorDialog = Dialog(this@RootActivity)
+
+        initErrorDialog()
 
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/video/Petunjuk_Menghadapi_Keadaan_Darurat.mp4", "pidio.mp4")
 //        fileDownloader("http://139.180.142.76/room_management_system/assets/uploads/slideshow/original/image/download.jpg","tes.jpg")
@@ -151,12 +155,13 @@ class RootActivity : AppCompatActivity() {
     private fun startActivity(){
         Handler().postDelayed({
             if (firstInstall) {
+                errorDialog?.dismiss()
                 startActivity(Intent(this@RootActivity, AdminLoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
             }
             else {
                 checkMandatoryData()
             }
-        }, 500)
+        }, 5000)
     }
 
     override fun onResume() {
@@ -203,12 +208,13 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }else{
+            errorDialog?.show()
             Handler().postDelayed({
                 if(!GlobalVal.isMainActivityStarted) {
                     checkMandatoryData()
                     checkMandatoryCtr++
                 }
-            },5000)
+            },500)
         }
     }
 
@@ -257,6 +263,7 @@ class RootActivity : AppCompatActivity() {
                     fileDownloader(DAO.configData!!.company_logo.toString(), GlobalVal.LOGO_NAME)
                     isGetConfig = DAO.configData != null
                 }else{
+                    getConfig()
                     isGetConfig = false
                     Toast.makeText(this@RootActivity,"get Running Text Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -281,6 +288,7 @@ class RootActivity : AppCompatActivity() {
                     DAO.runningText = response.body()
                     isGetRunningText = DAO.runningText != null
                 }else{
+                    getRunningText()
                     isGetRunningText = false
                     Toast.makeText(this@RootActivity,"get Running Text Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -312,6 +320,7 @@ class RootActivity : AppCompatActivity() {
                     DAO.nextMeeting = response.body()
                     isGetNextMeeting = DAO.nextMeeting != null
                 }else{
+                    getNextMeeting()
                     isGetNextMeeting = false
                     Toast.makeText(this@RootActivity,"get Next Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -341,6 +350,7 @@ class RootActivity : AppCompatActivity() {
                     DAO.currentMeeting = response.body()
                     isGetCurrentMeeting = DAO.currentMeeting != null
                 }else{
+                    getCurrentMeeting()
                     isGetCurrentMeeting = false
                     Toast.makeText(this@RootActivity,"get On Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
                 }
@@ -368,6 +378,7 @@ class RootActivity : AppCompatActivity() {
                     DAO.newsFeed = response.body()
                     isGetNewsData = DAO.newsFeed != null
                 }else{
+                    getNewsData()
                     Toast.makeText(this@RootActivity,"get News Failed, Response Null", Toast.LENGTH_LONG).show()
                     isGetNewsData = false
                 }
@@ -478,7 +489,12 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-
+    fun initErrorDialog(){
+        errorDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        errorDialog?.setCancelable(false)
+        errorDialog?.setContentView(R.layout.error_dialog)
     }
+
+
+    override fun onBackPressed() {}
 }

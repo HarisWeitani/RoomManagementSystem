@@ -19,6 +19,7 @@
     <string name="booking_end">Booking End</string>
     <string name="booking_date">Booking Date</string>
     <string name="host">Host</string>
+    <string name="error_message">Sedang ada masalah koneksi ke server \n(error code :101)</string>
 
     <string name="time_00">00:00</string>
     <string name="time_01">01:00</string>
