@@ -309,7 +309,7 @@ class MainActivity : AppCompatActivity(),
             finish()
             startActivity(
                 Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
                 )
             )
         }else {
@@ -355,7 +355,7 @@ class MainActivity : AppCompatActivity(),
                                 finish()
                                 startActivity(
                                     Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                                        Intent.FLAG_ACTIVITY_NEW_TASK
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     )
                                 )
                             } else {
@@ -440,7 +440,7 @@ class MainActivity : AppCompatActivity(),
                 loadingDialog?.dismiss()
                 finish()
                 startActivity(
-                    Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
             }
 
             override fun onResponse(
@@ -456,7 +456,7 @@ class MainActivity : AppCompatActivity(),
                         .show()
                     finish()
                     startActivity(
-                        Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 }
             }
         })
@@ -476,7 +476,7 @@ class MainActivity : AppCompatActivity(),
                   Toast.makeText(this@MainActivity,"Checkout Failed, Time Out", Toast.LENGTH_LONG).show()
                   errorDialog?.dismiss()
                   finish()
-                  startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                  startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
               }
 
               override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
@@ -526,6 +526,7 @@ class MainActivity : AppCompatActivity(),
     private fun initBottomScheduleViewPager(){
         botSchedLeftV2.clear()
         botSchedRigtV2.clear()
+
         var upcomingEventSize = 0
         try {
             upcomingEventSize = DAO.nextMeeting!!.data!!.size
@@ -552,6 +553,24 @@ class MainActivity : AppCompatActivity(),
 
         bottomSchedulePagerAdapterV2 = BottomSchedulePagerAdapterV2(botSchedLeftV2,botSchedRigtV2,this)
         vpBottomSchedule.adapter = bottomSchedulePagerAdapterV2
+
+        Handler().post {
+            vpBottomSchedule.getAdapter()?.notifyDataSetChanged()
+            bottomSchedulePagerAdapterV2.notifyDataSetChanged()
+        }
+        vpBottomSchedule.getAdapter()?.notifyDataSetChanged()
+        bottomSchedulePagerAdapterV2.notifyDataSetChanged()
+    }
+
+    class RefreshBottomViewSchedule() : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg params: Void?): String? {
+            return null
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            instance.initBottomScheduleViewPager()
+        }
     }
 
     private fun initImageVideoPager(){
@@ -841,7 +860,7 @@ class MainActivity : AppCompatActivity(),
             finish()
             startActivity(
                 Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
                 )
             )
         }else {
@@ -867,7 +886,7 @@ class MainActivity : AppCompatActivity(),
                     finish()
                     startActivity(
                         Intent(this@MainActivity, RootActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
                         )
                     )
                 }
@@ -902,7 +921,7 @@ class MainActivity : AppCompatActivity(),
                                 Intent(
                                     this@MainActivity,
                                     RootActivity::class.java
-                                ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             )
                         }, (timeInterval * 60 * 1000).toLong())
                     }
@@ -1077,7 +1096,7 @@ class MainActivity : AppCompatActivity(),
                 if( response?.code() == 200 && response.body() != null ){
                     DAO.nextMeeting = response.body()
                     isGetNextMeeting = DAO.nextMeeting != null
-                    initBottomScheduleViewPager()
+                    RefreshBottomViewSchedule().execute()
                 }else{
                     isGetNextMeeting = false
                     Toast.makeText(this@MainActivity,"get Next Meeting Failed, Response Null", Toast.LENGTH_LONG).show()
@@ -1141,7 +1160,7 @@ class MainActivity : AppCompatActivity(),
             if(!GlobalVal.isSurveyShowed) {
                 GlobalVal.isSurveyShowed = false
                 finish()
-                startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                startActivity(Intent(this@MainActivity, RootActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
             }
         } catch (e: Exception) {
             Log.d("timeStampSurvey","Exception $e")

@@ -21,8 +21,12 @@ class BottomSchedulePagerAdapterV2(internal var botSchedLeft: List<DataGetNextMe
         return botSchedLeft.size
     }
 
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
+
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view === `object`
+        return view == `object`
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
