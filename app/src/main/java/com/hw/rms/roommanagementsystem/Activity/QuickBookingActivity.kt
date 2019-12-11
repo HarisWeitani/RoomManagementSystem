@@ -68,6 +68,11 @@ class QuickBookingActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
+    companion object{
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quick_booking)
@@ -312,28 +317,28 @@ class QuickBookingActivity : AppCompatActivity() {
         val start_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_start.text.toString()+":00")
         val end_time = RequestBody.create(MediaType.parse("text/plain"), tv_booking_time_end.text.toString()+":00")
 
-/*        var email = ""
+        var email = ""
         var isEmailValid = false
         val size = emailList!!.size
         if( et_attendees_email.text.toString().isNotEmpty() ) {
             email = et_attendees_email.text.toString().trim()
             isEmailValid = true
         }
-//        if( size > 0 ){
-//            if( email.isNotEmpty() ){
-//                email += ",,,"
-//            }
-//
-//            for( x in 0 until size ){
-//                email += emailList!![x].trim()
-//                if(x < (size - 1) ){
-//                    email += ",,,"
-//                }
-//            }
-//
-//            isEmailValid = true
-//        }
-        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), email)*/
+        if( size > 0 ){
+            if( email.isNotEmpty() ){
+                email += ",,,"
+            }
+
+            for( x in 0 until size ){
+                email += emailList!![x].trim()
+                if(x < (size - 1) ){
+                    email += ",,,"
+                }
+            }
+
+            isEmailValid = true
+        }
+        val attendees_email = RequestBody.create(MediaType.parse("text/plain"), email)
 
 
 
@@ -351,9 +356,9 @@ class QuickBookingActivity : AppCompatActivity() {
         requestBodyMap["start_time"] = start_time
         requestBodyMap["end_time"] = end_time
 
-//        if( isEmailValid ) {
-//            requestBodyMap["attendees_email"] = attendees_email
-//        }
+        if( isEmailValid ) {
+            requestBodyMap["attendees_email"] = attendees_email
+        }
 
 //        val size = emailList!!.size
 //        for( x in 0 until size ){
